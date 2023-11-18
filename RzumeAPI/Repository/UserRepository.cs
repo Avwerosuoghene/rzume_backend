@@ -16,17 +16,24 @@ namespace RzumeAPI.Repository
     {
         private ApplicationDbContext _db;
         private readonly UserManager<User> _userManager;
+        private readonly IEmailRepository _emailService;
         private string secretKey;
         private readonly IMapper _mapper;
 
+        private readonly IConfiguration _configuration;
+
 
         public UserRepository(ApplicationDbContext db, IConfiguration configuration,
-            UserManager<User> userManager, IMapper mapper, RoleManager<IdentityRole> roleManager)
+            UserManager<User> userManager, IMapper mapper, RoleManager<IdentityRole> roleManager, IEmailRepository emailService)
         {
             _db = db;
             secretKey = configuration.GetValue<string>("ApiSettings:Secret");
             _mapper = mapper;
             _userManager = userManager;
+            _emailService = emailService;
+            _configuration = configuration;
+
+            
         }
 
         public bool IsUniqueUser(string email)
@@ -58,14 +65,16 @@ namespace RzumeAPI.Repository
 
                 if (result.Succeeded)
                 {
-                    var userToReturn = _db.ApplicationUsers
-                .FirstOrDefault(u => u.UserName == registrationDTO.Email);
+                        var userToReturn = _db.ApplicationUsers
+                    .FirstOrDefault(u => u.UserName == registrationDTO.Email);
 
                     var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
-                    if (!string.IsNullOrEmpty(token)) {
-
+                    if (!string.IsNullOrEmpty(token))
+                    {
+                        await SendEmailConfirmationEmail(user, token);
                     }
+
 
                     return _mapper.Map<UserDTO>(userToReturn);
                 }
@@ -75,6 +84,27 @@ namespace RzumeAPI.Repository
 
             }
             return null;
+        }
+
+        private async Task SendEmailConfirmationEmail(User user, string token)
+        {
+
+            string appDomain = _configuration.GetValue<string>("Application:AppDomain");
+            string confirmationLink = _configuration.GetValue<string>("Application:EmailConfirmation");
+
+
+            UserEmailOptions options = new UserEmailOptions
+            {
+                ToEmails = new List<string> { user.Email },
+                Placeholders = new List<KeyValuePair<string, string>>(){
+                    new KeyValuePair<string, string>("{{userName}}", user.UserName),
+                    new KeyValuePair<string, string>("{{link}}", string.Format(appDomain + confirmationLink, user.Id, token ))
+
+                }
+
+            };
+
+            await _emailService.SendConfrirmationMail(options);
         }
 
 

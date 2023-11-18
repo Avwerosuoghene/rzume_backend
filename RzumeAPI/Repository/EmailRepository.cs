@@ -18,13 +18,7 @@ namespace RzumeAPI.Repository
         private readonly SMTPConfigModel _smtConfig;
 
 
-        public async Task SendTestEmail(UserEmailOptions userEmailOptions)
-        {
-            userEmailOptions.Subject = UpdatePlaceHolder("This is a test email from {{userName}} ", userEmailOptions.Placeholders);
-            userEmailOptions.Body = UpdatePlaceHolder(GetEmailBody("TestEmail"), userEmailOptions.Placeholders);
-
-            await SendEmail(userEmailOptions);
-        }
+        
 
         public EmailRepository(IOptions<SMTPConfigModel> smtConfig)
         {
@@ -82,6 +76,22 @@ namespace RzumeAPI.Repository
                 }
             }
             return text;
+        }
+
+        public async Task SendTestEmail(UserEmailOptions userEmailOptions)
+        {
+            userEmailOptions.Subject = UpdatePlaceHolder("This is a test email from {{userName}} ", userEmailOptions.Placeholders);
+            userEmailOptions.Body = UpdatePlaceHolder(GetEmailBody("TestEmail"), userEmailOptions.Placeholders);
+
+            await SendEmail(userEmailOptions);
+        }
+
+        public async Task SendConfrirmationMail(UserEmailOptions userEmailOptions)
+        {
+            userEmailOptions.Subject = "Kindly confrim your email id.";
+            userEmailOptions.Body = UpdatePlaceHolder(GetEmailBody("EmailConfirm"), userEmailOptions.Placeholders);
+
+            await SendEmail(userEmailOptions);
         }
     }
 }

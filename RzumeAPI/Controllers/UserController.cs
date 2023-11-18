@@ -18,15 +18,18 @@ namespace RzumeAPI.Controllers
 
         private readonly IEmailRepository _emailRepo;
 
+        private readonly IConfiguration _configuration;
+
         //Marking this as protected makes it accessible to the parent class
         //and any other class that inherits from this parent class
         protected APIResponse _response;
 
-        public UserController(IUserRepository userRepo, IEmailRepository emailRepository)
+        public UserController(IUserRepository userRepo, IEmailRepository emailRepository, IConfiguration configuration)
         {
             _userRepo = userRepo;
             _response = new();
             _emailRepo = emailRepository;
+            _configuration = configuration;
         }
 
         [HttpPost("register")]
@@ -43,8 +46,8 @@ namespace RzumeAPI.Controllers
                 return BadRequest(_response);
             }
 
-            var user = await _userRepo.Register(model);
-            if (user == null)
+            var response = await _userRepo.Register(model);
+            if (response == null)
             {
                 _response.StatusCode = HttpStatusCode.BadRequest;
                 _response.IsSuccess = false;
@@ -89,15 +92,7 @@ namespace RzumeAPI.Controllers
             _response.IsSuccess = true;
             _response.Result = "Sever Running";
 
-            UserEmailOptions options = new UserEmailOptions {
-                ToEmails = new List<string>{"kesuion1@gmail.com"},
-                Placeholders = new List<KeyValuePair<string, string>>(){
-                    new KeyValuePair<string, string>("{{userName}}", "Avwerosuoghene")
-                }
-                
-            };
-
-            await _emailRepo.SendTestEmail(options);
+          
             return Ok(_response);
         }
     }

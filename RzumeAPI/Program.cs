@@ -40,7 +40,9 @@ builder.Services.AddIdentity<User, IdentityRole>()
 
 builder.Services.Configure<SMTPConfigModel>(configuration.GetSection("SMTPConfig"));
 
-//builder.Services.Configure<IdentityOptions>(IdentityConfig.ConfigureOptions);
+builder.Services.Configure<IdentityOptions>(options => {
+    options.SignIn.RequireConfirmedEmail = true;
+} );
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

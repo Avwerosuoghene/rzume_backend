@@ -9,5 +9,8 @@ namespace RzumeAPI.Repository.IRepository
     public interface IEmailRepository
     {
             Task SendTestEmail(UserEmailOptions userEmailOptions); 
+
+            Task SendConfrirmationMail(UserEmailOptions userEmailOptions); 
+
     }
 }
