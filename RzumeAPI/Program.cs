@@ -8,6 +8,11 @@ using RzumeAPI.Repository.IRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddJsonFile("appsettings.json");
+
+var configuration = builder.Configuration;
+
+
 // Add services to the container.
 
 builder.Services.AddControllers(option =>
@@ -28,8 +33,12 @@ builder.Services.AddVersionedApiExplorer(options =>
     options.SubstituteApiVersionInUrl = true;
 });
 
+
+// AddDefaultTokenProviders enables us to use the email token generator
 builder.Services.AddIdentity<User, IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+    .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+
+builder.Services.Configure<SMTPConfigModel>(configuration.GetSection("SMTPConfig"));
 
 //builder.Services.Configure<IdentityOptions>(IdentityConfig.ConfigureOptions);
 
@@ -47,6 +56,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(option =>
 });
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+builder.Services.AddScoped<IEmailRepository, EmailRepository>();
 
 var app = builder.Build();
 

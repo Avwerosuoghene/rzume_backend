@@ -4,6 +4,7 @@ using RzumeAPI.Models;
 using RzumeAPI.Models.DTO;
 using RzumeAPI.Repository.IRepository;
 using System.Net;
+using RzumeAPI.Repository;
 
 namespace RzumeAPI.Controllers
 {
@@ -15,14 +16,17 @@ namespace RzumeAPI.Controllers
 
         private readonly IUserRepository _userRepo;
 
+        private readonly IEmailRepository _emailRepo;
+
         //Marking this as protected makes it accessible to the parent class
         //and any other class that inherits from this parent class
         protected APIResponse _response;
 
-        public UserController(IUserRepository userRepo)
+        public UserController(IUserRepository userRepo, IEmailRepository emailRepository)
         {
             _userRepo = userRepo;
             _response = new();
+            _emailRepo = emailRepository;
         }
 
         [HttpPost("register")]
@@ -47,6 +51,7 @@ namespace RzumeAPI.Controllers
                 _response.ErrorMessages.Add("Error while registering");
                 return BadRequest(_response);
             }
+
 
             _response.StatusCode = HttpStatusCode.OK;
             _response.IsSuccess = true;
@@ -78,11 +83,21 @@ namespace RzumeAPI.Controllers
 
         [HttpGet("Health")]
 
-        public IActionResult GetUser()
+        public async Task<IActionResult> GetUser()
         {
             _response.StatusCode = HttpStatusCode.OK;
             _response.IsSuccess = true;
             _response.Result = "Sever Running";
+
+            UserEmailOptions options = new UserEmailOptions {
+                ToEmails = new List<string>{"kesuion1@gmail.com"},
+                Placeholders = new List<KeyValuePair<string, string>>(){
+                    new KeyValuePair<string, string>("{{userName}}", "Avwerosuoghene")
+                }
+                
+            };
+
+            await _emailRepo.SendTestEmail(options);
             return Ok(_response);
         }
     }

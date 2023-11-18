@@ -61,6 +61,12 @@ namespace RzumeAPI.Repository
                     var userToReturn = _db.ApplicationUsers
                 .FirstOrDefault(u => u.UserName == registrationDTO.Email);
 
+                    var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+                    if (!string.IsNullOrEmpty(token)) {
+
+                    }
+
                     return _mapper.Map<UserDTO>(userToReturn);
                 }
             }
@@ -79,7 +85,7 @@ namespace RzumeAPI.Repository
 
             bool isValid = await _userManager.CheckPasswordAsync(user, loginRequestDTO.Password);
 
-              if(user == null || isValid == false)
+            if (user == null || isValid == false)
             {
                 return new LoginResponseDTO()
                 {
@@ -89,9 +95,9 @@ namespace RzumeAPI.Repository
                 };
             }
 
-                var tokenHandler = new JwtSecurityTokenHandler();
+            var tokenHandler = new JwtSecurityTokenHandler();
 
-                var key = Encoding.ASCII.GetBytes(secretKey);
+            var key = Encoding.ASCII.GetBytes(secretKey);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -109,10 +115,10 @@ namespace RzumeAPI.Repository
                 SigningCredentials = new(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
-             var token = tokenHandler.CreateToken(tokenDescriptor);
+            var token = tokenHandler.CreateToken(tokenDescriptor);
 
 
-              LoginResponseDTO loginResponseDTO = new LoginResponseDTO()
+            LoginResponseDTO loginResponseDTO = new LoginResponseDTO()
             {
                 Token = tokenHandler.WriteToken(token),
                 User = _mapper.Map<UserDTO>(user),
@@ -123,7 +129,11 @@ namespace RzumeAPI.Repository
 
         }
 
-   
+
+        // private async Task SendEmailVerification(User user, string token) {
+        //     UserEmailOptions 
+        // }
+
     }
 
 
