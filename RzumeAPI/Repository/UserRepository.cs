@@ -33,7 +33,7 @@ namespace RzumeAPI.Repository
             _emailService = emailService;
             _configuration = configuration;
 
-            
+
         }
 
         public bool IsUniqueUser(string email)
@@ -65,16 +65,10 @@ namespace RzumeAPI.Repository
 
                 if (result.Succeeded)
                 {
-                        var userToReturn = _db.ApplicationUsers
-                    .FirstOrDefault(u => u.UserName == registrationDTO.Email);
+                    var userToReturn = _db.ApplicationUsers
+                .FirstOrDefault(u => u.UserName == registrationDTO.Email);
 
-                    var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-
-                    if (!string.IsNullOrEmpty(token))
-                    {
-                        await SendEmailConfirmationEmail(user, token);
-                    }
-
+                    await GenerateEmailConfirmationToken(user);
 
                     return _mapper.Map<UserDTO>(userToReturn);
                 }
@@ -84,6 +78,20 @@ namespace RzumeAPI.Repository
 
             }
             return null;
+        }
+
+        public async Task GenerateEmailConfirmationToken(User user)
+        {
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+            if (!string.IsNullOrEmpty(token))
+            {
+                await SendEmailConfirmationEmail(user, token);
+            }
+        }
+
+        public async Task<User> GetUserByEmailAsync (string email) {
+            return await _userManager.FindByEmailAsync(email);
         }
 
         private async Task SendEmailConfirmationEmail(User user, string token)
@@ -160,9 +168,11 @@ namespace RzumeAPI.Repository
         }
 
 
-        // private async Task SendEmailVerification(User user, string token) {
-        //     UserEmailOptions 
-        // }
+        public async Task<IdentityResult> ConfirmEmail(string uid, string token)
+        {
+            return await _userManager.ConfirmEmailAsync(await _userManager.FindByIdAsync(uid), token);
+
+        }
 
     }
 

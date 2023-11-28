@@ -61,13 +61,14 @@ namespace RzumeAPI.Controllers
             return Ok(_response);
         }
 
-         [HttpPost("login")]
+        [HttpPost("login")]
 
-        public async Task<IActionResult> Login([FromBody] LoginRequestDTO model) {
+        public async Task<IActionResult> Login([FromBody] LoginRequestDTO model)
+        {
 
             var loginResponse = await _userRepo.Login(model);
 
-              if(loginResponse.User == null || string.IsNullOrEmpty(loginResponse.Token))
+            if (loginResponse.User == null || string.IsNullOrEmpty(loginResponse.Token))
             {
                 _response.StatusCode = HttpStatusCode.BadRequest;
                 _response.IsSuccess = false;
@@ -77,8 +78,47 @@ namespace RzumeAPI.Controllers
 
             _response.StatusCode = HttpStatusCode.OK;
             _response.IsSuccess = true;
-             _response.Result = loginResponse;
+            _response.Result = loginResponse;
             return Ok(_response);
+        }
+
+
+        [HttpGet("confirm-email")]
+        public async Task ConfirmEmail(string uid, string token, string email)
+        {
+            EmailConfirm model = new EmailConfirm {
+                Email = email
+            };
+            if (!string.IsNullOrEmpty(uid) && !string.IsNullOrEmpty(token))
+            {
+                token = token.Replace(' ', '+');
+                var result = await _userRepo.ConfirmEmail(uid, token);
+                if (result.Succeeded)
+                {
+                    Console.WriteLine("yes");
+                }
+            }
+        }
+
+
+        [HttpPost("confirm-email")]
+        public async Task ConfirmEmail(EmailConfirm model)
+        {
+          var user = await _userRepo.GetUserByEmailAsync(model.Email);
+          if(user != null) {
+
+                if(user.EmailConfirmed) {
+                    model.IsConfirmed = true;
+                    return;
+                }
+
+                await _userRepo.GenerateEmailConfirmationToken(user);
+                model.EmailSent = true;
+                ModelState.Clear();
+            
+          } else {
+           
+          }
         }
 
 
@@ -86,15 +126,17 @@ namespace RzumeAPI.Controllers
 
         [HttpGet("Health")]
 
-        public async Task<IActionResult> GetUser()
+        public IActionResult HealthCheck()
         {
             _response.StatusCode = HttpStatusCode.OK;
             _response.IsSuccess = true;
             _response.Result = "Sever Running";
 
-          
+
             return Ok(_response);
         }
+
+
     }
 
 
