@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using RzumeAPI.Configurations;
 using RzumeAPI.Data;
+using RzumeAPI.Helpers;
 using RzumeAPI.Models;
 using RzumeAPI.Repository;
 using RzumeAPI.Repository.IRepository;
@@ -61,7 +62,14 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddScoped<IEmailRepository, EmailRepository>();
 
+builder.Services.AddScoped<IOtpRepository, OtpRepository>();
+
+builder.Services.AddScoped<MiscellaneousHelper>();
+
 var app = builder.Build();
+
+app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

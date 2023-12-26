@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using RzumeAPI.Data;
+using RzumeAPI.Helpers;
 using RzumeAPI.Models;
 using RzumeAPI.Models.DTO;
 using RzumeAPI.Repository.IRepository;
@@ -22,6 +23,11 @@ namespace RzumeAPI.Repository
 
         private readonly IConfiguration _configuration;
 
+        private IOtpRepository _dbOtp;
+
+
+
+
 
         public UserRepository(ApplicationDbContext db, IConfiguration configuration,
             UserManager<User> userManager, IMapper mapper, RoleManager<IdentityRole> roleManager, IEmailRepository emailService)
@@ -36,18 +42,6 @@ namespace RzumeAPI.Repository
 
         }
 
-        public bool IsUniqueUser(string email)
-        {
-            var user = _db.ApplicationUsers.FirstOrDefault(x => x.Email == email);
-
-            if (user == null)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
         public async Task<UserDTO> Register(RegistrationDTO registrationDTO)
         {
             User user = new()
@@ -56,6 +50,7 @@ namespace RzumeAPI.Repository
                 Email = registrationDTO.Email,
                 NormalizedEmail = registrationDTO.Email.ToUpper(),
                 UserName = registrationDTO.Email,
+                TwoFactorEnabled = true
 
             };
 
@@ -68,7 +63,33 @@ namespace RzumeAPI.Repository
                     var userToReturn = _db.ApplicationUsers
                 .FirstOrDefault(u => u.UserName == registrationDTO.Email);
 
-                    await GenerateEmailConfirmationToken(user);
+                    var token = MiscellaneousHelper.GenerateOtp();
+                    DateTime currentDate = DateTime.Now;
+                    DateTime expirationDate = currentDate.AddMinutes(5);
+
+                    Console.WriteLine(userToReturn.Id);
+
+                
+                    OtpDTO otp = new OtpDTO
+                    {
+                        UserId = userToReturn!.Id.ToString(),
+                        ExpirationDate = expirationDate,
+                        OtpValue = token.ToString()
+                
+                    };
+
+
+
+                     Otp otpModel = _mapper.Map<Otp>(otp);
+
+                    // await _dbOtp.CreateAsync(otpModel);
+
+                    //  await _dbOtp.AddAsync(otp);
+                    await _db.Otp.AddAsync(otpModel);
+                    await _db.SaveChangesAsync();
+
+
+                    await SendEmailConfirmationEmail(user, token);
 
                     return _mapper.Map<UserDTO>(userToReturn);
                 }
@@ -82,23 +103,26 @@ namespace RzumeAPI.Repository
 
         public async Task GenerateEmailConfirmationToken(User user)
         {
-            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            // var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            // var token = await _userManager.GenerateTwoFactorTokenAsync(user, "Email");
+            var token = MiscellaneousHelper.GenerateOtp();
 
-            if (!string.IsNullOrEmpty(token))
-            {
-                await SendEmailConfirmationEmail(user, token);
-            }
+
+
+            await SendEmailConfirmationEmail(user, token);
+
         }
 
-        public async Task<User> GetUserByEmailAsync (string email) {
+        public async Task<User> GetUserByEmailAsync(string email)
+        {
             return await _userManager.FindByEmailAsync(email);
         }
 
-        private async Task SendEmailConfirmationEmail(User user, string token)
+        private async Task SendEmailConfirmationEmail(User user, int token)
         {
 
-            string appDomain = _configuration.GetValue<string>("Application:AppDomain");
-            string confirmationLink = _configuration.GetValue<string>("Application:EmailConfirmation");
+            // string appDomain = _configuration.GetValue<string>("Application:AppDomain");
+            // string confirmationLink = _configuration.GetValue<string>("Application:EmailConfirmation");
 
 
             UserEmailOptions options = new UserEmailOptions
@@ -106,7 +130,7 @@ namespace RzumeAPI.Repository
                 ToEmails = new List<string> { user.Email },
                 Placeholders = new List<KeyValuePair<string, string>>(){
                     new KeyValuePair<string, string>("{{userName}}", user.UserName),
-                    new KeyValuePair<string, string>("{{link}}", string.Format(appDomain + confirmationLink, user.Id, token ))
+                    new KeyValuePair<string, string>("{{link}}", token.ToString() )
 
                 }
 
@@ -120,8 +144,13 @@ namespace RzumeAPI.Repository
         public async Task<LoginResponseDTO> Login(LoginRequestDTO loginRequestDTO)
         {
             var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == loginRequestDTO.UserName.ToLower());
+            bool isValid = false;
 
-            bool isValid = await _userManager.CheckPasswordAsync(user, loginRequestDTO.Password);
+            if (user != null)
+            {
+                isValid = await _userManager.CheckPasswordAsync(user, loginRequestDTO.Password);
+
+            }
 
             if (user == null || isValid == false)
             {

@@ -5,6 +5,7 @@ using RzumeAPI.Models.DTO;
 using RzumeAPI.Repository.IRepository;
 using System.Net;
 using RzumeAPI.Repository;
+using RzumeAPI.Helpers;
 
 namespace RzumeAPI.Controllers
 {
@@ -15,6 +16,7 @@ namespace RzumeAPI.Controllers
     {
 
         private readonly IUserRepository _userRepo;
+        private readonly MiscellaneousHelper _helperRepo;
 
         private readonly IEmailRepository _emailRepo;
 
@@ -24,19 +26,21 @@ namespace RzumeAPI.Controllers
         //and any other class that inherits from this parent class
         protected APIResponse _response;
 
-        public UserController(IUserRepository userRepo, IEmailRepository emailRepository, IConfiguration configuration)
+        public UserController(IUserRepository userRepo, IEmailRepository emailRepository, IConfiguration configuration, MiscellaneousHelper helperRepo)
         {
             _userRepo = userRepo;
             _response = new();
             _emailRepo = emailRepository;
             _configuration = configuration;
+            _helperRepo = helperRepo;
         }
 
         [HttpPost("register")]
 
         public async Task<IActionResult> Register([FromBody] RegistrationDTO model)
         {
-            bool userNameIsUnique = _userRepo.IsUniqueUser(model.Email);
+            bool userNameIsUnique = _helperRepo.IsUniqueUser(model.Email);
+            // bool userNameIsUnique = true;
 
             if (!userNameIsUnique)
             {
@@ -58,6 +62,9 @@ namespace RzumeAPI.Controllers
 
             _response.StatusCode = HttpStatusCode.OK;
             _response.IsSuccess = true;
+            _response.Result = new {
+                message = "Kindly check your mail for the confirmation token"
+            };
             return Ok(_response);
         }
 

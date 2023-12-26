@@ -5,7 +5,7 @@ using RzumeAPI.Models;
 
 namespace RzumeAPI.Data
 {
-	public class ApplicationDbContext: IdentityDbContext<User>
+    public class ApplicationDbContext : IdentityDbContext<User>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -23,6 +23,7 @@ namespace RzumeAPI.Data
                 .HasForeignKey(x => x.UserId)
                 .HasPrincipalKey(x => x.Id)
                 .IsRequired();
+
 
             modelBuilder.Entity<Favorites>()
               .HasMany(x => x.Applications)
@@ -64,6 +65,8 @@ namespace RzumeAPI.Data
         public DbSet<Application> Application { get; set; }
 
         public DbSet<Favorites> Favorites { get; set; }
+
+        public DbSet<Otp> Otp { get; set; }
 
     }
 }

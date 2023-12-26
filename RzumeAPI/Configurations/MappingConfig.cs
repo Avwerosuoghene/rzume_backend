@@ -10,6 +10,8 @@ namespace RzumeAPI.Configurations
         public MappingConfig()
         {
             CreateMap<User, UserDTO>().ReverseMap();
+
+            CreateMap<OtpDTO, Otp>().ReverseMap();
         }
     }
 }
