@@ -17,6 +17,8 @@ namespace RzumeAPI.Models
 
         public string OtpValue { get; set; }
 
+        public bool IsConfirmed {get; set;}
+
 
         public DateTime ExpirationDate { get; set; }
 

@@ -16,30 +16,31 @@ namespace RzumeAPI.Controllers
     {
 
         private readonly IUserRepository _userRepo;
-        private readonly MiscellaneousHelper _helperRepo;
+        private readonly MiscellaneousHelper _helperService;
 
         private readonly IEmailRepository _emailRepo;
 
-        private readonly IConfiguration _configuration;
+        private readonly IOtpRepository _otpRepo;
+
 
         //Marking this as protected makes it accessible to the parent class
         //and any other class that inherits from this parent class
         protected APIResponse _response;
 
-        public UserController(IUserRepository userRepo, IEmailRepository emailRepository, IConfiguration configuration, MiscellaneousHelper helperRepo)
+        public UserController(IUserRepository userRepo, IEmailRepository emailRepository, IConfiguration configuration, MiscellaneousHelper helperService, IOtpRepository otpRepo)
         {
             _userRepo = userRepo;
             _response = new();
             _emailRepo = emailRepository;
-            _configuration = configuration;
-            _helperRepo = helperRepo;
+            _helperService = helperService;
+            _otpRepo = otpRepo;
         }
 
         [HttpPost("register")]
 
         public async Task<IActionResult> Register([FromBody] RegistrationDTO model)
         {
-            bool userNameIsUnique = _helperRepo.IsUniqueUser(model.Email);
+            bool userNameIsUnique = _helperService.IsUniqueUser(model.Email);
             // bool userNameIsUnique = true;
 
             if (!userNameIsUnique)
@@ -62,7 +63,8 @@ namespace RzumeAPI.Controllers
 
             _response.StatusCode = HttpStatusCode.OK;
             _response.IsSuccess = true;
-            _response.Result = new {
+            _response.Result = new
+            {
                 message = "Kindly check your mail for the confirmation token"
             };
             return Ok(_response);
@@ -93,7 +95,8 @@ namespace RzumeAPI.Controllers
         [HttpGet("confirm-email")]
         public async Task ConfirmEmail(string uid, string token, string email)
         {
-            EmailConfirm model = new EmailConfirm {
+            EmailConfirm model = new EmailConfirm
+            {
                 Email = email
             };
             if (!string.IsNullOrEmpty(uid) && !string.IsNullOrEmpty(token))
@@ -107,26 +110,85 @@ namespace RzumeAPI.Controllers
             }
         }
 
-
-        [HttpPost("confirm-email")]
-        public async Task ConfirmEmail(EmailConfirm model)
+        [HttpPost("generate-token")]
+        public async Task<IActionResult> GenerateToken(GenerateOtpDTO otpPayload)
         {
-          var user = await _userRepo.GetUserByEmailAsync(model.Email);
-          if(user != null) {
-
-                if(user.EmailConfirmed) {
-                    model.IsConfirmed = true;
-                    return;
+            try
+            {
+                var user = await _userRepo.GetUserByEmailAsync(otpPayload.Email);
+                if (user == null)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("Username not found");
+                    return BadRequest(_response);
                 }
 
-                await _userRepo.GenerateEmailConfirmationToken(user);
-                model.EmailSent = true;
-                ModelState.Clear();
-            
-          } else {
-           
-          }
+
+                var otpModel = await _otpRepo.GetAsync(u => u.UserId == user.Id);
+
+                Otp otpResponse = await _otpRepo.UpdateAsync(otpModel);
+
+                if (otpResponse == null)
+                {
+                    _response.StatusCode = HttpStatusCode.InternalServerError;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("Error occured updating the db");
+                    return BadRequest(_response);
+                }
+
+
+                await _emailRepo.SendConfrirmationMail(user, otpResponse.OtpValue);
+
+
+                _response.StatusCode = HttpStatusCode.OK;
+                _response.IsSuccess = true;
+                _response.Result = new {message = "otp sent succesfully"};
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+
+            _response.StatusCode = HttpStatusCode.InternalServerError;
+            _response.IsSuccess = false;
+            return BadRequest(_response);
         }
+
+
+
+        // [HttpPost("confirm-email")]
+        // public async Task ConfirmEmail(EmailConfirm model)
+        // {
+        //     try
+        //     {
+        //         var user = await _userRepo.GetUserByEmailAsync(model.Email);
+        //         if (user != null)
+        //         {
+
+        //             if (user.EmailConfirmed)
+        //             {
+        //                 model.IsConfirmed = true;
+        //                 return;
+        //             }
+
+        //             await _userRepo.GenerateEmailConfirmationToken(user);
+        //             model.EmailSent = true;
+        //             ModelState.Clear();
+
+        //         }
+        //         else
+        //         {
+
+        //         }
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         Console.WriteLine(ex);
+        //     }
+
+        // }
 
 
 
@@ -137,7 +199,9 @@ namespace RzumeAPI.Controllers
         {
             _response.StatusCode = HttpStatusCode.OK;
             _response.IsSuccess = true;
-            _response.Result = "Sever Running";
+            _response.Result =  new {
+                message = "Server running!"
+            };
 
 
             return Ok(_response);

@@ -4,13 +4,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RzumeAPI.Models.DTO
 {
-    public class OtpDTO
+    public class CreateOtpDTO
     {
 
-        public string OtpID { get; set; }
-
         public string UserId { get; set; }
-
         public string OtpValue { get; set; }
 
         public bool IsConfirmed { get; set; }

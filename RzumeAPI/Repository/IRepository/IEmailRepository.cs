@@ -10,7 +10,7 @@ namespace RzumeAPI.Repository.IRepository
     {
             Task SendTestEmail(UserEmailOptions userEmailOptions); 
 
-            Task SendConfrirmationMail(UserEmailOptions userEmailOptions); 
+            Task SendConfrirmationMail(User user, string token); 
 
     }
 }

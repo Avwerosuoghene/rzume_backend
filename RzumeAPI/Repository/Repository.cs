@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using RzumeAPI.Data;
 using RzumeAPI.Repository.IRepository;
@@ -36,7 +37,9 @@ namespace RzumeAPI.Repository
         }
 
 
-        public async Task<T> GetAsync(System.Linq.Expressions.Expression<Func<T, bool>> filter = null, bool tracked = true)
+        public async Task<T> GetAsync(Expression<Func<T, bool>>? filter = null,
+
+                       bool tracked = true)
         {
             IQueryable<T> query = dbSet;
 

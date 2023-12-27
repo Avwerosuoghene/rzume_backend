@@ -8,7 +8,8 @@ namespace RzumeAPI.Repository.IRepository
 {
     public interface IOtpRepository: IRepository<Otp>
     {
-           Task<Otp> UpdateAsync(Otp entity);
+           Task<Otp> UpdateAsync(Otp otp );
+        //    Task<int> CreateNewOtp(string userId);
 
     }
 }

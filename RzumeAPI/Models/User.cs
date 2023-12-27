@@ -5,7 +5,6 @@ namespace RzumeAPI.Models
 {
     public class User : IdentityUser
     {
-        //public required string ID { get; set; }
 
         public string? Name { get; set; }
 

@@ -13,7 +13,7 @@ namespace RzumeAPI.Repository.IRepository
         Task<LoginResponseDTO> Login(LoginRequestDTO loginRequestDTO);
         Task<IdentityResult> ConfirmEmail(string uid, string token);
 
-        Task GenerateEmailConfirmationToken(User user);
+        // Task GenerateEmailConfirmationToken(User user);
 
         Task<User> GetUserByEmailAsync (string email);
     }

@@ -25,12 +25,15 @@ namespace RzumeAPI.Repository
 
         private IOtpRepository _dbOtp;
 
+        private readonly MiscellaneousHelper _helperService;
+
+
 
 
 
 
         public UserRepository(ApplicationDbContext db, IConfiguration configuration,
-            UserManager<User> userManager, IMapper mapper, RoleManager<IdentityRole> roleManager, IEmailRepository emailService)
+            UserManager<User> userManager, IMapper mapper, RoleManager<IdentityRole> roleManager, IEmailRepository emailService, IOtpRepository dbOtp, MiscellaneousHelper helperService)
         {
             _db = db;
             secretKey = configuration.GetValue<string>("ApiSettings:Secret");
@@ -38,6 +41,9 @@ namespace RzumeAPI.Repository
             _userManager = userManager;
             _emailService = emailService;
             _configuration = configuration;
+            _dbOtp = dbOtp;
+            _helperService = helperService;
+
 
 
         }
@@ -63,33 +69,29 @@ namespace RzumeAPI.Repository
                     var userToReturn = _db.ApplicationUsers
                 .FirstOrDefault(u => u.UserName == registrationDTO.Email);
 
+             
                     var token = MiscellaneousHelper.GenerateOtp();
                     DateTime currentDate = DateTime.Now;
                     DateTime expirationDate = currentDate.AddMinutes(5);
 
-                    Console.WriteLine(userToReturn.Id);
 
-                
+
                     OtpDTO otp = new OtpDTO
                     {
                         UserId = userToReturn!.Id.ToString(),
                         ExpirationDate = expirationDate,
-                        OtpValue = token.ToString()
-                
+                        OtpValue = token.ToString(),
+                        IsConfirmed = false
+
                     };
 
+                    Otp otpModel = _mapper.Map<Otp>(otp);
 
+                    await _dbOtp.CreateAsync(otpModel);
 
-                     Otp otpModel = _mapper.Map<Otp>(otp);
+              
 
-                    // await _dbOtp.CreateAsync(otpModel);
-
-                    //  await _dbOtp.AddAsync(otp);
-                    await _db.Otp.AddAsync(otpModel);
-                    await _db.SaveChangesAsync();
-
-
-                    await SendEmailConfirmationEmail(user, token);
+                    await _emailService.SendConfrirmationMail(user, token.ToString());
 
                     return _mapper.Map<UserDTO>(userToReturn);
                 }
@@ -101,43 +103,23 @@ namespace RzumeAPI.Repository
             return null;
         }
 
-        public async Task GenerateEmailConfirmationToken(User user)
-        {
-            // var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            // var token = await _userManager.GenerateTwoFactorTokenAsync(user, "Email");
-            var token = MiscellaneousHelper.GenerateOtp();
+        // public async Task GenerateEmailConfirmationToken(User user)
+        // {
+
+        //     var token = MiscellaneousHelper.GenerateOtp();
 
 
 
-            await SendEmailConfirmationEmail(user, token);
+        //     await _emailService.SendConfrirmationMail(user, token);
 
-        }
+        // }
 
         public async Task<User> GetUserByEmailAsync(string email)
         {
             return await _userManager.FindByEmailAsync(email);
         }
 
-        private async Task SendEmailConfirmationEmail(User user, int token)
-        {
-
-            // string appDomain = _configuration.GetValue<string>("Application:AppDomain");
-            // string confirmationLink = _configuration.GetValue<string>("Application:EmailConfirmation");
-
-
-            UserEmailOptions options = new UserEmailOptions
-            {
-                ToEmails = new List<string> { user.Email },
-                Placeholders = new List<KeyValuePair<string, string>>(){
-                    new KeyValuePair<string, string>("{{userName}}", user.UserName),
-                    new KeyValuePair<string, string>("{{link}}", token.ToString() )
-
-                }
-
-            };
-
-            await _emailService.SendConfrirmationMail(options);
-        }
+      
 
 
 
@@ -182,12 +164,13 @@ namespace RzumeAPI.Repository
                 SigningCredentials = new(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
-            var token = tokenHandler.CreateToken(tokenDescriptor);
+            // var token = tokenHandler.CreateToken(tokenDescriptor);
+            var token = _helperService.GenerateToken(user.Id.ToString(), user.Email.ToString());
 
 
             LoginResponseDTO loginResponseDTO = new LoginResponseDTO()
             {
-                Token = tokenHandler.WriteToken(token),
+                Token = token,
                 User = _mapper.Map<UserDTO>(user),
             };
 

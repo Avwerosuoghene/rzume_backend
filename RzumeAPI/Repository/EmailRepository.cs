@@ -86,12 +86,22 @@ namespace RzumeAPI.Repository
             await SendEmail(userEmailOptions);
         }
 
-        public async Task SendConfrirmationMail(UserEmailOptions userEmailOptions)
+        public async Task SendConfrirmationMail(User user, string token)
         {
-            userEmailOptions.Subject = "Kindly confrim your email id.";
-            userEmailOptions.Body = UpdatePlaceHolder(GetEmailBody("EmailConfirm"), userEmailOptions.Placeholders);
+            UserEmailOptions options = new UserEmailOptions
+            {
+                ToEmails = new List<string> { user.Email },
+                Placeholders = new List<KeyValuePair<string, string>>(){
+                    new KeyValuePair<string, string>("{{userName}}", user.UserName),
+                    new KeyValuePair<string, string>("{{link}}", token )
 
-            await SendEmail(userEmailOptions);
+                },
+                Subject = "Kindly confrim your email id.",
+            };
+
+            options.Body = UpdatePlaceHolder(GetEmailBody("EmailConfirm"), options.Placeholders);
+
+            await SendEmail(options);
         }
     }
 }
