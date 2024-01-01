@@ -7,6 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
 using RzumeAPI.Data;
+using RzumeAPI.Models;
+using RzumeAPI.Models.DTO;
+using RzumeAPI.Repository.IRepository;
 
 namespace RzumeAPI.Helpers
 {
@@ -16,22 +19,27 @@ namespace RzumeAPI.Helpers
     {
         private string secretKey;
 
+        private IOtpRepository _dbOtp;
+
+
         private ApplicationDbContext _db;
 
-        public MiscellaneousHelper(ApplicationDbContext db, IConfiguration configuration)
+        public MiscellaneousHelper(ApplicationDbContext db, IConfiguration configuration, IOtpRepository dbOtp)
         {
             _db = db;
+
+            _dbOtp = dbOtp;
+
 
             secretKey = configuration.GetValue<string>("ApiSettings:Secret");
 
         }
 
-        public static int GenerateOtp()
+        public static string GenerateOtp()
         {
             Random generator = new Random();
-            int generatedOtp = generator.Next(1, 1000000);
-            string sixDigitOtp = generatedOtp.ToString("D6");
-            return int.Parse(sixDigitOtp);
+            string generatedOtp = generator.Next(1, 10000).ToString("D4");
+            return generatedOtp;
 
         }
 
@@ -74,5 +82,57 @@ namespace RzumeAPI.Helpers
             var uniqueGenerateToken = tokenHandler.WriteToken(token);
             return uniqueGenerateToken;
         }
+
+        public async Task<OtpValidationResponseDTO> ConfirmOtp(User user, string otpPayloadValue)
+        {
+            var otpModel = await _dbOtp.GetAsync(u => u.UserId == user.Id);
+            OtpValidationResponseDTO responseValue = new OtpValidationResponseDTO();
+
+
+
+            if (otpModel.OtpValue.ToString() != otpPayloadValue)
+            {
+
+
+                responseValue.isValid = false;
+                responseValue.message = "Invalid otp value";
+
+                return responseValue;
+            }
+
+
+            DateTime currentDate = DateTime.Now;
+            if (currentDate > otpModel.ExpirationDate)
+            {
+
+                responseValue.isValid = false;
+                responseValue.message = "Otp has expired";
+                ;
+                return responseValue;
+
+
+            }
+
+            if (otpModel.IsConfirmed)
+            {
+
+                responseValue.isValid = false;
+                responseValue.message = "Otp validation failed";
+
+                return responseValue;
+            }
+
+            otpModel.IsConfirmed = true;
+
+            Otp otpResponse = await _dbOtp.UpdateAsync(otpModel);
+
+
+            responseValue.isValid = true;
+            responseValue.message = "Otp validation succesful";
+
+            return responseValue;
+
+        }
+
     }
 }

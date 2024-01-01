@@ -56,7 +56,7 @@ namespace RzumeAPI.Repository
             await smtpClient.SendMailAsync(mail);
         }
 
-        private string GetEmailBody(string templateName)
+        private string GetEmailBody(string templateName, string templatePath)
         {
             var body = File.ReadAllText(string.Format(templatePath, templateName));
             ;
@@ -78,28 +78,32 @@ namespace RzumeAPI.Repository
             return text;
         }
 
-        public async Task SendTestEmail(UserEmailOptions userEmailOptions)
-        {
-            userEmailOptions.Subject = UpdatePlaceHolder("This is a test email from {{userName}} ", userEmailOptions.Placeholders);
-            userEmailOptions.Body = UpdatePlaceHolder(GetEmailBody("TestEmail"), userEmailOptions.Placeholders);
+        // public async Task SendTestEmail(UserEmailOptions userEmailOptions, string templatePath)
+        // {
+        //     userEmailOptions.Subject = UpdatePlaceHolder("This is a test email from {{userName}} ", userEmailOptions.Placeholders);
+        //     userEmailOptions.Body = UpdatePlaceHolder(GetEmailBody("TestEmail", templatePath), userEmailOptions.Placeholders);
 
-            await SendEmail(userEmailOptions);
-        }
+        //     await SendEmail(userEmailOptions);
+        // }
 
-        public async Task SendConfrirmationMail(User user, string token)
+        public async Task SendConfrirmationMail(User user, string token, string otpPurpose, bool isSigin)
         {
+
+          
             UserEmailOptions options = new UserEmailOptions
             {
                 ToEmails = new List<string> { user.Email },
                 Placeholders = new List<KeyValuePair<string, string>>(){
                     new KeyValuePair<string, string>("{{userName}}", user.UserName),
-                    new KeyValuePair<string, string>("{{link}}", token )
+                    new KeyValuePair<string, string>("{{link}}", token ),
+                    new KeyValuePair<string, string>("{{introText}}", otpPurpose ),
+                    new  KeyValuePair<string, string>("{{isSignin}}", isSigin.ToString() ),
 
                 },
                 Subject = "Kindly confrim your email id.",
             };
 
-            options.Body = UpdatePlaceHolder(GetEmailBody("EmailConfirm"), options.Placeholders);
+            options.Body = UpdatePlaceHolder(GetEmailBody("EmailConfirm", templatePath), options.Placeholders);
 
             await SendEmail(options);
         }

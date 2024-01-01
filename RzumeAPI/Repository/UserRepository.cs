@@ -52,7 +52,6 @@ namespace RzumeAPI.Repository
         {
             User user = new()
             {
-                Verified = false,
                 Email = registrationDTO.Email,
                 NormalizedEmail = registrationDTO.Email.ToUpper(),
                 UserName = registrationDTO.Email,
@@ -69,29 +68,8 @@ namespace RzumeAPI.Repository
                     var userToReturn = _db.ApplicationUsers
                 .FirstOrDefault(u => u.UserName == registrationDTO.Email);
 
-             
-                    var token = MiscellaneousHelper.GenerateOtp();
-                    DateTime currentDate = DateTime.Now;
-                    DateTime expirationDate = currentDate.AddMinutes(5);
 
-
-
-                    OtpDTO otp = new OtpDTO
-                    {
-                        UserId = userToReturn!.Id.ToString(),
-                        ExpirationDate = expirationDate,
-                        OtpValue = token.ToString(),
-                        IsConfirmed = false
-
-                    };
-
-                    Otp otpModel = _mapper.Map<Otp>(otp);
-
-                    await _dbOtp.CreateAsync(otpModel);
-
-              
-
-                    await _emailService.SendConfrirmationMail(user, token.ToString());
+                    await GenerateMail(userToReturn!, "Signup", true);
 
                     return _mapper.Map<UserDTO>(userToReturn);
                 }
@@ -103,23 +81,39 @@ namespace RzumeAPI.Repository
             return null;
         }
 
-        // public async Task GenerateEmailConfirmationToken(User user)
-        // {
-
-        //     var token = MiscellaneousHelper.GenerateOtp();
-
-
-
-        //     await _emailService.SendConfrirmationMail(user, token);
-
-        // }
 
         public async Task<User> GetUserByEmailAsync(string email)
         {
             return await _userManager.FindByEmailAsync(email);
         }
 
-      
+        private async Task GenerateMail(User user, string otpPurpose, bool isSigin)
+        {
+            var token = MiscellaneousHelper.GenerateOtp();
+            DateTime currentDate = DateTime.Now;
+            DateTime expirationDate = currentDate.AddMinutes(5);
+
+
+
+            OtpDTO otp = new OtpDTO
+            {
+                UserId = user!.Id.ToString(),
+                ExpirationDate = expirationDate,
+                OtpValue = token.ToString(),
+                IsConfirmed = false
+
+            };
+
+            Otp otpModel = _mapper.Map<Otp>(otp);
+
+            await _dbOtp.CreateAsync(otpModel);
+
+
+
+            await _emailService.SendConfrirmationMail(user, token.ToString(), otpPurpose, isSigin);
+        }
+
+
 
 
 
@@ -140,7 +134,19 @@ namespace RzumeAPI.Repository
                 {
                     //WeakReference couldn't use the token directly as it is of type SecurityToken
                     Token = "",
-                    User = null
+                    User = null,
+                    Message = "Username or password is incorrect"
+                };
+            }
+
+            if (!user.EmailConfirmed)
+            {
+                return new LoginResponseDTO()
+                {
+                    Token = "",
+                    User = _mapper.Map<UserDTO>(user),
+                    EmailConfirmed = false,
+                    Message = "Kindly Validate User"
                 };
             }
 
@@ -167,11 +173,19 @@ namespace RzumeAPI.Repository
             // var token = tokenHandler.CreateToken(tokenDescriptor);
             var token = _helperService.GenerateToken(user.Id.ToString(), user.Email.ToString());
 
+            await _userManager.SetAuthenticationTokenAsync(user, "Login", "LoginToken", token);
+
+
+            //    var result = await userManager.ResetPasswordAsync(user, model.Token, model.Password);
+
 
             LoginResponseDTO loginResponseDTO = new LoginResponseDTO()
             {
                 Token = token,
                 User = _mapper.Map<UserDTO>(user),
+                EmailConfirmed = true,
+                Message = "Login Succesful"
+
             };
 
 
@@ -180,12 +194,80 @@ namespace RzumeAPI.Repository
         }
 
 
+        public async Task<bool> Logout(LogoutRequestDTO logoutRequestDTO)
+        {
+            var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == logoutRequestDTO.UserName.ToLower());
+            if (user == null)
+            {
+                return false;
+            }
+            await _userManager.RemoveAuthenticationTokenAsync(user, "Login", "LoginToken");
+            return true;
+
+        }
+
+        public async Task<OtpPasswordResetRequestResponseDTO> InitiateOtpResetPassword(OtpPasswordResetRequestDTO passwordResetRequestModel)
+        {
+            var user = _db.ApplicationUsers.FirstOrDefault(u => u.Email.ToLower() == passwordResetRequestModel.Email.ToLower());
+            OtpPasswordResetRequestResponseDTO passwordResetResponse = new OtpPasswordResetRequestResponseDTO();
+            if (user == null)
+            {
+                passwordResetResponse.isSuccess = false;
+                passwordResetResponse.message = "User not found";
+                return passwordResetResponse;
+            }
+
+            var otpModel = await _dbOtp.GetAsync(u => u.UserId == user.Id);
+
+            OtpValidationResponseDTO otpConfirmedResponse = await _helperService.ConfirmOtp(user, passwordResetRequestModel.OtpValue.ToString()!);
+
+            if (!otpConfirmedResponse.isValid)
+            {
+                passwordResetResponse.isSuccess = false;
+                passwordResetResponse.message = otpConfirmedResponse.message;
+                return passwordResetResponse;
+            }
+
+            var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+
+            var result = await _userManager.ResetPasswordAsync(user, resetToken, passwordResetRequestModel.Password);
+
+            if (result.Succeeded)
+            {
+                passwordResetResponse.isSuccess = true;
+                passwordResetResponse.message = "Password Reset Succesful";
+                return passwordResetResponse;
+            }
+            else
+            {
+                passwordResetResponse.isSuccess = false;
+                passwordResetResponse.message = "Password Reset Failed";
+                return passwordResetResponse;
+            }
+
+
+
+
+
+        }
+
         public async Task<IdentityResult> ConfirmEmail(string uid, string token)
         {
             return await _userManager.ConfirmEmailAsync(await _userManager.FindByIdAsync(uid), token);
 
         }
 
+
+        public async Task<User> UpdateAsync(User user)
+        {
+
+
+
+            _db.ApplicationUsers.Update(user);
+            await _db.SaveChangesAsync();
+            return user;
+        }
     }
 
 

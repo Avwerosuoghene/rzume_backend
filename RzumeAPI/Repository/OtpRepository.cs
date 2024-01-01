@@ -35,6 +35,8 @@ namespace RzumeAPI.Repository
 
         }
 
+        
+
 
 
 
@@ -43,13 +45,6 @@ namespace RzumeAPI.Repository
         {
 
 
-            var token = MiscellaneousHelper.GenerateOtp();
-            DateTime currentDate = DateTime.Now;
-            DateTime expirationDate = currentDate.AddMinutes(5);
-
-            otp.OtpValue = token.ToString();
-            otp.ExpirationDate = expirationDate;
-            otp.IsConfirmed = false;
 
             _db.Otp.Update(otp);
             await _db.SaveChangesAsync();

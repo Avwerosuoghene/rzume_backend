@@ -6,6 +6,9 @@ using RzumeAPI.Helpers;
 using RzumeAPI.Models;
 using RzumeAPI.Repository;
 using RzumeAPI.Repository.IRepository;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,9 +44,24 @@ builder.Services.AddIdentity<User, IdentityRole>()
 
 builder.Services.Configure<SMTPConfigModel>(configuration.GetSection("SMTPConfig"));
 
-builder.Services.Configure<IdentityOptions>(options => {
+builder.Services.Configure<IdentityOptions>(options =>
+{
     options.SignIn.RequireConfirmedEmail = true;
-} );
+});
+
+
+builder.Services.AddAuthentication(
+    options =>
+    {
+        options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+
+    }
+).AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+{
+    options.ClientId = configuration.GetSection("Authentication:Google:ClientId").Value;
+    options.ClientSecret = configuration.GetSection("Authentication:Google:ClientSecret").Value;
+});
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -69,6 +87,8 @@ builder.Services.AddScoped<MiscellaneousHelper>();
 var app = builder.Build();
 
 app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+
+app.UseAuthentication();
 
 
 // Configure the HTTP request pipeline.

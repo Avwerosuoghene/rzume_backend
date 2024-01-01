@@ -13,6 +13,8 @@ namespace RzumeAPI.Models.DTO
 
         public string UserName { get; set; }
 
+        public string Email {get; set;}
+
 
 
         public string? Location { get; set; }
@@ -38,7 +40,6 @@ namespace RzumeAPI.Models.DTO
 
         public string? Bio { get; set; }
 
-        public bool Verified { get; set; }
 
     }
 

@@ -11,12 +11,17 @@ namespace RzumeAPI.Repository.IRepository
         Task<UserDTO> Register(RegistrationDTO registrationRequestDTO);
 
         Task<LoginResponseDTO> Login(LoginRequestDTO loginRequestDTO);
+        Task<bool> Logout(LogoutRequestDTO logoutRequestDTO);
+
+          Task<OtpPasswordResetRequestResponseDTO> InitiateOtpResetPassword(OtpPasswordResetRequestDTO passwordResetRequestModel);
         Task<IdentityResult> ConfirmEmail(string uid, string token);
 
         // Task GenerateEmailConfirmationToken(User user);
 
         Task<User> GetUserByEmailAsync (string email);
-    }
+
+        Task<User> UpdateAsync(User user);
+    };
 }
 
 
