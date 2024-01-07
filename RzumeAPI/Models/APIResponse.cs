@@ -15,7 +15,17 @@ namespace RzumeAPI.Models
 
         public List<string> ErrorMessages { get; set; }
 
-        public object Result { get; set; }
+        public ResultObject? Result { get; set; }
+
+       
     }
+
+      public class ResultObject
+        {
+            public string Message { get; set; }
+            public object? Content { get; set; }
+        }
+
+    
 }
 

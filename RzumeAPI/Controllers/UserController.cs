@@ -65,13 +65,17 @@ namespace RzumeAPI.Controllers
                 return BadRequest(_response);
             }
 
-
+            RegistrationResponseDTO signupResponse = new RegistrationResponseDTO{
+                IsCreated = true
+            };
             _response.StatusCode = HttpStatusCode.OK;
             _response.IsSuccess = true;
-            _response.Result = new
+            _response.Result = new ResultObject
             {
-                message = "Kindly check your mail for the confirmation token"
+                Message = "Kindly check your mail for the confirmation token",
+                Content = signupResponse
             };
+
             return Ok(_response);
         }
 
@@ -92,21 +96,34 @@ namespace RzumeAPI.Controllers
                     return BadRequest(_response);
                 }
 
-                  if (!loginResponse.EmailConfirmed)
+                if (!loginResponse.EmailConfirmed)
                 {
-                    GenerateOtpDTO otpPayload = new GenerateOtpDTO {
+                    GenerateOtpDTO otpPayload = new GenerateOtpDTO
+                    {
                         Email = loginResponse.User.Email,
                         Purpose = "User Validation"
                     };
                     await GenerateToken(otpPayload);
                     _response.StatusCode = HttpStatusCode.OK;
                     _response.IsSuccess = true;
-                    _response.Result = loginResponse;
+                    _response.Result = new ResultObject
+                    {
+                        Message = "Kindly Validate your Account",
+                        Content = loginResponse
+                    };
+                    return Ok(_response);
                 }
 
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.IsSuccess = true;
-                _response.Result = loginResponse;
+
+                _response.Result = new ResultObject
+                {
+                    Message = "Login Successful",
+                    Content = loginResponse
+                };
+
+
                 return Ok(_response);
             }
             catch (Exception ex)
@@ -143,7 +160,12 @@ namespace RzumeAPI.Controllers
 
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.IsSuccess = true;
-                _response.Result = new { message = "Logout succesful" };
+                _response.Result = new ResultObject
+                {
+                    Message = "Logout Successful",
+                    Content = null
+                };
+
                 return Ok(_response);
             }
             catch (Exception ex)
@@ -178,7 +200,12 @@ namespace RzumeAPI.Controllers
 
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.IsSuccess = true;
-                _response.Result = new { message = otpPasswordResetInitSucess.message! };
+                _response.Result = new ResultObject
+                {
+                    Message = otpPasswordResetInitSucess.message!,
+                    Content = null
+                };
+
                 return Ok(_response);
 
 
@@ -239,7 +266,12 @@ namespace RzumeAPI.Controllers
 
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.IsSuccess = true;
-                _response.Result = new { message = "otp sent succesfully" };
+                _response.Result = new ResultObject
+                {
+                    Message = "otp sent succesfully",
+                    Content = null
+                };
+
                 return Ok(_response);
             }
             catch (Exception ex)
@@ -358,7 +390,11 @@ namespace RzumeAPI.Controllers
 
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.IsSuccess = true;
-                _response.Result = loginResponse;
+                _response.Result = new ResultObject
+                {
+                    Message = "Login Successful",
+                    Content = loginResponse
+                };
                 return Ok(_response);
 
             }
@@ -425,9 +461,10 @@ namespace RzumeAPI.Controllers
         {
             _response.StatusCode = HttpStatusCode.OK;
             _response.IsSuccess = true;
-            _response.Result = new
+            _response.Result = new ResultObject
             {
-                message = "Server running!"
+                Message = "Server running!",
+                Content = null
             };
 
 
