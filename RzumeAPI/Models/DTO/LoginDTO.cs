@@ -1,4 +1,13 @@
-namespace RzumeAPI.Models.DTO {
+﻿using System;
+namespace RzumeAPI.Models.DTO
+{
+	public class LoginRequestDTO
+	{
+          public string UserName { get; set; }
+
+        public string Password { get; set; }
+    }
+
 
 public class LoginResponseDTO
 	{
@@ -9,5 +18,5 @@ public class LoginResponseDTO
 
 		public bool EmailConfirmed {get; set;}
 	}
-
 }
+

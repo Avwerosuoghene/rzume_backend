@@ -65,7 +65,8 @@ namespace RzumeAPI.Controllers
                 return BadRequest(_response);
             }
 
-            RegistrationResponseDTO signupResponse = new RegistrationResponseDTO{
+            RegistrationResponseDTO signupResponse = new RegistrationResponseDTO
+            {
                 IsCreated = true
             };
             _response.StatusCode = HttpStatusCode.OK;
@@ -284,59 +285,6 @@ namespace RzumeAPI.Controllers
             return BadRequest(_response);
         }
 
-        // private async Task<OtpValidationResponseDTO> ConfirmOtp(User user, string otpPayloadValue)
-        // {
-        //     var otpModel = await _otpRepo.GetAsync(u => u.UserId == user.Id);
-        //          OtpValidationResponseDTO responseValue = new OtpValidationResponseDTO();
-
-
-
-        //     if (otpModel.OtpValue.ToString() != otpPayloadValue)
-        //     {
-
-
-        //             responseValue.isValid = false;
-        //             responseValue.message = "Invalid otp value";
-
-        //         return responseValue;
-        //     }
-
-
-        //     DateTime currentDate = DateTime.Now;
-        //     if (currentDate > otpModel.ExpirationDate)
-        //     {
-
-        //              responseValue.isValid  = false;
-        //             responseValue.message = "Otp has expired";
-        //         ;
-        //         return responseValue;
-
-
-        //     }
-
-        //     if (otpModel.IsConfirmed)
-        //     {
-
-        //              responseValue.isValid  = false;
-        //             responseValue.message = "Otp validation failed";
-
-        //         return responseValue;
-        //     }
-
-        //     otpModel.IsConfirmed = true;
-
-        //     Otp otpResponse = await _otpRepo.UpdateAsync(otpModel);
-
-
-        //          responseValue.isValid  = true;
-        //         responseValue.message = "Otp validation succesful";
-
-        //     return responseValue;
-
-        // }
-
-
-
         [HttpPost("confirm-email")]
         public async Task<IActionResult> ConfirmEmail(OtpValidationDTO otpValidationPayload)
         {
@@ -394,6 +342,48 @@ namespace RzumeAPI.Controllers
                 {
                     Message = "Login Successful",
                     Content = loginResponse
+                };
+                return Ok(_response);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+
+            _response.StatusCode = HttpStatusCode.InternalServerError;
+            _response.IsSuccess = false;
+            return BadRequest(_response);
+
+        }
+
+
+        [HttpPost("validate-email")]
+        public async Task<IActionResult> ValidateEmail(ValidateEmailDTO validatePayload)
+        {
+            try
+            {
+                var user = await _userRepo.GetUserByEmailAsync(validatePayload.Email);
+                if (user == null)
+                {
+                    _response.StatusCode = HttpStatusCode.NotFound;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("User not found");
+                    return BadRequest(_response);
+                }
+
+                ValidateEmailResponseDTO validateResponse = new ValidateEmailResponseDTO
+                {
+                    isValidated = true
+                };
+
+
+                _response.StatusCode = HttpStatusCode.OK;
+                _response.IsSuccess = true;
+                _response.Result = new ResultObject
+                {
+                    Message = "Succesful",
+                    Content = validateResponse
                 };
                 return Ok(_response);
 
