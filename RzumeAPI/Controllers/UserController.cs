@@ -185,13 +185,13 @@ namespace RzumeAPI.Controllers
 
             try
             {
-                OtpPasswordResetRequestResponseDTO otpPasswordResetInitSucess = await _userRepo.InitiateOtpResetPassword(model);
-                if (!otpPasswordResetInitSucess.isSuccess)
+                OtpPasswordResetRequestResponseDTO otpPasswordResetResponse = await _userRepo.InitiateOtpResetPassword(model);
+                if (!otpPasswordResetResponse.isSuccess)
                 {
 
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
-                    _response.ErrorMessages.Add(otpPasswordResetInitSucess.message);
+                    _response.ErrorMessages.Add(otpPasswordResetResponse.message);
                     return BadRequest(_response);
 
 
@@ -203,8 +203,8 @@ namespace RzumeAPI.Controllers
                 _response.IsSuccess = true;
                 _response.Result = new ResultObject
                 {
-                    Message = otpPasswordResetInitSucess.message!,
-                    Content = null
+                    Message = otpPasswordResetResponse.message!,
+                    Content = otpPasswordResetResponse
                 };
 
                 return Ok(_response);
@@ -264,13 +264,15 @@ namespace RzumeAPI.Controllers
 
                 await _emailRepo.SendConfrirmationMail(user, otpResponse.OtpValue, otpPayload.Purpose, false);
 
-
+                GenerateOtpResponseDTO otpGenerateResponse = new GenerateOtpResponseDTO{
+                    isSuccess = true
+                };
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.IsSuccess = true;
                 _response.Result = new ResultObject
                 {
                     Message = "otp sent succesfully",
-                    Content = null
+                    Content = otpGenerateResponse
                 };
 
                 return Ok(_response);
@@ -285,7 +287,7 @@ namespace RzumeAPI.Controllers
             return BadRequest(_response);
         }
 
-        [HttpPost("confirm-email")]
+        [HttpPost("confirm-user")]
         public async Task<IActionResult> ConfirmEmail(OtpValidationDTO otpValidationPayload)
         {
             try

@@ -41,6 +41,13 @@ namespace RzumeAPI.Models.DTO
 
     }
 
+
+     public class GenerateOtpResponseDTO
+    {
+        public  bool isSuccess { get; set; }
+
+    }
+
      public class OtpPasswordResetRequestResponseDTO
     {
         public bool isSuccess { get; set; }
