@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RzumeAPI.Data;
 
@@ -11,9 +12,10 @@ using RzumeAPI.Data;
 namespace RzumeAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240125101242_Files_Table_Edit_UserTable_Adds_OnboardStatus_Fix")]
+    partial class Files_Table_Edit_UserTable_Adds_OnboardStatus_Fix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -366,9 +368,6 @@ namespace RzumeAPI.Migrations
 
                     b.Property<bool>("OnBoarded")
                         .HasColumnType("bit");
-
-                    b.Property<byte?>("OnBoardingStage")
-                        .HasColumnType("tinyint");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");

@@ -81,6 +81,77 @@ namespace RzumeAPI.Repository
             return null;
         }
 
+        public async Task<GetActiveUserResponse> GetActiveUser(string token)
+        {
+            try
+            {
+
+                var key = Encoding.ASCII.GetBytes(secretKey);
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var validations = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+                var claimsPrincipal = tokenHandler.ValidateToken(token, validations, out var tokenSecure);
+                var userIdClaim = claimsPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email);
+                var userMail = userIdClaim?.Value;
+                if (userMail == null)
+                {
+                    return new GetActiveUserResponse()
+                    {
+                        User = null,
+                        Message = "Invalid Request"
+                    };
+                }
+
+                var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == userMail.ToLower());
+
+                if (user == null)
+                {
+                    return new GetActiveUserResponse()
+                    {
+                        User = null,
+                        Message = "User not found"
+                    };
+                }
+
+                return new GetActiveUserResponse()
+                {
+
+
+                    User = _mapper.Map<UserDTO>(user),
+                    Message = "Success"
+
+                };
+
+
+
+            }
+            catch (SecurityTokenExpiredException ex)
+            {
+                Console.WriteLine($"Token expired: {ex.Message}");
+
+                return new GetActiveUserResponse()
+                {
+                    User = null,
+                    Message = "Token expired"
+                };
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return new GetActiveUserResponse()
+                {
+                    User = null,
+                    Message = "An error occurred"
+                };
+            }
+
+        }
+
 
         public async Task<User> GetUserByEmailAsync(string email)
         {
@@ -119,6 +190,8 @@ namespace RzumeAPI.Repository
 
         public async Task<LoginResponseDTO> Login(LoginRequestDTO loginRequestDTO)
         {
+
+            // The async version of this method is FirstOrDefaultAsync
             var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == loginRequestDTO.UserName.ToLower());
             bool isValid = false;
 
@@ -141,6 +214,7 @@ namespace RzumeAPI.Repository
 
             if (!user.EmailConfirmed)
             {
+                // await GenerateMail(user!, "Signup", true);
                 return new LoginResponseDTO()
                 {
                     Token = "",

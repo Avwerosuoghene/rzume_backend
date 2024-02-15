@@ -32,6 +32,14 @@ namespace RzumeAPI.Data
               .HasPrincipalKey(x => x.FavoritesID)
               .IsRequired();
 
+
+            modelBuilder.Entity<UserFile>()
+              .HasOne(x => x.User)
+              .WithMany(x => x.UserFiles)
+              .HasForeignKey(x => x.UserId)
+              .HasPrincipalKey(x => x.Id)
+              .IsRequired();
+
             modelBuilder.Entity<User>()
                 .HasOne(x => x.Favorites)
                 .WithOne(x => x.User)

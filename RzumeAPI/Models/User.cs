@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Identity;
+using RzumeAPI.Models.DTO;
 
 namespace RzumeAPI.Models
 {
@@ -22,6 +23,9 @@ namespace RzumeAPI.Models
 
         public Favorites? Favorites { get; set; }
 
+        public ICollection<UserFile>? UserFiles { get; set; }
+
+
 
         public byte[]? ProfilePicture { get; set; }
 
@@ -30,6 +34,16 @@ namespace RzumeAPI.Models
 
         public string? Bio { get; set; }
 
+        public bool OnBoarded { get; set; }
+
+        public byte? OnBoardingStage {get; set;}
+
+
+    }
+
+    public class GetActiveUserResponse {
+        public UserDTO? User {get; set;}
+        public string Message {get; set;}
     }
 
 }

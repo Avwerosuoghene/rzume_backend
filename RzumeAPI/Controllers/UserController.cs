@@ -139,6 +139,50 @@ namespace RzumeAPI.Controllers
 
         }
 
+        [HttpGet("active-user")]
+
+        public async Task<IActionResult> GetActiveUser()
+        {
+            try
+            {
+                var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+                if (token == null)
+                {
+
+
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("Invalid Request");
+                    return BadRequest(_response);
+                }
+                GetActiveUserResponse response = await _userRepo.GetActiveUser(token);
+                if (response.User == null)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add(response.Message);
+                    return BadRequest(_response);
+                }
+
+                _response.StatusCode = HttpStatusCode.OK;
+                _response.IsSuccess = true;
+                _response.Result = new ResultObject
+                {
+                    Message = "User Retrieved Succesfully",
+                    Content = response
+                };
+                return Ok(_response);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+
+             _response.StatusCode = HttpStatusCode.InternalServerError;
+            _response.IsSuccess = false;
+            return BadRequest(_response);
+        }
 
 
 
@@ -264,7 +308,8 @@ namespace RzumeAPI.Controllers
 
                 await _emailRepo.SendConfrirmationMail(user, otpResponse.OtpValue, otpPayload.Purpose, false);
 
-                GenerateOtpResponseDTO otpGenerateResponse = new GenerateOtpResponseDTO{
+                GenerateOtpResponseDTO otpGenerateResponse = new GenerateOtpResponseDTO
+                {
                     isSuccess = true
                 };
                 _response.StatusCode = HttpStatusCode.OK;

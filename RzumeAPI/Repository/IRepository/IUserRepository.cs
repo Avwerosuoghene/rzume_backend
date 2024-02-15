@@ -21,6 +21,8 @@ namespace RzumeAPI.Repository.IRepository
         Task<User> GetUserByEmailAsync (string email);
 
         Task<User> UpdateAsync(User user);
+
+         Task<GetActiveUserResponse> GetActiveUser(string token);
     };
 }
 

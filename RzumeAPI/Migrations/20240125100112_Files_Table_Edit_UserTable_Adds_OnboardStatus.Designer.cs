@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RzumeAPI.Data;
 
@@ -11,9 +12,10 @@ using RzumeAPI.Data;
 namespace RzumeAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240125100112_Files_Table_Edit_UserTable_Adds_OnboardStatus")]
+    partial class Files_Table_Edit_UserTable_Adds_OnboardStatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -367,9 +369,6 @@ namespace RzumeAPI.Migrations
                     b.Property<bool>("OnBoarded")
                         .HasColumnType("bit");
 
-                    b.Property<byte?>("OnBoardingStage")
-                        .HasColumnType("tinyint");
-
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
@@ -406,35 +405,6 @@ namespace RzumeAPI.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("RzumeAPI.Models.UserFile", b =>
-                {
-                    b.Property<string>("FileId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FilePath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FileType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("FileId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserFile");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -549,17 +519,6 @@ namespace RzumeAPI.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("RzumeAPI.Models.UserFile", b =>
-                {
-                    b.HasOne("RzumeAPI.Models.User", "User")
-                        .WithMany("UserFiles")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("RzumeAPI.Models.Favorites", b =>
                 {
                     b.Navigation("Applications");
@@ -574,8 +533,6 @@ namespace RzumeAPI.Migrations
                     b.Navigation("Experience");
 
                     b.Navigation("Favorites");
-
-                    b.Navigation("UserFiles");
                 });
 #pragma warning restore 612, 618
         }

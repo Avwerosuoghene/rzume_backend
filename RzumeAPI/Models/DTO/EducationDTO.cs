@@ -14,9 +14,9 @@ namespace RzumeAPI.Models.DTO
 
         public string? UserId { get; set; }
 
-        public  string InstitutionName { get; set; }
+        public string InstitutionName { get; set; }
 
-        public  string CourseOfStudy { get; set; }
+        public string CourseOfStudy { get; set; }
 
         public string? Grade { get; set; }
 
