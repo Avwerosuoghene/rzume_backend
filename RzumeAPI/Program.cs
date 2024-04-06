@@ -82,6 +82,8 @@ builder.Services.AddScoped<IEmailRepository, EmailRepository>();
 
 builder.Services.AddScoped<IOtpRepository, OtpRepository>();
 
+builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
+
 builder.Services.AddScoped<MiscellaneousHelper>();
 
 var app = builder.Build();

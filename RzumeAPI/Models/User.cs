@@ -7,6 +7,11 @@ namespace RzumeAPI.Models
     public class User : IdentityUser
     {
 
+        public User()
+        {
+            OnBoardingStage = 0;
+        }
+
         public string? Name { get; set; }
 
 
@@ -36,14 +41,15 @@ namespace RzumeAPI.Models
 
         public bool OnBoarded { get; set; }
 
-        public byte? OnBoardingStage {get; set;}
+        public byte? OnBoardingStage { get; set; }
 
 
     }
 
-    public class GetActiveUserResponse {
-        public UserDTO? User {get; set;}
-        public string Message {get; set;}
+    public class GetActiveUserResponse
+    {
+        public UserDTO? User { get; set; }
+        public string Message { get; set; }
     }
 
 }

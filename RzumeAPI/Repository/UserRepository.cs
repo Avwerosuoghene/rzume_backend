@@ -332,6 +332,27 @@ namespace RzumeAPI.Repository
 
         }
 
+        public async Task<GenericResponseDTO> OnboardingFirstStage(OnboardUserFirstStageRequestDTO onboardRequestPayload, string userMail)
+        {
+             GenericResponseDTO genericResponse = new GenericResponseDTO{
+                isSuccess = false,
+                message = ""
+             } ;
+            
+            var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == userMail.ToLower());
+            if (user == null)
+            {
+                genericResponse.message = "User does not exist";
+                return genericResponse;
+            }
+            user.Name = $"{onboardRequestPayload.FirstName} {onboardRequestPayload.LastName}";
+            user.OnBoardingStage = 1;
+             genericResponse.message = "updated succesfully";
+             genericResponse.isSuccess = true;
+            await UpdateAsync(user);
+            return genericResponse;
+        }
+
 
         public async Task<User> UpdateAsync(User user)
         {

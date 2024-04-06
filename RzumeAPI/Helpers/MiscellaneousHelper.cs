@@ -83,6 +83,32 @@ namespace RzumeAPI.Helpers
             return uniqueGenerateToken;
         }
 
+        public async Task<string> WriteFile(IFormFile file)
+        {
+            string filename = "";
+            try
+            {
+                var extension = "." + file.FileName.Split('.')[file.FileName.Split('.').Length - 1];
+                filename = DateTime.Now.Ticks.ToString() + extension;
+                var filepath = Path.Combine(Directory.GetCurrentDirectory(), "Upload\\Files");
+                if (!Directory.Exists(filepath))
+                {
+                    Directory.CreateDirectory(filepath);
+                }
+
+                var exactPath = Path.Combine(Directory.GetCurrentDirectory(), "Upload\\Files", filename);
+                using (var stream = new FileStream(exactPath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return filename;
+        }
+
         public async Task<OtpValidationResponseDTO> ConfirmOtp(User user, string otpPayloadValue)
         {
             var otpModel = await _dbOtp.GetAsync(u => u.UserId == user.Id);

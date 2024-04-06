@@ -18,7 +18,7 @@ namespace RzumeAPI.Repository
         private readonly SMTPConfigModel _smtConfig;
 
 
-        
+
 
         public EmailRepository(IOptions<SMTPConfigModel> smtConfig)
         {
@@ -40,7 +40,7 @@ namespace RzumeAPI.Repository
                 mail.To.Add(toEmail);
             }
 
-            NetworkCredential networkCredential = new NetworkCredential(_smtConfig.UserName,_smtConfig.Password);
+            NetworkCredential networkCredential = new NetworkCredential(_smtConfig.UserName, _smtConfig.Password);
 
             SmtpClient smtpClient = new()
             {
@@ -52,8 +52,16 @@ namespace RzumeAPI.Repository
             };
 
             mail.BodyEncoding = Encoding.Default;
+            try
+            {
+                await smtpClient.SendMailAsync(mail);
 
-            await smtpClient.SendMailAsync(mail);
+            }
+            catch (Exception ex)
+            {
+
+            }
+
         }
 
         private string GetEmailBody(string templateName, string templatePath)
@@ -89,7 +97,7 @@ namespace RzumeAPI.Repository
         public async Task SendConfrirmationMail(User user, string token, string otpPurpose, bool isSigin)
         {
 
-          
+
             UserEmailOptions options = new UserEmailOptions
             {
                 ToEmails = new List<string> { user.Email },

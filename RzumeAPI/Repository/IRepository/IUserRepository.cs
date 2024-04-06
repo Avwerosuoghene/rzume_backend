@@ -23,6 +23,7 @@ namespace RzumeAPI.Repository.IRepository
         Task<User> UpdateAsync(User user);
 
          Task<GetActiveUserResponse> GetActiveUser(string token);
+         Task<GenericResponseDTO> OnboardingFirstStage(OnboardUserFirstStageRequestDTO onboardRequestPayload, String userMail);
     };
 }
 

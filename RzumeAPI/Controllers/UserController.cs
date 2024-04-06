@@ -9,7 +9,8 @@ using RzumeAPI.Helpers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using System.Security.Claims;
+using Newtonsoft.Json;
+
 
 namespace RzumeAPI.Controllers
 {
@@ -179,7 +180,7 @@ namespace RzumeAPI.Controllers
                 Console.WriteLine(ex);
             }
 
-             _response.StatusCode = HttpStatusCode.InternalServerError;
+            _response.StatusCode = HttpStatusCode.InternalServerError;
             _response.IsSuccess = false;
             return BadRequest(_response);
         }
@@ -484,9 +485,9 @@ namespace RzumeAPI.Controllers
         }
 
 
+        [HttpPost("user-onboarding")]
 
-
-
+   
 
 
 
