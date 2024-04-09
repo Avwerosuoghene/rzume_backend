@@ -36,7 +36,9 @@ namespace RzumeAPI.Models.DTO
     {
 
         public string FileName { get; set; }
-        public byte[] File { get; set; }
+        public string FileBytes { get; set; }
+
+        public FileCategory FileCat {get; set;}
 
 
 

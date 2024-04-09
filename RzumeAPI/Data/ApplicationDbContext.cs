@@ -63,6 +63,7 @@ namespace RzumeAPI.Data
         }
 
         public DbSet<User> ApplicationUsers { get; set; }
+        public DbSet<UserFile> Userfile { get; set; }
 
         public DbSet<Company> Company { get; set; }
 

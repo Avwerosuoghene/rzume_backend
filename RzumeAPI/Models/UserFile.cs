@@ -14,9 +14,9 @@ namespace RzumeAPI.Models
 
         public string FileName { get; set; }
 
-        public string FileType { get; set; }
+        public string FileCategory { get; set; }
 
-        public string FilePath { get; set; }
+        public string FileBytes { get; set; }
 
         public string UserId { get; set; }
 

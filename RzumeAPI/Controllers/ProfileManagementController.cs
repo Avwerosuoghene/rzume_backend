@@ -94,79 +94,94 @@ namespace RzumeAPI.Controllers
 
             return Ok("File uploaded successfully");
         }
-    
 
 
 
-    [HttpPost("user-onboarding")]
 
-    public async Task<IActionResult> OnboardUser(OnboardUserRequestDTO onboardUserPayload)
-    {
+        [HttpPost("user-onboarding")]
 
-
-        Console.WriteLine("here");
-        try
+        public async Task<IActionResult> OnboardUser(OnboardUserRequestDTO onboardUserPayload)
         {
-            if (onboardUserPayload.OnboardUserPayload == null)
-            {
-                _response.StatusCode = HttpStatusCode.NotFound;
-                _response.IsSuccess = false;
-                _response.ErrorMessages.Add("Please provide onboarding stage payload");
-                return BadRequest(_response);
-            }
-            if (onboardUserPayload.OnBoardingStage == 0)
-            {
 
-                OnboardUserFirstStageRequestDTO onboardUserFirstStagePayload = JsonConvert.DeserializeObject<OnboardUserFirstStageRequestDTO>(onboardUserPayload.OnboardUserPayload.ToString());
-                GenericResponseDTO onboardFirstStageResponse = await _profileRepo.OnboardingFirstStage(onboardUserFirstStagePayload, onboardUserPayload.UserMail);
 
-                if (onboardFirstStageResponse.isSuccess == false)
+            try
+            {
+                if (onboardUserPayload.OnboardUserPayload == null)
                 {
                     _response.StatusCode = HttpStatusCode.NotFound;
                     _response.IsSuccess = false;
-                    _response.ErrorMessages.Add(onboardFirstStageResponse.message);
+                    _response.ErrorMessages.Add("Please provide onboarding stage payload");
                     return BadRequest(_response);
                 }
-
-
-                _response.StatusCode = HttpStatusCode.OK;
-                _response.IsSuccess = true;
-                _response.Result = new ResultObject
+                if (onboardUserPayload.OnBoardingStage == 0)
                 {
-                    Message = onboardFirstStageResponse.message,
-                    Content = onboardFirstStageResponse.isSuccess
-                };
-                return Ok(_response);
+
+                    OnboardUserFirstStageRequestDTO onboardUserFirstStagePayload = JsonConvert.DeserializeObject<OnboardUserFirstStageRequestDTO>(onboardUserPayload.OnboardUserPayload.ToString());
+                    GenericResponseDTO onboardFirstStageResponse = await _profileRepo.OnboardingFirstStage(onboardUserFirstStagePayload, onboardUserPayload.UserMail);
+
+                    if (onboardFirstStageResponse.isSuccess == false)
+                    {
+                        _response.StatusCode = HttpStatusCode.NotFound;
+                        _response.IsSuccess = false;
+                        _response.ErrorMessages.Add(onboardFirstStageResponse.message);
+                        return BadRequest(_response);
+                    }
+
+
+                    _response.StatusCode = HttpStatusCode.OK;
+                    _response.IsSuccess = true;
+                    _response.Result = new ResultObject
+                    {
+                        Message = onboardFirstStageResponse.message,
+                        Content = onboardFirstStageResponse.isSuccess
+                    };
+                    return Ok(_response);
+
+                }
+                if (onboardUserPayload.OnBoardingStage == 1)
+                {
+                    OnboardUserSecondStageRequestDTO onboardUserSecondStagePayload = JsonConvert.DeserializeObject<OnboardUserSecondStageRequestDTO>(onboardUserPayload.OnboardUserPayload.ToString());
+                    GenericResponseDTO onboardSecondStageResponse = await _profileRepo.OnboardingSecondStage(onboardUserSecondStagePayload, onboardUserPayload.UserMail);
+                    if (onboardSecondStageResponse.isSuccess == false)
+                    {
+                        _response.StatusCode = HttpStatusCode.NotFound;
+                        _response.IsSuccess = false;
+                        _response.ErrorMessages.Add(onboardSecondStageResponse.message);
+                        return BadRequest(_response);
+                    }
+
+
+                    _response.StatusCode = HttpStatusCode.OK;
+                    _response.IsSuccess = true;
+                    _response.Result = new ResultObject
+                    {
+                        Message = onboardSecondStageResponse.message,
+                        Content = onboardSecondStageResponse.isSuccess
+                    };
+                    return Ok(_response);
+
+                }
 
             }
-            // if (onboardUserPayload.OnBoardingStage == 1)
-            // {
-            //     OnboardUserSecondStageRequestDTO onboardUserSecondStagePayload = JsonConvert.DeserializeObject<OnboardUserSecondStageRequestDTO>(onboardUserPayload.OnboardUserPayload.ToString());
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                _response.StatusCode = HttpStatusCode.BadRequest;
+                _response.IsSuccess = false;
+                _response.ErrorMessages.Add(ex.Message);
 
-
-            //     string result = await _helperService.WriteFile(onboardUserSecondStagePayload.File);
-            // }
-
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex);
-            _response.StatusCode = HttpStatusCode.BadRequest;
+                return BadRequest(_response);
+            }
+            _response.StatusCode = HttpStatusCode.InternalServerError;
             _response.IsSuccess = false;
-            _response.ErrorMessages.Add(ex.Message);
-
+            _response.ErrorMessages.Add("An error occured");
             return BadRequest(_response);
+
+
         }
-        _response.StatusCode = HttpStatusCode.InternalServerError;
-        _response.IsSuccess = false;
-        _response.ErrorMessages.Add("An error occured");
-        return BadRequest(_response);
 
 
     }
-
-
-}
 
 
 }

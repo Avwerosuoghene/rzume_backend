@@ -16,44 +16,36 @@ namespace RzumeAPI.Repository
     public class ProfileRepository : IProfileRepository
     {
         private ApplicationDbContext _db;
-        private readonly UserManager<User> _userManager;
-        private readonly IEmailRepository _emailService;
-        private string secretKey;
-        // private readonly IMapper _mapper;
 
-        private readonly IConfiguration _configuration;
+        private readonly IMapper _mapper;
 
-        // private IOtpRepository _dbOtp;
-
-        private readonly MiscellaneousHelper _helperService;
+        private IUserFileRepository _dbUserFile;
 
 
 
 
 
 
-        public ProfileRepository(ApplicationDbContext db, IConfiguration configuration,
-            UserManager<User> userManager, IMapper mapper, RoleManager<IdentityRole> roleManager, IEmailRepository emailService, IOtpRepository dbOtp, MiscellaneousHelper helperService)
+        public ProfileRepository(ApplicationDbContext db,
+          IMapper mapper, IUserFileRepository dbUserFile)
         {
             _db = db;
-            // _mapper = mapper;
-            // _userManager = userManager;
-            // _configuration = configuration;
-            // _dbOtp = dbOtp;
-            _helperService = helperService;
+
+            _dbUserFile = dbUserFile;
 
 
 
         }
 
-     
+
         public async Task<GenericResponseDTO> OnboardingFirstStage(OnboardUserFirstStageRequestDTO onboardRequestPayload, string userMail)
         {
-             GenericResponseDTO genericResponse = new GenericResponseDTO{
+            GenericResponseDTO genericResponse = new GenericResponseDTO
+            {
                 isSuccess = false,
                 message = ""
-             } ;
-            
+            };
+
             var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == userMail.ToLower());
             if (user == null)
             {
@@ -62,9 +54,44 @@ namespace RzumeAPI.Repository
             }
             user.Name = $"{onboardRequestPayload.FirstName} {onboardRequestPayload.LastName}";
             user.OnBoardingStage = 1;
-             genericResponse.message = "updated succesfully";
-             genericResponse.isSuccess = true;
             await UpdateAsync(user);
+            genericResponse.message = "updated succesfully";
+            genericResponse.isSuccess = true;
+
+            return genericResponse;
+        }
+
+        public async Task<GenericResponseDTO> OnboardingSecondStage(OnboardUserSecondStageRequestDTO onboardRequestPayload, string userMail)
+        {
+            GenericResponseDTO genericResponse = new GenericResponseDTO
+            {
+                isSuccess = false,
+                message = ""
+            };
+
+            var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == userMail.ToLower());
+            if (user == null)
+            {
+                genericResponse.message = "User does not exist";
+                return genericResponse;
+            }
+
+
+            UserFileDTO file = new UserFileDTO
+            {
+                FileName = onboardRequestPayload.FileName,
+                FileCategory = onboardRequestPayload.FileCat.ToString(),
+                FileBytes = onboardRequestPayload.FileBytes,
+                UserId = user!.Id.ToString()
+
+            };
+
+            UserFile userFileModel = _mapper.Map<UserFile>(file);
+
+            await _dbUserFile.CreateAsync(userFileModel);
+            genericResponse.message = "created succesfully";
+            genericResponse.isSuccess = true;
+
             return genericResponse;
         }
 
