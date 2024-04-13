@@ -18,7 +18,7 @@ namespace RzumeAPI.Models
 
         public  string CourseOfStudy { get; set; }
 
-        public string? Grade { get; set; }
+        // public string? Grade { get; set; }
 
         public DateTime YearOfGraudation { get; set; }
 

@@ -18,7 +18,7 @@ namespace RzumeAPI.Models.DTO
 
         public string CourseOfStudy { get; set; }
 
-        public string? Grade { get; set; }
+        // public string? Grade { get; set; }
 
 
 

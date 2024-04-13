@@ -33,6 +33,8 @@ namespace RzumeAPI.Repository
 
             _dbUserFile = dbUserFile;
 
+            _mapper = mapper;
+
 
 
         }
@@ -69,6 +71,8 @@ namespace RzumeAPI.Repository
                 message = ""
             };
 
+            Console.WriteLine(onboardRequestPayload.FileCat.ToString());
+
             var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == userMail.ToLower());
             if (user == null)
             {
@@ -76,13 +80,16 @@ namespace RzumeAPI.Repository
                 return genericResponse;
             }
 
+            Console.WriteLine(_mapper != null);
+
+
 
             UserFileDTO file = new UserFileDTO
             {
                 FileName = onboardRequestPayload.FileName,
                 FileCategory = onboardRequestPayload.FileCat.ToString(),
                 FileBytes = onboardRequestPayload.FileBytes,
-                UserId = user!.Id.ToString()
+                UserId = user!.Id.ToString(),
 
             };
 

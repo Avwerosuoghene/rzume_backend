@@ -102,7 +102,7 @@ namespace RzumeAPI.Controllers
 
         public async Task<IActionResult> OnboardUser(OnboardUserRequestDTO onboardUserPayload)
         {
-
+            GenericResponseDTO? response = null;
 
             try
             {
@@ -117,50 +117,41 @@ namespace RzumeAPI.Controllers
                 {
 
                     OnboardUserFirstStageRequestDTO onboardUserFirstStagePayload = JsonConvert.DeserializeObject<OnboardUserFirstStageRequestDTO>(onboardUserPayload.OnboardUserPayload.ToString());
-                    GenericResponseDTO onboardFirstStageResponse = await _profileRepo.OnboardingFirstStage(onboardUserFirstStagePayload, onboardUserPayload.UserMail);
+                    response = await _profileRepo.OnboardingFirstStage(onboardUserFirstStagePayload, onboardUserPayload.UserMail);
 
-                    if (onboardFirstStageResponse.isSuccess == false)
-                    {
-                        _response.StatusCode = HttpStatusCode.NotFound;
-                        _response.IsSuccess = false;
-                        _response.ErrorMessages.Add(onboardFirstStageResponse.message);
-                        return BadRequest(_response);
-                    }
-
-
-                    _response.StatusCode = HttpStatusCode.OK;
-                    _response.IsSuccess = true;
-                    _response.Result = new ResultObject
-                    {
-                        Message = onboardFirstStageResponse.message,
-                        Content = onboardFirstStageResponse.isSuccess
-                    };
-                    return Ok(_response);
 
                 }
                 if (onboardUserPayload.OnBoardingStage == 1)
                 {
                     OnboardUserSecondStageRequestDTO onboardUserSecondStagePayload = JsonConvert.DeserializeObject<OnboardUserSecondStageRequestDTO>(onboardUserPayload.OnboardUserPayload.ToString());
-                    GenericResponseDTO onboardSecondStageResponse = await _profileRepo.OnboardingSecondStage(onboardUserSecondStagePayload, onboardUserPayload.UserMail);
-                    if (onboardSecondStageResponse.isSuccess == false)
-                    {
-                        _response.StatusCode = HttpStatusCode.NotFound;
-                        _response.IsSuccess = false;
-                        _response.ErrorMessages.Add(onboardSecondStageResponse.message);
-                        return BadRequest(_response);
-                    }
-
-
-                    _response.StatusCode = HttpStatusCode.OK;
-                    _response.IsSuccess = true;
-                    _response.Result = new ResultObject
-                    {
-                        Message = onboardSecondStageResponse.message,
-                        Content = onboardSecondStageResponse.isSuccess
-                    };
-                    return Ok(_response);
+                    response = await _profileRepo.OnboardingSecondStage(onboardUserSecondStagePayload, onboardUserPayload.UserMail);
 
                 }
+
+                if (response == null)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("Bad Request");
+                    return BadRequest(_response);
+                }
+                if (response.isSuccess == false)
+                {
+                    _response.StatusCode = HttpStatusCode.NotFound;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add(response.message);
+                    return BadRequest(_response);
+                }
+
+
+                _response.StatusCode = HttpStatusCode.OK;
+                _response.IsSuccess = true;
+                _response.Result = new ResultObject
+                {
+                    Message = response.message,
+                    Content = response.isSuccess
+                };
+                return Ok(_response);
 
             }
             catch (Exception ex)
@@ -172,10 +163,7 @@ namespace RzumeAPI.Controllers
 
                 return BadRequest(_response);
             }
-            _response.StatusCode = HttpStatusCode.InternalServerError;
-            _response.IsSuccess = false;
-            _response.ErrorMessages.Add("An error occured");
-            return BadRequest(_response);
+
 
 
         }
