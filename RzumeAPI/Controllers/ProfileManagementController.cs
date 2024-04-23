@@ -127,6 +127,9 @@ namespace RzumeAPI.Controllers
                     response = await _profileRepo.OnboardingSecondStage(onboardUserSecondStagePayload, onboardUserPayload.UserMail);
 
                 }
+                if (onboardUserPayload.OnBoardingStage == 2) {
+                    
+                }
 
                 if (response == null)
                 {

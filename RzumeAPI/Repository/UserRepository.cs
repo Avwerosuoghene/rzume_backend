@@ -21,7 +21,6 @@ namespace RzumeAPI.Repository
         private string secretKey;
         private readonly IMapper _mapper;
 
-        private readonly IConfiguration _configuration;
 
         private IOtpRepository _dbOtp;
 
@@ -40,7 +39,6 @@ namespace RzumeAPI.Repository
             _mapper = mapper;
             _userManager = userManager;
             _emailService = emailService;
-            _configuration = configuration;
             _dbOtp = dbOtp;
             _helperService = helperService;
 
@@ -48,14 +46,14 @@ namespace RzumeAPI.Repository
 
         }
 
-        public async Task<UserDTO> Register(RegistrationDTO registrationDTO)
+        public async Task<UserDTO>? Register(RegistrationDTO registrationDTO)
         {
             User user = new()
             {
                 Email = registrationDTO.Email,
                 NormalizedEmail = registrationDTO.Email.ToUpper(),
                 UserName = registrationDTO.Email,
-                TwoFactorEnabled = true
+                TwoFactorEnabled = true,
 
             };
 
@@ -68,15 +66,31 @@ namespace RzumeAPI.Repository
                     var userToReturn = _db.ApplicationUsers
                 .FirstOrDefault(u => u.UserName == registrationDTO.Email);
 
+                    if (userToReturn != null)
+                    {
+                        await GenerateMail(userToReturn, "Signup", true);
+                        return _mapper.Map<UserDTO>(userToReturn);
+                    }
+                    else
+                    {
+                        throw new Exception("Failed to retrieve the created user.");
+                    }
 
-                    await GenerateMail(userToReturn!, "Signup", true);
 
-                    return _mapper.Map<UserDTO>(userToReturn);
+
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        // Log or handle each error as needed
+                        Console.WriteLine($"Error: {error.Description}");
+                    }
                 }
             }
             catch (Exception ex)
             {
-
+                Console.WriteLine($"Error: {ex}");
             }
             return null;
         }
@@ -245,7 +259,7 @@ namespace RzumeAPI.Repository
             };
 
             // var token = tokenHandler.CreateToken(tokenDescriptor);
-            var token = _helperService.GenerateToken(user.Id.ToString(), user.Email.ToString());
+            var token = MiscellaneousHelper.GenerateToken(user.Id.ToString(), user.Email.ToString());
 
             await _userManager.SetAuthenticationTokenAsync(user, "Login", "LoginToken", token);
 
@@ -334,11 +348,12 @@ namespace RzumeAPI.Repository
 
         public async Task<GenericResponseDTO> OnboardingFirstStage(OnboardUserFirstStageRequestDTO onboardRequestPayload, string userMail)
         {
-             GenericResponseDTO genericResponse = new GenericResponseDTO{
+            GenericResponseDTO genericResponse = new GenericResponseDTO
+            {
                 isSuccess = false,
                 message = ""
-             } ;
-            
+            };
+
             var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == userMail.ToLower());
             if (user == null)
             {
@@ -347,8 +362,8 @@ namespace RzumeAPI.Repository
             }
             user.Name = $"{onboardRequestPayload.FirstName} {onboardRequestPayload.LastName}";
             user.OnBoardingStage = 1;
-             genericResponse.message = "updated succesfully";
-             genericResponse.isSuccess = true;
+            genericResponse.message = "updated succesfully";
+            genericResponse.isSuccess = true;
             await UpdateAsync(user);
             return genericResponse;
         }

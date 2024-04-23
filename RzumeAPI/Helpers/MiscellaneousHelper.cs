@@ -17,7 +17,7 @@ namespace RzumeAPI.Helpers
 
     public class MiscellaneousHelper
     {
-        private string secretKey;
+        private static string secretKey;
 
         private IOtpRepository _dbOtp;
 
@@ -56,7 +56,7 @@ namespace RzumeAPI.Helpers
             return false;
         }
 
-        public string GenerateToken(string userId, string userMail)
+        public static string GenerateToken(string userId, string userMail)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(secretKey);

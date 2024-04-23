@@ -8,7 +8,7 @@ namespace RzumeAPI.Repository.IRepository
     public interface IUserRepository
     {
 
-        Task<UserDTO> Register(RegistrationDTO registrationRequestDTO);
+        Task<UserDTO>? Register(RegistrationDTO registrationRequestDTO);
 
         Task<LoginResponseDTO> Login(LoginRequestDTO loginRequestDTO);
         Task<bool> Logout(LogoutRequestDTO logoutRequestDTO);
