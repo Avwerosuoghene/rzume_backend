@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 
 namespace RzumeAPI.Controllers
@@ -115,6 +116,19 @@ namespace RzumeAPI.Controllers
                 }
                 if (onboardUserPayload.OnBoardingStage == 0)
                 {
+                    JObject payloadObject = JObject.Parse(onboardUserPayload.OnboardUserPayload.ToString());
+                    List<String> payloadProps = new(){
+                       "FirstName", "LastName"
+                    };
+                    bool validProperties = MiscellaneousHelper.CheckOnboardPayloadValidaty(payloadObject, payloadProps);
+
+                    if (!validProperties)
+                    {
+                        _response.StatusCode = HttpStatusCode.BadRequest;
+                        _response.IsSuccess = false;
+                        _response.ErrorMessages.Add("Bad Request");
+                        return BadRequest(_response);
+                    }
 
                     OnboardUserFirstStageRequestDTO onboardUserFirstStagePayload = JsonConvert.DeserializeObject<OnboardUserFirstStageRequestDTO>(onboardUserPayload.OnboardUserPayload.ToString());
                     response = await _profileRepo.OnboardingFirstStage(onboardUserFirstStagePayload, onboardUserPayload.UserMail);
@@ -127,8 +141,12 @@ namespace RzumeAPI.Controllers
                     response = await _profileRepo.OnboardingSecondStage(onboardUserSecondStagePayload, onboardUserPayload.UserMail);
 
                 }
-                if (onboardUserPayload.OnBoardingStage == 2) {
-                    
+                if (onboardUserPayload.OnBoardingStage == 2)
+                {
+
+
+                    OnboardUserThirdStageRequestDTO onboardUserThirdStagePayload = JsonConvert.DeserializeObject<OnboardUserThirdStageRequestDTO>(onboardUserPayload.OnboardUserPayload.ToString());
+                    response = await _profileRepo.OnboardingThirdStage(onboardUserThirdStagePayload, onboardUserPayload.UserMail);
                 }
 
                 if (response == null)
@@ -170,6 +188,7 @@ namespace RzumeAPI.Controllers
 
 
         }
+
 
 
     }

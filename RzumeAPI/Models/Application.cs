@@ -10,14 +10,14 @@ namespace RzumeAPI.Models
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public  string ApplicationID { get; set; }
+        public  string ApplicationID { get; set; } = string.Empty;
 
         public string? UserId { get; set; }
 
 
-        public  string Position { get; set; }
+        public  string Position { get; set; } = string.Empty;
 
-        public  string ApplicationDate { get; set; }
+        public  string ApplicationDate { get; set; } = string.Empty;
 
         [NotMapped]
         public List<string>? AdditionalDocuments { get; set; }

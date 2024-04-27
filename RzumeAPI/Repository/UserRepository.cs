@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Text;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using RzumeAPI.Data;
 using RzumeAPI.Helpers;
@@ -46,7 +47,7 @@ namespace RzumeAPI.Repository
 
         }
 
-        public async Task<UserDTO>? Register(RegistrationDTO registrationDTO)
+        public async Task<UserDTO?> Register(RegistrationDTO registrationDTO)
         {
             User user = new()
             {
@@ -74,9 +75,10 @@ namespace RzumeAPI.Repository
                     else
                     {
                         throw new Exception("Failed to retrieve the created user.");
+                        
                     }
 
-
+                
 
                 }
                 else
@@ -86,13 +88,17 @@ namespace RzumeAPI.Repository
                         // Log or handle each error as needed
                         Console.WriteLine($"Error: {error.Description}");
                     }
+
+                    throw new Exception("Registration failed.");
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error: {ex}");
+                //   throw new Exception("An error occurred during registration.");
+                  return null;
             }
-            return null;
+           
         }
 
         public async Task<GetActiveUserResponse> GetActiveUser(string token)
@@ -121,7 +127,7 @@ namespace RzumeAPI.Repository
                     };
                 }
 
-                var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == userMail.ToLower());
+                var user = await _db.ApplicationUsers.FirstOrDefaultAsync(u => u.UserName.ToLower() == userMail.ToLower());
 
                 if (user == null)
                 {
@@ -300,8 +306,8 @@ namespace RzumeAPI.Repository
             OtpPasswordResetRequestResponseDTO passwordResetResponse = new OtpPasswordResetRequestResponseDTO();
             if (user == null)
             {
-                passwordResetResponse.isSuccess = false;
-                passwordResetResponse.message = "User not found";
+                passwordResetResponse.IsSuccess = false;
+                passwordResetResponse.Message = "User not found";
                 return passwordResetResponse;
             }
 
@@ -309,10 +315,10 @@ namespace RzumeAPI.Repository
 
             OtpValidationResponseDTO otpConfirmedResponse = await _helperService.ConfirmOtp(user, passwordResetRequestModel.OtpValue.ToString()!);
 
-            if (!otpConfirmedResponse.isValid)
+            if (!otpConfirmedResponse.IsValid)
             {
-                passwordResetResponse.isSuccess = false;
-                passwordResetResponse.message = otpConfirmedResponse.message;
+                passwordResetResponse.IsSuccess = false;
+                passwordResetResponse.Message = otpConfirmedResponse.Message;
                 return passwordResetResponse;
             }
 
@@ -323,14 +329,14 @@ namespace RzumeAPI.Repository
 
             if (result.Succeeded)
             {
-                passwordResetResponse.isSuccess = true;
-                passwordResetResponse.message = "Password Reset Succesful";
+                passwordResetResponse.IsSuccess = true;
+                passwordResetResponse.Message = "Password Reset Succesful";
                 return passwordResetResponse;
             }
             else
             {
-                passwordResetResponse.isSuccess = false;
-                passwordResetResponse.message = "Password Reset Failed";
+                passwordResetResponse.IsSuccess = false;
+                passwordResetResponse.Message = "Password Reset Failed";
                 return passwordResetResponse;
             }
 

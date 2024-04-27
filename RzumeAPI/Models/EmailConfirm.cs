@@ -7,7 +7,7 @@ namespace RzumeAPI.Models
 {
     public class EmailConfirm
     {
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
         public bool IsConfirmed { get; set; }
 

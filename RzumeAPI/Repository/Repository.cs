@@ -53,7 +53,9 @@ namespace RzumeAPI.Repository
                 query = query.Where(filter);
             }
 
-            return await query.FirstOrDefaultAsync();
+            var result = await query.FirstOrDefaultAsync();
+
+            return result!;
         }
 
         public async Task RemoveAsync(T entity)

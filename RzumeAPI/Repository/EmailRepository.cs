@@ -47,7 +47,6 @@ namespace RzumeAPI.Repository
                 EnableSsl = _smtConfig.EnableSSL,
                 Host = _smtConfig.Host,
                 Port = _smtConfig.Port,
-                // UseDefaultCredentials = _smtConfig.UserDefaulCredentials,
                 Credentials = networkCredential
             };
 
@@ -59,7 +58,7 @@ namespace RzumeAPI.Repository
             }
             catch (Exception ex)
             {
-
+                Console.WriteLine(ex);
             }
 
         }
@@ -71,7 +70,7 @@ namespace RzumeAPI.Repository
             return body;
         }
 
-        private string UpdatePlaceHolder(string text, List<KeyValuePair<string, string>> keyValuePairs)
+        private static string UpdatePlaceHolder(string text, List<KeyValuePair<string, string>> keyValuePairs)
         {
             if (!string.IsNullOrEmpty(text) && keyValuePairs != null)
             {

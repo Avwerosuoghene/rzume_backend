@@ -1,32 +1,30 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿
 
 namespace RzumeAPI.Models.DTO
 {
     public class OtpDTO
     {
 
-        public string OtpID { get; set; }
+        public string OtpID { get; set; } = string.Empty;
 
-        public string UserId { get; set; }
+        public string UserId { get; set; } = string.Empty;
 
-        public string OtpValue { get; set; }
+        public string OtpValue { get; set; } = string.Empty;
 
-        public bool IsConfirmed { get; set; }
+        public bool IsConfirmed { get; set; } = false;
 
 
 
         public DateTime ExpirationDate { get; set; }
     }
 
-     public class CreateOtpDTO
+    public class CreateOtpDTO
     {
 
-        public string UserId { get; set; }
-        public string OtpValue { get; set; }
+        public string UserId { get; set; } = string.Empty;
+        public string OtpValue { get; set; } = string.Empty;
 
-        public bool IsConfirmed { get; set; }
+        public bool IsConfirmed { get; set; } = false;
 
 
 
@@ -35,58 +33,60 @@ namespace RzumeAPI.Models.DTO
 
     public class GenerateOtpDTO
     {
-        public  string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
-        public string Purpose {get; set;}
-
-    }
-
-
-     public class GenerateOtpResponseDTO
-    {
-        public  bool isSuccess { get; set; }
+        public string Purpose { get; set; } = string.Empty;
 
     }
 
-     public class OtpPasswordResetRequestResponseDTO
-    {
-        public bool isSuccess { get; set; }
 
-        public string message { get; set; }
+    public class GenerateOtpResponseDTO
+    {
+        public bool IsSuccess { get; set; } 
 
 
 
     }
 
-     public class OtpPasswordResetRequestDTO
+    public class OtpPasswordResetRequestResponseDTO
     {
-        public string Email { get; set; }
+        public bool IsSuccess { get; set; }
 
-        public string OtpValue { get; set; }
+        public string Message { get; set; } = string.Empty;
 
-        public string Password {get; set;}
 
 
     }
 
-     public class OtpValidationDTO
+    public class OtpPasswordResetRequestDTO
     {
-        public  string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
-        public  string OtpValue { get; set; }
+        public string OtpValue { get; set; } = string.Empty;
 
-         public string Password { get; set; } 
+        public string Password { get; set; } = string.Empty;
+
 
     }
 
-     public class OtpValidationResponseDTO 
+    public class OtpValidationDTO
+    {
+        public string Email { get; set; } = string.Empty;
+
+        public string OtpValue { get; set; } = string.Empty;
+
+        public string Password { get; set; } = string.Empty;
+
+    }
+
+    public class OtpValidationResponseDTO
     {
 
-        public bool isValid { get; set; }
+        public bool IsValid { get; set; }
 
-        public string message { get; set; }
+        public string Message { get; set; } = string.Empty;
 
- 
+
     }
 }
 

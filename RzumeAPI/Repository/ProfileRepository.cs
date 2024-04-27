@@ -1,12 +1,7 @@
-﻿using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+﻿
 using AutoMapper;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
+
 using RzumeAPI.Data;
-using RzumeAPI.Helpers;
 using RzumeAPI.Models;
 using RzumeAPI.Models.DTO;
 using RzumeAPI.Repository.IRepository;
@@ -15,19 +10,15 @@ namespace RzumeAPI.Repository
 {
     public class ProfileRepository : IProfileRepository
     {
-        private ApplicationDbContext _db;
+        private readonly ApplicationDbContext _db;
+        private readonly IEducationRepository _dbEducation;
 
         private readonly IMapper _mapper;
 
-        private IUserFileRepository _dbUserFile;
-
-
-
-
-
-
+        private readonly IUserFileRepository _dbUserFile;
+        
         public ProfileRepository(ApplicationDbContext db,
-          IMapper mapper, IUserFileRepository dbUserFile)
+  IMapper mapper, IUserFileRepository dbUserFile, IEducationRepository dbEducation)
         {
             _db = db;
 
@@ -35,52 +26,43 @@ namespace RzumeAPI.Repository
 
             _mapper = mapper;
 
+            _dbEducation = dbEducation;
+
+
 
 
         }
+
+
 
 
         public async Task<GenericResponseDTO> OnboardingFirstStage(OnboardUserFirstStageRequestDTO onboardRequestPayload, string userMail)
         {
-            GenericResponseDTO genericResponse = new GenericResponseDTO
-            {
-                isSuccess = false,
-                message = ""
-            };
+
 
             var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == userMail.ToLower());
             if (user == null)
             {
-                genericResponse.message = "User does not exist";
-                return genericResponse;
+                return GenerateErrorResponse("User does not exist");
             }
             user.Name = $"{onboardRequestPayload.FirstName} {onboardRequestPayload.LastName}";
             user.OnBoardingStage = 1;
             await UpdateAsync(user);
-            genericResponse.message = "updated succesfully";
-            genericResponse.isSuccess = true;
 
-            return genericResponse;
+            return GenerateSuccessResponse("updated succesfully");
         }
 
         public async Task<GenericResponseDTO> OnboardingSecondStage(OnboardUserSecondStageRequestDTO onboardRequestPayload, string userMail)
         {
-            GenericResponseDTO genericResponse = new GenericResponseDTO
-            {
-                isSuccess = false,
-                message = ""
-            };
 
-            Console.WriteLine(onboardRequestPayload.FileCat.ToString());
+
 
             var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == userMail.ToLower());
             if (user == null)
             {
-                genericResponse.message = "User does not exist";
-                return genericResponse;
+                return GenerateErrorResponse("User does not exist");
             }
 
-            Console.WriteLine(_mapper != null);
 
 
 
@@ -96,11 +78,43 @@ namespace RzumeAPI.Repository
             UserFile userFileModel = _mapper.Map<UserFile>(file);
 
             await _dbUserFile.CreateAsync(userFileModel);
-            genericResponse.message = "created succesfully";
-            genericResponse.isSuccess = true;
+            return GenerateSuccessResponse("updated succesfully");
 
-            return genericResponse;
         }
+
+
+        public async Task<GenericResponseDTO> OnboardingThirdStage(OnboardUserThirdStageRequestDTO onboardRequestPayload, string userMail)
+        {
+            var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == userMail.ToLower());
+            if (user == null)
+            {
+                return GenerateErrorResponse("User does not exist");
+            }
+
+            List<Education> userEducationItems = _db.Education.Where(education => education.UserId == user.Id).ToList();
+
+            if (userEducationItems.Count >= 3)
+
+            {
+                return GenerateErrorResponse("Maximum number of education created for user");
+            }
+
+
+
+            List<EducationDTO> receivedEducationList = onboardRequestPayload.EducationList;
+
+
+
+            if (receivedEducationList.Count + userEducationItems.Count > 3)
+            {
+                return GenerateErrorResponse("A user cannot have more than 3 education records");
+            }
+
+            await _dbEducation.BulkUpdateAsync(onboardRequestPayload.EducationList, user.Id);
+
+            return GenerateSuccessResponse("education updated succesfully");
+        }
+
 
 
         public async Task<User> UpdateAsync(User user)
@@ -111,6 +125,26 @@ namespace RzumeAPI.Repository
             _db.ApplicationUsers.Update(user);
             await _db.SaveChangesAsync();
             return user;
+        }
+
+
+
+        private GenericResponseDTO GenerateErrorResponse(string message)
+        {
+            return new GenericResponseDTO
+            {
+                isSuccess = false,
+                message = message
+            };
+        }
+
+        private GenericResponseDTO GenerateSuccessResponse(string message)
+        {
+            return new GenericResponseDTO
+            {
+                isSuccess = true,
+                message = message
+            };
         }
     }
 

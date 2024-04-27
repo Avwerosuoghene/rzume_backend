@@ -57,7 +57,7 @@ namespace RzumeAPI.Controllers
                 return BadRequest(_response);
             }
 
-            var response = await _userRepo.Register(model);
+             UserDTO? response = await _userRepo.Register(model)!;
             if (response == null)
             {
                 _response.StatusCode = HttpStatusCode.BadRequest;
@@ -231,12 +231,12 @@ namespace RzumeAPI.Controllers
             try
             {
                 OtpPasswordResetRequestResponseDTO otpPasswordResetResponse = await _userRepo.InitiateOtpResetPassword(model);
-                if (!otpPasswordResetResponse.isSuccess)
+                if (!otpPasswordResetResponse.IsSuccess)
                 {
 
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
-                    _response.ErrorMessages.Add(otpPasswordResetResponse.message);
+                    _response.ErrorMessages.Add(otpPasswordResetResponse.Message);
                     return BadRequest(_response);
 
 
@@ -248,7 +248,7 @@ namespace RzumeAPI.Controllers
                 _response.IsSuccess = true;
                 _response.Result = new ResultObject
                 {
-                    Message = otpPasswordResetResponse.message!,
+                    Message = otpPasswordResetResponse.Message!,
                     Content = otpPasswordResetResponse
                 };
 
@@ -311,7 +311,7 @@ namespace RzumeAPI.Controllers
 
                 GenerateOtpResponseDTO otpGenerateResponse = new GenerateOtpResponseDTO
                 {
-                    isSuccess = true
+                    IsSuccess = true
                 };
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.IsSuccess = true;
@@ -357,11 +357,11 @@ namespace RzumeAPI.Controllers
 
                 OtpValidationResponseDTO otpConfirmedResponse = await _helperService.ConfirmOtp(user, otpValidationPayload.OtpValue.ToString()!);
 
-                if (!otpConfirmedResponse.isValid)
+                if (!otpConfirmedResponse.IsValid)
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
-                    _response.ErrorMessages.Add(otpConfirmedResponse.message);
+                    _response.ErrorMessages.Add(otpConfirmedResponse.Message);
                     return BadRequest(_response);
                 }
 

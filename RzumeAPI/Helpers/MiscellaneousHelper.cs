@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Linq;
 using RzumeAPI.Data;
 using RzumeAPI.Models;
 using RzumeAPI.Models.DTO;
@@ -17,7 +18,7 @@ namespace RzumeAPI.Helpers
 
     public class MiscellaneousHelper
     {
-        private static string secretKey;
+        private static string secretKey = string.Empty;
 
         private IOtpRepository _dbOtp;
 
@@ -104,7 +105,7 @@ namespace RzumeAPI.Helpers
             }
             catch (Exception ex)
             {
-
+                Console.WriteLine(ex);
             }
             return filename;
         }
@@ -112,7 +113,7 @@ namespace RzumeAPI.Helpers
         public async Task<OtpValidationResponseDTO> ConfirmOtp(User user, string otpPayloadValue)
         {
             var otpModel = await _dbOtp.GetAsync(u => u.UserId == user.Id);
-            OtpValidationResponseDTO responseValue = new OtpValidationResponseDTO();
+            OtpValidationResponseDTO responseValue = new();
 
 
 
@@ -120,8 +121,8 @@ namespace RzumeAPI.Helpers
             {
 
 
-                responseValue.isValid = false;
-                responseValue.message = "Invalid otp value";
+                responseValue.IsValid = false;
+                responseValue.Message = "Invalid otp value";
 
                 return responseValue;
             }
@@ -131,8 +132,8 @@ namespace RzumeAPI.Helpers
             if (currentDate > otpModel.ExpirationDate)
             {
 
-                responseValue.isValid = false;
-                responseValue.message = "Otp has expired";
+                responseValue.IsValid = false;
+                responseValue.Message = "Otp has expired";
                 ;
                 return responseValue;
 
@@ -142,8 +143,8 @@ namespace RzumeAPI.Helpers
             if (otpModel.IsConfirmed)
             {
 
-                responseValue.isValid = false;
-                responseValue.message = "Otp validation failed";
+                responseValue.IsValid = false;
+                responseValue.Message = "Otp validation failed";
 
                 return responseValue;
             }
@@ -153,12 +154,28 @@ namespace RzumeAPI.Helpers
             Otp otpResponse = await _dbOtp.UpdateAsync(otpModel);
 
 
-            responseValue.isValid = true;
-            responseValue.message = "Otp validation succesful";
+            responseValue.IsValid = true;
+            responseValue.Message = "Otp validation succesful";
 
             return responseValue;
 
         }
 
+
+        public static bool CheckOnboardPayloadValidaty(JObject stringedPayload, List<string> payloadProperties)
+        {
+
+            bool allPropertiesPresent = true;
+
+            payloadProperties.ForEach(property =>
+            {
+                if (!stringedPayload.ContainsKey(property))
+                    allPropertiesPresent = false;
+            });
+
+
+
+            return allPropertiesPresent;
+        }
     }
 }

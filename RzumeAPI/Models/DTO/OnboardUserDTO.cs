@@ -3,11 +3,11 @@ namespace RzumeAPI.Models.DTO
 {
     public class OnboardUserRequestDTO
     {
-        public int OnBoardingStage { get; set; }
+        public int OnBoardingStage { get; set; } 
 
-        public dynamic OnboardUserPayload { get; set; }
+        public dynamic OnboardUserPayload { get; set; } = null!;
 
-        public string UserMail { get; set; }
+        public string UserMail { get; set; } = string.Empty;
 
 
     }
@@ -16,18 +16,18 @@ namespace RzumeAPI.Models.DTO
 
     public class OnboardUserResponseDTO
     {
-        public string isValid { get; set; }
+        public string isValid { get; set; } = string.Empty;
 
-        public String FirstName { get; set; }
-        public String LastName { get; set; }
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
 
     }
 
     public class OnboardUserFirstStageRequestDTO
     {
 
-        public String FirstName { get; set; }
-        public String LastName { get; set; }
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
 
 
     }
@@ -35,10 +35,17 @@ namespace RzumeAPI.Models.DTO
     public class OnboardUserSecondStageRequestDTO
     {
 
-        public string FileName { get; set; }
-        public string FileBytes { get; set; }
+        public string FileName { get; set; }  =  string.Empty;
+        public string FileBytes { get; set; } =  string.Empty;
 
-        public string FileCat {get; set;}
+        public string FileCat {get; set;} =  string.Empty;
+
+    }
+
+    public class OnboardUserThirdStageRequestDTO
+    {
+
+        public List<EducationDTO> EducationList { get; set; } = new List<EducationDTO>();
 
 
 

@@ -22,7 +22,7 @@ namespace RzumeAPI.Models
 
       public class ResultObject
         {
-            public string Message { get; set; }
+            public string Message { get; set; } = string.Empty;
             public object? Content { get; set; }
         }
 

@@ -8,7 +8,7 @@ namespace RzumeAPI.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string FavoritesID { get; set; }
+        public string FavoritesID { get; set; } = string.Empty;
 
         public User? User { get; set; }
         public string? UserId { get; set; }

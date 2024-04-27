@@ -10,6 +10,15 @@ namespace RzumeAPI.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+             Userfile = Set<UserFile>();
+             ApplicationUsers = Set<User>();
+             Company = Set<Company>();
+             Education = Set<Education>();
+             Experience = Set<Experience>();
+             Application = Set<Application>();
+             Otp = Set<Otp>();
+             Favorites = Set<Favorites>();
+
 
         }
 
