@@ -7,7 +7,7 @@ namespace RzumeAPI.Models.DTO
 
         public dynamic OnboardUserPayload { get; set; } = null!;
 
-        public string UserMail { get; set; } = string.Empty;
+        public string UserMail { get; set; } 
 
 
     }
@@ -16,18 +16,18 @@ namespace RzumeAPI.Models.DTO
 
     public class OnboardUserResponseDTO
     {
-        public string isValid { get; set; } = string.Empty;
+        public string isValid { get; set; } 
 
-        public string FirstName { get; set; } = string.Empty;
-        public string LastName { get; set; } = string.Empty;
+        public string FirstName { get; set; } 
+        public string LastName { get; set; } 
 
     }
 
     public class OnboardUserFirstStageRequestDTO
     {
 
-        public string FirstName { get; set; } = string.Empty;
-        public string LastName { get; set; } = string.Empty;
+        public string FirstName { get; set; } 
+        public string LastName { get; set; } 
 
 
     }
@@ -35,10 +35,10 @@ namespace RzumeAPI.Models.DTO
     public class OnboardUserSecondStageRequestDTO
     {
 
-        public string FileName { get; set; }  =  string.Empty;
-        public string FileBytes { get; set; } =  string.Empty;
+        public string FileName { get; set; }  
+        public string FileBytes { get; set; } 
 
-        public string FileCat {get; set;} =  string.Empty;
+        public string FileCat {get; set;} 
 
     }
 

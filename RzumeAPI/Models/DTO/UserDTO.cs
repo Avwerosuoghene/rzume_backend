@@ -10,15 +10,15 @@ namespace RzumeAPI.Models.DTO
         {
             OnBoardingStage = 0;
         }
-        public string ID { get; set; } = string.Empty;
+        public string ID { get; set; } 
 
         public string? FirstName { get; set; }
 
         public string? LastName { get; set; }
 
-        public string UserName { get; set; } = string.Empty;
+        public string UserName { get; set; } 
 
-        public string Email { get; set; } = string.Empty;
+        public string Email { get; set; } 
 
         public bool OnBoarded { get; set; }
 

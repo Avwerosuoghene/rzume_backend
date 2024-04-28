@@ -8,16 +8,16 @@ namespace RzumeAPI.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public  string ExperienceID { get; set; } = string.Empty;
+        public  string ExperienceID { get; set; } 
 
-        public string? UserId { get; set; }
+        public string UserId { get; set; }
 
 
         public string? Industry { get; set; }
 
         public  string? Company { get; set; }
 
-        public  string Designation { get; set; } = string.Empty;
+        public  string Designation { get; set; } 
 
         public  DateTime StartDate { get; set; }
 

@@ -5,11 +5,11 @@ namespace RzumeAPI.Models.DTO
     public class OtpDTO
     {
 
-        public string OtpID { get; set; } = string.Empty;
+        public string OtpID { get; set; } 
 
-        public string UserId { get; set; } = string.Empty;
+        public string UserId { get; set; } 
 
-        public string OtpValue { get; set; } = string.Empty;
+        public string OtpValue { get; set; } 
 
         public bool IsConfirmed { get; set; } = false;
 
@@ -21,8 +21,8 @@ namespace RzumeAPI.Models.DTO
     public class CreateOtpDTO
     {
 
-        public string UserId { get; set; } = string.Empty;
-        public string OtpValue { get; set; } = string.Empty;
+        public string UserId { get; set; } 
+        public string OtpValue { get; set; } 
 
         public bool IsConfirmed { get; set; } = false;
 
@@ -33,9 +33,9 @@ namespace RzumeAPI.Models.DTO
 
     public class GenerateOtpDTO
     {
-        public string Email { get; set; } = string.Empty;
+        public string Email { get; set; } 
 
-        public string Purpose { get; set; } = string.Empty;
+        public string Purpose { get; set; } 
 
     }
 
@@ -52,7 +52,7 @@ namespace RzumeAPI.Models.DTO
     {
         public bool IsSuccess { get; set; }
 
-        public string Message { get; set; } = string.Empty;
+        public string Message { get; set; } 
 
 
 
@@ -60,22 +60,22 @@ namespace RzumeAPI.Models.DTO
 
     public class OtpPasswordResetRequestDTO
     {
-        public string Email { get; set; } = string.Empty;
+        public string Email { get; set; } 
 
-        public string OtpValue { get; set; } = string.Empty;
+        public string OtpValue { get; set; } 
 
-        public string Password { get; set; } = string.Empty;
+        public string Password { get; set; } 
 
 
     }
 
     public class OtpValidationDTO
     {
-        public string Email { get; set; } = string.Empty;
+        public string Email { get; set; } 
 
-        public string OtpValue { get; set; } = string.Empty;
+        public string OtpValue { get; set; } 
 
-        public string Password { get; set; } = string.Empty;
+        public string Password { get; set; } 
 
     }
 
@@ -84,7 +84,7 @@ namespace RzumeAPI.Models.DTO
 
         public bool IsValid { get; set; }
 
-        public string Message { get; set; } = string.Empty;
+        public string Message { get; set; } 
 
 
     }

@@ -18,7 +18,7 @@ namespace RzumeAPI.Helpers
 
     public class MiscellaneousHelper
     {
-        private static string secretKey = string.Empty;
+        private static string secretKey;
 
         private IOtpRepository _dbOtp;
 
