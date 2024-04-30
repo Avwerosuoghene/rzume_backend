@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Reflection;
 
 
 namespace RzumeAPI.Controllers
@@ -103,74 +104,101 @@ namespace RzumeAPI.Controllers
 
         public async Task<IActionResult> OnboardUser(OnboardUserRequestDTO onboardUserPayload)
         {
-            GenericResponseDTO? response = null;
-
             try
             {
                 if (onboardUserPayload.OnboardUserPayload == null)
                 {
-                    _response.StatusCode = HttpStatusCode.NotFound;
-                    _response.IsSuccess = false;
-                    _response.ErrorMessages.Add("Please provide onboarding stage payload");
-                    return BadRequest(_response);
+
+
+
+                    return BadRequest(MiscellaneousHelper.GenerateBadRequest("Please provide onboarding stage payload"));
+
                 }
-                if (onboardUserPayload.OnBoardingStage == 0)
+                JObject payloadObject = JObject.Parse(onboardUserPayload.OnboardUserPayload.ToString());
+                bool validProperties = true;
+
+                GenericResponseDTO? response;
+                switch (onboardUserPayload.OnBoardingStage)
                 {
-                    JObject payloadObject = JObject.Parse(onboardUserPayload.OnboardUserPayload.ToString());
-                    List<String> payloadProps = new(){
-                       "FirstName", "LastName"
-                    };
-                    bool validProperties = MiscellaneousHelper.CheckOnboardPayloadValidaty(payloadObject, payloadProps);
+                    case 0:
+                        validProperties = MiscellaneousHelper.CheckOnboardPayloadValidaty<OnboardUserFirstStageRequestDTO>(payloadObject);
 
-                    if (!validProperties)
-                    {
-                        _response.StatusCode = HttpStatusCode.BadRequest;
-                        _response.IsSuccess = false;
-                        _response.ErrorMessages.Add("Bad Request");
-                        return BadRequest(_response);
-                    }
+                        if (!validProperties)
+                        {
+                            return BadRequest(MiscellaneousHelper.GenerateBadRequest("Bad Request"));
 
-                    OnboardUserFirstStageRequestDTO onboardUserFirstStagePayload = JsonConvert.DeserializeObject<OnboardUserFirstStageRequestDTO>(onboardUserPayload.OnboardUserPayload.ToString());
-                    response = await _profileRepo.OnboardingFirstStage(onboardUserFirstStagePayload, onboardUserPayload.UserMail);
+                        }
 
+                        OnboardUserFirstStageRequestDTO onboardUserFirstStagePayload = JsonConvert.DeserializeObject<OnboardUserFirstStageRequestDTO>(onboardUserPayload.OnboardUserPayload.ToString());
+                        response = await _profileRepo.OnboardingFirstStage(onboardUserFirstStagePayload, onboardUserPayload.UserMail);
+                        break;
+                    case 1:
+                        validProperties = MiscellaneousHelper.CheckOnboardPayloadValidaty<OnboardUserSecondStageRequestDTO>(payloadObject);
+                        if (!validProperties)
+                        {
+                            return BadRequest(MiscellaneousHelper.GenerateBadRequest("Bad Request"));
+
+                        }
+
+                        OnboardUserSecondStageRequestDTO onboardUserSecondStagePayload = JsonConvert.DeserializeObject<OnboardUserSecondStageRequestDTO>(onboardUserPayload.OnboardUserPayload.ToString());
+                        response = await _profileRepo.OnboardingSecondStage(onboardUserSecondStagePayload, onboardUserPayload.UserMail);
+
+                        break;
+                    case 2:
+                        validProperties = MiscellaneousHelper.CheckOnboardPayloadValidaty<OnboardUserThirdStageRequestDTO>(payloadObject);
+                        if (!validProperties)
+                        {
+                            return BadRequest(MiscellaneousHelper.GenerateBadRequest("Bad Request"));
+
+                        }
+
+                        OnboardUserThirdStageRequestDTO onboardUserThirdStagePayload = JsonConvert.DeserializeObject<OnboardUserThirdStageRequestDTO>(onboardUserPayload.OnboardUserPayload.ToString());
+                        response = await _profileRepo.OnboardingThirdStage(onboardUserThirdStagePayload, onboardUserPayload.UserMail);
+                        break;
+                    case 3:
+
+                        validProperties = MiscellaneousHelper.CheckOnboardPayloadValidaty<OnboardUserFourthStageRequestDTO>(payloadObject);
+                        if (!validProperties)
+                        {
+
+                            return BadRequest(MiscellaneousHelper.GenerateBadRequest("Bad Request"));
+                        }
+
+                        OnboardUserFourthStageRequestDTO onboardUserFourthStagePayload = JsonConvert.DeserializeObject<OnboardUserFourthStageRequestDTO>(onboardUserPayload.OnboardUserPayload.ToString());
+                        response = await _profileRepo.OnboardingFourthStage(onboardUserFourthStagePayload, onboardUserPayload.UserMail);
+                        break;
+
+                    default:
+
+                        return BadRequest(MiscellaneousHelper.GenerateBadRequest("Invalid onboarding stage"));
 
                 }
-                if (onboardUserPayload.OnBoardingStage == 1)
-                {
-                    OnboardUserSecondStageRequestDTO onboardUserSecondStagePayload = JsonConvert.DeserializeObject<OnboardUserSecondStageRequestDTO>(onboardUserPayload.OnboardUserPayload.ToString());
-                    response = await _profileRepo.OnboardingSecondStage(onboardUserSecondStagePayload, onboardUserPayload.UserMail);
-
-                }
-                if (onboardUserPayload.OnBoardingStage == 2)
-                {
 
 
-                    OnboardUserThirdStageRequestDTO onboardUserThirdStagePayload = JsonConvert.DeserializeObject<OnboardUserThirdStageRequestDTO>(onboardUserPayload.OnboardUserPayload.ToString());
-                    response = await _profileRepo.OnboardingThirdStage(onboardUserThirdStagePayload, onboardUserPayload.UserMail);
-                }
+
 
                 if (response == null)
                 {
-                    _response.StatusCode = HttpStatusCode.BadRequest;
-                    _response.IsSuccess = false;
-                    _response.ErrorMessages.Add("Bad Request");
-                    return BadRequest(_response);
+                    return BadRequest(MiscellaneousHelper.GenerateBadRequest("Bad Request"));
                 }
-                if (response.isSuccess == false)
+                if (response.IsSuccess == false)
                 {
-                    _response.StatusCode = HttpStatusCode.NotFound;
-                    _response.IsSuccess = false;
-                    _response.ErrorMessages.Add(response.message);
-                    return BadRequest(_response);
+
+
+                    return BadRequest(MiscellaneousHelper.GenerateBadRequest(response.Message));
                 }
 
+                GenericContentVal content = new()
+                {
+                    IsSuccess = true
+                };
 
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.IsSuccess = true;
                 _response.Result = new ResultObject
                 {
-                    Message = response.message,
-                    Content = response.isSuccess
+                    Message = response.Message,
+                    Content = content
                 };
                 return Ok(_response);
 
@@ -178,16 +206,18 @@ namespace RzumeAPI.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
-                _response.StatusCode = HttpStatusCode.BadRequest;
-                _response.IsSuccess = false;
-                _response.ErrorMessages.Add(ex.Message);
 
-                return BadRequest(_response);
+
+
+                return BadRequest(MiscellaneousHelper.GenerateBadRequest(ex.Message));
+
             }
 
 
 
         }
+
+
 
 
 

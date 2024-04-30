@@ -51,4 +51,13 @@ namespace RzumeAPI.Models.DTO
 
     }
 
+    public class OnboardUserFourthStageRequestDTO
+    {
+
+        public List<ExperienceDTO> ExperienceList { get; set; } = new List<ExperienceDTO>();
+
+
+
+    }
+
 }

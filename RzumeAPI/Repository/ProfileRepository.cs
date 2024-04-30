@@ -12,13 +12,14 @@ namespace RzumeAPI.Repository
     {
         private readonly ApplicationDbContext _db;
         private readonly IEducationRepository _dbEducation;
+        private readonly IExperienceRepository _dbExperience;
 
         private readonly IMapper _mapper;
 
         private readonly IUserFileRepository _dbUserFile;
         
         public ProfileRepository(ApplicationDbContext db,
-  IMapper mapper, IUserFileRepository dbUserFile, IEducationRepository dbEducation)
+  IMapper mapper, IUserFileRepository dbUserFile, IEducationRepository dbEducation, IExperienceRepository dbExperience)
         {
             _db = db;
 
@@ -27,6 +28,8 @@ namespace RzumeAPI.Repository
             _mapper = mapper;
 
             _dbEducation = dbEducation;
+
+            _dbExperience = dbExperience;
 
 
 
@@ -78,7 +81,7 @@ namespace RzumeAPI.Repository
             UserFile userFileModel = _mapper.Map<UserFile>(file);
 
             await _dbUserFile.CreateAsync(userFileModel);
-            return GenerateSuccessResponse("updated succesfully");
+            return GenerateSuccessResponse("uploaded succesfully");
 
         }
 
@@ -116,6 +119,19 @@ namespace RzumeAPI.Repository
         }
 
 
+   public async Task<GenericResponseDTO> OnboardingFourthStage(OnboardUserFourthStageRequestDTO onboardRequestPayload, string userMail)
+        {
+            var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == userMail.ToLower());
+            if (user == null)
+            {
+                return GenerateErrorResponse("User does not exist");
+            }
+
+            await _dbExperience.BulkUpdateAsync(onboardRequestPayload.ExperienceList, user.Id);
+
+            return GenerateSuccessResponse("experience updated succesfully");
+        }
+
 
         public async Task<User> UpdateAsync(User user)
         {
@@ -133,8 +149,8 @@ namespace RzumeAPI.Repository
         {
             return new GenericResponseDTO
             {
-                isSuccess = false,
-                message = message
+                IsSuccess = false,
+                Message = message
             };
         }
 
@@ -142,8 +158,8 @@ namespace RzumeAPI.Repository
         {
             return new GenericResponseDTO
             {
-                isSuccess = true,
-                message = message
+                IsSuccess = true,
+                Message = message
             };
         }
     }

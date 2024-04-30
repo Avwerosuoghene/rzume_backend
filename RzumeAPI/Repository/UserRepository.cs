@@ -356,20 +356,20 @@ namespace RzumeAPI.Repository
         {
             GenericResponseDTO genericResponse = new GenericResponseDTO
             {
-                isSuccess = false,
-                message = ""
+                IsSuccess = false,
+                Message = ""
             };
 
             var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == userMail.ToLower());
             if (user == null)
             {
-                genericResponse.message = "User does not exist";
+                genericResponse.Message = "User does not exist";
                 return genericResponse;
             }
             user.Name = $"{onboardRequestPayload.FirstName} {onboardRequestPayload.LastName}";
             user.OnBoardingStage = 1;
-            genericResponse.message = "updated succesfully";
-            genericResponse.isSuccess = true;
+            genericResponse.Message = "updated succesfully";
+            genericResponse.IsSuccess = true;
             await UpdateAsync(user);
             return genericResponse;
         }

@@ -2,9 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net;
+using System.Reflection;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Linq;
 using RzumeAPI.Data;
@@ -25,6 +28,9 @@ namespace RzumeAPI.Helpers
 
         private ApplicationDbContext _db;
 
+        protected static APIResponse _response;
+
+
         public MiscellaneousHelper(ApplicationDbContext db, IConfiguration configuration, IOtpRepository dbOtp)
         {
             _db = db;
@@ -33,6 +39,8 @@ namespace RzumeAPI.Helpers
 
 
             secretKey = configuration.GetValue<string>("ApiSettings:Secret");
+
+            _response = new();
 
         }
 
@@ -162,20 +170,37 @@ namespace RzumeAPI.Helpers
         }
 
 
-        public static bool CheckOnboardPayloadValidaty(JObject stringedPayload, List<string> payloadProperties)
+        public static bool CheckOnboardPayloadValidaty<T>(JObject stringedPayload)
         {
+
+
+
+            Type payloadType = typeof(T);
+
+            PropertyInfo[] expectedProperties = payloadType.GetProperties();
 
             bool allPropertiesPresent = true;
 
-            payloadProperties.ForEach(property =>
+            foreach (var property in expectedProperties)
             {
-                if (!stringedPayload.ContainsKey(property))
+                if (!stringedPayload.ContainsKey(property.Name))
                     allPropertiesPresent = false;
-            });
+
+            }
 
 
 
             return allPropertiesPresent;
+        }
+
+
+
+        public static APIResponse GenerateBadRequest(string message)
+        {
+            _response.StatusCode = HttpStatusCode.BadRequest;
+            _response.IsSuccess = false;
+            _response.ErrorMessages.Add(message);
+            return _response;
         }
     }
 }

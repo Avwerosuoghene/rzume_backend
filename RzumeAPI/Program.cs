@@ -86,6 +86,8 @@ builder.Services.AddScoped<IOtpRepository, OtpRepository>();
 
 builder.Services.AddScoped<IEducationRepository, EducationRepository>();
 
+builder.Services.AddScoped<IExperienceRepository, ExperienceRepository>();
+
 builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 
 builder.Services.AddScoped<MiscellaneousHelper>();
