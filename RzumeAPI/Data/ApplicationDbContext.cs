@@ -18,6 +18,7 @@ namespace RzumeAPI.Data
              Application = Set<Application>();
              Otp = Set<Otp>();
              Favorites = Set<Favorites>();
+             Country = Set<Country>();
 
 
         }
@@ -85,6 +86,7 @@ namespace RzumeAPI.Data
         public DbSet<Favorites> Favorites { get; set; }
 
         public DbSet<Otp> Otp { get; set; }
+        public DbSet<Country> Country { get; set; }
 
     }
 }

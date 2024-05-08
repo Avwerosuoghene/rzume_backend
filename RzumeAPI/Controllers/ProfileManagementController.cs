@@ -1,17 +1,12 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using RzumeAPI.Models;
 using RzumeAPI.Models.DTO;
 using RzumeAPI.Repository.IRepository;
 using System.Net;
-using RzumeAPI.Repository;
 using RzumeAPI.Helpers;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Google;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Reflection;
+
 
 
 namespace RzumeAPI.Controllers
@@ -216,6 +211,7 @@ namespace RzumeAPI.Controllers
 
 
         }
+
 
 
 

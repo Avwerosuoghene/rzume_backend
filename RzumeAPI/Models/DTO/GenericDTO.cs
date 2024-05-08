@@ -7,13 +7,12 @@ namespace RzumeAPI.Models.DTO
 
         public string Message { get; set; } 
 
-
-
     }
 
 
     public class GenericContentVal {
         public bool IsSuccess {get; set; }
     }
+
 }
 
