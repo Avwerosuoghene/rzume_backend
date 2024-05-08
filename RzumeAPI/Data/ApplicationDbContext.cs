@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Reflection;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using RzumeAPI.Data.configuaration;
 using RzumeAPI.Models;
 
 namespace RzumeAPI.Data
@@ -26,50 +28,7 @@ namespace RzumeAPI.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<Application>()
-                .HasOne(x => x.User)
-                .WithMany(x => x.Applications)
-                .HasForeignKey(x => x.UserId)
-                .HasPrincipalKey(x => x.Id)
-                .IsRequired();
-
-
-            modelBuilder.Entity<Favorites>()
-              .HasMany(x => x.Applications)
-              .WithOne(x => x.Favorites)
-              .HasForeignKey(x => x.ApplicationID)
-              .HasPrincipalKey(x => x.FavoritesID)
-              .IsRequired();
-
-
-            modelBuilder.Entity<UserFile>()
-              .HasOne(x => x.User)
-              .WithMany(x => x.UserFiles)
-              .HasForeignKey(x => x.UserId)
-              .HasPrincipalKey(x => x.Id)
-              .IsRequired();
-
-            modelBuilder.Entity<User>()
-                .HasOne(x => x.Favorites)
-                .WithOne(x => x.User)
-                .HasForeignKey<Favorites>(u => u.UserId);
-
-            modelBuilder.Entity<Education>()
-           .HasOne(x => x.User)
-           .WithMany(u => u.Education)
-           .HasForeignKey(c => c.UserId)
-           .IsRequired();
-
-            modelBuilder.Entity<Experience>()
-           .HasOne(x => x.User)
-           .WithMany(u => u.Experience)
-           .HasForeignKey(c => c.UserId)
-           .IsRequired();
-
-
-
-
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
 
         public DbSet<User> ApplicationUsers { get; set; }

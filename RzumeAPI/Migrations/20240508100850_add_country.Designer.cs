@@ -12,8 +12,8 @@ using RzumeAPI.Data;
 namespace RzumeAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240203213930_Adds_OnBoarding_Stage_To_User_Db")]
-    partial class Adds_OnBoarding_Stage_To_User_Db
+    [Migration("20240508100850_add_country")]
+    partial class add_country
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -212,6 +212,25 @@ namespace RzumeAPI.Migrations
                     b.ToTable("Company");
                 });
 
+            modelBuilder.Entity("RzumeAPI.Models.Country", b =>
+                {
+                    b.Property<string>("CountryID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CountryID");
+
+                    b.ToTable("Country");
+                });
+
             modelBuilder.Entity("RzumeAPI.Models.Education", b =>
                 {
                     b.Property<string>("EducationID")
@@ -222,8 +241,8 @@ namespace RzumeAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Grade")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("GraduationDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("InstitutionName")
                         .IsRequired()
@@ -232,9 +251,6 @@ namespace RzumeAPI.Migrations
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("YearOfGraudation")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("EducationID");
 
@@ -286,13 +302,13 @@ namespace RzumeAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("FavoritesID");
 
                     b.HasIndex("UserId")
-                        .IsUnique()
-                        .HasFilter("[UserId] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Favorites");
                 });
@@ -416,15 +432,15 @@ namespace RzumeAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("FileBytes")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FileCategory")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FilePath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FileType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -436,7 +452,7 @@ namespace RzumeAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserFile");
+                    b.ToTable("Userfile");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -535,7 +551,9 @@ namespace RzumeAPI.Migrations
                 {
                     b.HasOne("RzumeAPI.Models.User", "User")
                         .WithOne("Favorites")
-                        .HasForeignKey("RzumeAPI.Models.Favorites", "UserId");
+                        .HasForeignKey("RzumeAPI.Models.Favorites", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
