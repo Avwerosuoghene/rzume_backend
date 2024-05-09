@@ -90,6 +90,8 @@ builder.Services.AddScoped<IExperienceRepository, ExperienceRepository>();
 
 builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 
+builder.Services.AddScoped<IUtilityRepository, UtilityRepository>();
+
 builder.Services.AddScoped<MiscellaneousHelper>();
 
 var app = builder.Build();

@@ -1,10 +1,11 @@
 ﻿
 using AutoMapper;
-
+using Microsoft.EntityFrameworkCore;
 using RzumeAPI.Data;
 using RzumeAPI.Models;
 using RzumeAPI.Models.DTO;
 using RzumeAPI.Repository.IRepository;
+
 
 namespace RzumeAPI.Repository
 {
@@ -29,10 +30,6 @@ namespace RzumeAPI.Repository
 
         }
 
-        public Task<GenericResponseDTO> GetCountryList()
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task<UploadCountriesResponseDTO> UpdateCountryList(UploadCountryRequestDTO updateCountryListPayload)
         {
@@ -78,9 +75,6 @@ namespace RzumeAPI.Repository
                 uploadContryRequestResponse.IsSuccess = true;
                 uploadContryRequestResponse.ExistingCountries = countriesAlreadyExisting;
 
-
-
-
                 _db.Country.AddRange(countriesToSave);
                 await _db.SaveChangesAsync();
 
@@ -90,6 +84,31 @@ namespace RzumeAPI.Repository
 
 
         }
+
+
+
+        public async Task<List<CountryDTO>> GetCountryList()
+        {
+            var countryModelReturned = await _db.Country.ToListAsync();
+
+            List<CountryDTO> countriesDTO = new();
+
+
+
+
+            foreach (var country in countryModelReturned)
+            {
+                CountryDTO countryItem = _mapper.Map<CountryDTO>(country);
+                countriesDTO.Add(countryItem);
+
+            }
+
+            return countriesDTO;
+
+
+        }
+
+
 
 
 
@@ -122,6 +141,9 @@ namespace RzumeAPI.Repository
                 Message = message
             };
         }
+
+
+
     }
 
 

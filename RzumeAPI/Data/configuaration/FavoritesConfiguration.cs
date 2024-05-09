@@ -11,10 +11,10 @@ namespace RzumeAPI.Data.configuaration
         {
             builder
                 .HasMany(x => x.Applications)
-             .WithOne(x => x.Favorites)
-             .HasForeignKey(x => x.ApplicationID)
-             .HasPrincipalKey(x => x.FavoritesID)
-             .IsRequired();
+                .WithOne(x => x.Favorites)
+                .HasForeignKey(x => x.ApplicationID)
+                .HasPrincipalKey(x => x.FavoritesID)
+                .IsRequired();
         }
     }
 }

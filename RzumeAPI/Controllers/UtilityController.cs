@@ -4,8 +4,6 @@ using RzumeAPI.Models.DTO;
 using RzumeAPI.Repository.IRepository;
 using System.Net;
 using RzumeAPI.Helpers;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 
 
@@ -26,6 +24,7 @@ namespace RzumeAPI.Controllers
         public UtilityController(MiscellaneousHelper helperService, IUtilityRepository utilityRepository)
         {
             _utilityRepo = utilityRepository;
+            _response = new();
         }
 
 
@@ -56,10 +55,18 @@ namespace RzumeAPI.Controllers
                     return BadRequest(MiscellaneousHelper.GenerateBadRequest("Bad Request"));
                 }
 
-                if (uploadRequestResponse.ExistingCountries.Count > 0)
+                List<CountryDTO> existingCountries = uploadRequestResponse.ExistingCountries;
+                int numberOfExistingCountries = existingCountries.Count;
+                if (numberOfExistingCountries > 0)
                 {
                     string discoveredCountriesJson = uploadRequestResponse.ConvertExistingCountriesToJson();
-                    return BadRequest(MiscellaneousHelper.GenerateBadRequest($"The following countries already exists on the db {discoveredCountriesJson}"));
+
+                    ResultObject resultObject = new()
+                    {
+                        Content = existingCountries,
+                        Message = $"{numberOfExistingCountries} existing countr{(numberOfExistingCountries == 1 ? "y" : "ies")} discovered"
+                    };
+                    return BadRequest(MiscellaneousHelper.GenerateBadRequest($"The request contains existing countries ", resultObject));
 
                 }
                 if (uploadRequestResponse.IsSuccess == false)
@@ -94,6 +101,42 @@ namespace RzumeAPI.Controllers
 
             }
         }
+
+
+        [HttpGet("update-country-list")]
+        public async Task<IActionResult> GetCountryList()
+        {
+            try
+            {
+                List<CountryDTO> getCountriesResponse = await _utilityRepo.GetCountryList();
+
+                if (getCountriesResponse == null)
+                {
+                    return BadRequest(MiscellaneousHelper.GenerateBadRequest("Bad Request"));
+
+                }
+
+
+
+                _response.StatusCode = HttpStatusCode.OK;
+                _response.IsSuccess = true;
+                _response.Result = new ResultObject
+                {
+                    Message = "Countries returned succesfully",
+                    Content = getCountriesResponse
+                };
+                return Ok(_response);
+
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(MiscellaneousHelper.GenerateBadRequest(ex.Message));
+
+            }
+
+        }
+
 
 
 

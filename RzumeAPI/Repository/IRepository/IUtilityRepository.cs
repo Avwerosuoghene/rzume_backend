@@ -7,7 +7,7 @@ namespace RzumeAPI.Repository.IRepository
 
        
         Task<UploadCountriesResponseDTO> UpdateCountryList(UploadCountryRequestDTO updateCountryListPayload);
-         Task<GenericResponseDTO> GetCountryList();
+        Task<List<CountryDTO>> GetCountryList();
 
     };
 }

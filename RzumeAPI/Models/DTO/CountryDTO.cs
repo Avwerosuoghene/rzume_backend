@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 
 namespace RzumeAPI.Models.DTO
@@ -33,10 +34,13 @@ namespace RzumeAPI.Models.DTO
 
         public string ConvertExistingCountriesToJson()
         {
-            return JsonConvert.SerializeObject(ExistingCountries);
+             string json = JsonConvert.SerializeObject(ExistingCountries,  Formatting.None);
+              string output = Regex.Replace(json, @"\\", "");
+             return output;
         }
 
 
     }
+
 }
 

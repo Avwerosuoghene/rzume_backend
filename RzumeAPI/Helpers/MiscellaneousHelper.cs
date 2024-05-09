@@ -195,8 +195,11 @@ namespace RzumeAPI.Helpers
 
 
 
-        public static APIResponse GenerateBadRequest(string message)
+        public static APIResponse GenerateBadRequest(string message, ResultObject? result = null)
         {
+            if (result != null) {
+                _response.Result = result;
+            }
             _response.StatusCode = HttpStatusCode.BadRequest;
             _response.IsSuccess = false;
             _response.ErrorMessages.Add(message);

@@ -18,6 +18,8 @@ namespace RzumeAPI.Configurations
             CreateMap<EducationDTO, Education>().ReverseMap();
 
             CreateMap<ExperienceDTO, Experience>().ReverseMap();
+
+            CreateMap<CountryDTO, Country>().ReverseMap();
         }
     }
 }
