@@ -4,14 +4,14 @@ namespace RzumeAPI.Models.DTO
     public class UploadCountryRequestDTO
     {
 
-        public List<CountryDTO> CountryList {get; set;}
+        public List<CountryDTO> CountryList {get; set;} = new List<CountryDTO>();
 
 
     }
 
     public class GetCountryResponseDTO
     {
-        public List<Country> CountryList { get; set; }
+        public List<CountryDTO> CountryList { get; set; } = new List<CountryDTO>();
     }
 
 

@@ -116,6 +116,10 @@ namespace RzumeAPI.Controllers
 
                 }
 
+                GetCountryResponseDTO obtainedCountryList = new()
+                {
+                    CountryList = getCountriesResponse
+                };
 
 
                 _response.StatusCode = HttpStatusCode.OK;
@@ -123,7 +127,7 @@ namespace RzumeAPI.Controllers
                 _response.Result = new ResultObject
                 {
                     Message = "Countries returned succesfully",
-                    Content = getCountriesResponse
+                    Content = obtainedCountryList
                 };
                 return Ok(_response);
 
