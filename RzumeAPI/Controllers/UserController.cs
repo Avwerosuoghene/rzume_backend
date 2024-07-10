@@ -1,52 +1,52 @@
-﻿using System;
+﻿
 using Microsoft.AspNetCore.Mvc;
 using RzumeAPI.Models;
 using RzumeAPI.Models.DTO;
 using RzumeAPI.Repository.IRepository;
 using System.Net;
-using RzumeAPI.Repository;
-using RzumeAPI.Helpers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Newtonsoft.Json;
+using RzumeAPI.Services;
 
 
 namespace RzumeAPI.Controllers
 {
 
-    [Route("api/v{version:apiVersion}/UsersAuth")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [ApiVersionNeutral]
     public class UserController : Controller
     {
 
         private readonly IUserRepository _userRepo;
-        private readonly MiscellaneousHelper _helperService;
+        private readonly OtpService _otpService;
 
         private readonly IEmailRepository _emailRepo;
 
         private readonly IOtpRepository _otpRepo;
+        private readonly UserService _userService;
 
 
         //Marking this as protected makes it accessible to the parent class
         //and any other class that inherits from this parent class
         protected APIResponse _response;
 
-        public UserController(IUserRepository userRepo, IEmailRepository emailRepository, IConfiguration configuration, MiscellaneousHelper helperService, IOtpRepository otpRepo)
+        public UserController(IUserRepository userRepo, IEmailRepository emailRepository, OtpService otpService, IOtpRepository otpRepo, UserService userService)
         {
             _userRepo = userRepo;
             _response = new();
             _emailRepo = emailRepository;
-            _helperService = helperService;
+            _otpService = otpService;
             _otpRepo = otpRepo;
+            _userService = userService;
         }
 
         [HttpPost("register")]
 
         public async Task<IActionResult> Register([FromBody] RegistrationDTO model)
         {
-            bool userNameIsUnique = _helperService.IsUniqueUser(model.Email);
+            bool userNameIsUnique = _userService.IsUniqueUser(model.Email);
             // bool userNameIsUnique = true;
 
             if (!userNameIsUnique)
@@ -288,7 +288,7 @@ namespace RzumeAPI.Controllers
                 var otpModel = await _otpRepo.GetAsync(u => u.UserId == user.Id);
 
 
-                var token = MiscellaneousHelper.GenerateOtp();
+                var token = _otpService.GenerateOtp();
                 DateTime currentDate = DateTime.Now;
                 DateTime expirationDate = currentDate.AddMinutes(5);
 
@@ -355,7 +355,7 @@ namespace RzumeAPI.Controllers
                     return BadRequest(_response);
                 }
 
-                OtpValidationResponseDTO otpConfirmedResponse = await _helperService.ConfirmOtp(user, otpValidationPayload.OtpValue.ToString()!);
+                OtpValidationResponseDTO otpConfirmedResponse = await _otpService.ConfirmOtp(user, otpValidationPayload.OtpValue.ToString()!);
 
                 if (!otpConfirmedResponse.IsValid)
                 {

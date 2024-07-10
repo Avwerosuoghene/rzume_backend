@@ -12,31 +12,24 @@ using Newtonsoft.Json.Linq;
 namespace RzumeAPI.Controllers
 {
 
-    [Route("api/v{version:apiVersion}/UsersProfile")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [ApiVersionNeutral]
     public class ProfileManagementController : Controller
     {
 
         private readonly IProfileRepository _profileRepo;
-        private readonly MiscellaneousHelper _helperService;
 
         private readonly string _uploadDirectory;
 
-        // private readonly IEmailRepository _emailRepo;
-
-        // private readonly IOtpRepository _otpRepo;
-
-
-        //Marking this as protected makes it accessible to the parent class
-        //and any other class that inherits from this parent class
+     
         protected APIResponse _response;
 
-        public ProfileManagementController(IProfileRepository profileRepo, MiscellaneousHelper helperService, IOtpRepository otpRepo)
+        public ProfileManagementController(IProfileRepository profileRepo,IOtpRepository otpRepo)
         {
             _profileRepo = profileRepo;
             _response = new();
-            _helperService = helperService;
+        
 
             _uploadDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
             if (!Directory.Exists(_uploadDirectory))
@@ -106,7 +99,7 @@ namespace RzumeAPI.Controllers
 
 
 
-                    return BadRequest(MiscellaneousHelper.GenerateBadRequest("Please provide onboarding stage payload"));
+                    return BadRequest(ApiResponseFactory.GenerateBadRequest("Please provide onboarding stage payload"));
 
                 }
                 JObject payloadObject = JObject.Parse(onboardUserPayload.OnboardUserPayload.ToString());
@@ -116,11 +109,11 @@ namespace RzumeAPI.Controllers
                 switch (onboardUserPayload.OnBoardingStage)
                 {
                     case 0:
-                        validProperties = MiscellaneousHelper.CheckOnboardPayloadValidaty<OnboardUserFirstStageRequestDTO>(payloadObject);
+                        validProperties = PayloadValidator.CheckOnboardPayloadValidaty<OnboardUserFirstStageRequestDTO>(payloadObject);
 
                         if (!validProperties)
                         {
-                            return BadRequest(MiscellaneousHelper.GenerateBadRequest("Bad Request"));
+                            return BadRequest(ApiResponseFactory.GenerateBadRequest("Bad Request"));
 
                         }
 
@@ -128,10 +121,10 @@ namespace RzumeAPI.Controllers
                         response = await _profileRepo.OnboardingFirstStage(onboardUserFirstStagePayload, onboardUserPayload.UserMail);
                         break;
                     case 1:
-                        validProperties = MiscellaneousHelper.CheckOnboardPayloadValidaty<OnboardUserSecondStageRequestDTO>(payloadObject);
+                        validProperties = PayloadValidator.CheckOnboardPayloadValidaty<OnboardUserSecondStageRequestDTO>(payloadObject);
                         if (!validProperties)
                         {
-                            return BadRequest(MiscellaneousHelper.GenerateBadRequest("Bad Request"));
+                            return BadRequest(ApiResponseFactory.GenerateBadRequest("Bad Request"));
 
                         }
 
@@ -140,10 +133,10 @@ namespace RzumeAPI.Controllers
 
                         break;
                     case 2:
-                        validProperties = MiscellaneousHelper.CheckOnboardPayloadValidaty<OnboardUserThirdStageRequestDTO>(payloadObject);
+                        validProperties = PayloadValidator.CheckOnboardPayloadValidaty<OnboardUserThirdStageRequestDTO>(payloadObject);
                         if (!validProperties)
                         {
-                            return BadRequest(MiscellaneousHelper.GenerateBadRequest("Bad Request"));
+                            return BadRequest(ApiResponseFactory.GenerateBadRequest("Bad Request"));
 
                         }
 
@@ -152,11 +145,11 @@ namespace RzumeAPI.Controllers
                         break;
                     case 3:
 
-                        validProperties = MiscellaneousHelper.CheckOnboardPayloadValidaty<OnboardUserFourthStageRequestDTO>(payloadObject);
+                        validProperties = PayloadValidator.CheckOnboardPayloadValidaty<OnboardUserFourthStageRequestDTO>(payloadObject);
                         if (!validProperties)
                         {
 
-                            return BadRequest(MiscellaneousHelper.GenerateBadRequest("Bad Request"));
+                            return BadRequest(ApiResponseFactory.GenerateBadRequest("Bad Request"));
                         }
 
                         OnboardUserFourthStageRequestDTO onboardUserFourthStagePayload = JsonConvert.DeserializeObject<OnboardUserFourthStageRequestDTO>(onboardUserPayload.OnboardUserPayload.ToString());
@@ -165,7 +158,7 @@ namespace RzumeAPI.Controllers
 
                     default:
 
-                        return BadRequest(MiscellaneousHelper.GenerateBadRequest("Invalid onboarding stage"));
+                        return BadRequest(ApiResponseFactory.GenerateBadRequest("Invalid onboarding stage"));
 
                 }
 
@@ -174,13 +167,13 @@ namespace RzumeAPI.Controllers
 
                 if (response == null)
                 {
-                    return BadRequest(MiscellaneousHelper.GenerateBadRequest("Bad Request"));
+                    return BadRequest(ApiResponseFactory.GenerateBadRequest("Bad Request"));
                 }
                 if (response.IsSuccess == false)
                 {
 
 
-                    return BadRequest(MiscellaneousHelper.GenerateBadRequest(response.Message));
+                    return BadRequest(ApiResponseFactory.GenerateBadRequest(response.Message));
                 }
 
                 GenericContentVal content = new()
@@ -204,7 +197,7 @@ namespace RzumeAPI.Controllers
 
 
 
-                return BadRequest(MiscellaneousHelper.GenerateBadRequest(ex.Message));
+                return BadRequest(ApiResponseFactory.GenerateBadRequest(ex.Message));
 
             }
 

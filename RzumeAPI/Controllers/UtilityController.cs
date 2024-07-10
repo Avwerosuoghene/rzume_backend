@@ -4,13 +4,14 @@ using RzumeAPI.Models.DTO;
 using RzumeAPI.Repository.IRepository;
 using System.Net;
 using RzumeAPI.Helpers;
+using RzumeAPI.Services;
 
 
 
 namespace RzumeAPI.Controllers
 {
 
-    [Route("api/v{version:apiVersion}/Utility")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [ApiVersionNeutral]
     public class UtilityController : Controller
@@ -21,10 +22,13 @@ namespace RzumeAPI.Controllers
         private readonly IUtilityRepository _utilityRepo;
 
 
-        public UtilityController(MiscellaneousHelper helperService, IUtilityRepository utilityRepository)
+
+
+        public UtilityController( IUtilityRepository utilityRepository)
         {
             _utilityRepo = utilityRepository;
             _response = new();
+       
         }
 
 
@@ -39,7 +43,7 @@ namespace RzumeAPI.Controllers
 
 
 
-                    return BadRequest(MiscellaneousHelper.GenerateBadRequest("Please provide a valid list"));
+                    return BadRequest(ApiResponseFactory.GenerateBadRequest("Please provide a valid list"));
 
                 }
 
@@ -52,7 +56,7 @@ namespace RzumeAPI.Controllers
 
                 if (uploadRequestResponse == null)
                 {
-                    return BadRequest(MiscellaneousHelper.GenerateBadRequest("Bad Request"));
+                    return BadRequest(ApiResponseFactory.GenerateBadRequest("Bad Request"));
                 }
 
                 List<CountryDTO> existingCountries = uploadRequestResponse.ExistingCountries;
@@ -66,12 +70,12 @@ namespace RzumeAPI.Controllers
                         Content = existingCountries,
                         Message = $"{numberOfExistingCountries} existing countr{(numberOfExistingCountries == 1 ? "y" : "ies")} discovered"
                     };
-                    return BadRequest(MiscellaneousHelper.GenerateBadRequest($"The request contains existing countries ", resultObject));
+                    return BadRequest(ApiResponseFactory.GenerateBadRequest($"The request contains existing countries ", resultObject));
 
                 }
                 if (uploadRequestResponse.IsSuccess == false)
                 {
-                    return BadRequest(MiscellaneousHelper.GenerateBadRequest("Bad Request"));
+                    return BadRequest(ApiResponseFactory.GenerateBadRequest("Bad Request"));
 
 
                 }
@@ -97,7 +101,7 @@ namespace RzumeAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(MiscellaneousHelper.GenerateBadRequest(ex.Message));
+                return BadRequest(ApiResponseFactory.GenerateBadRequest(ex.Message));
 
             }
         }
@@ -112,7 +116,7 @@ namespace RzumeAPI.Controllers
 
                 if (getCountriesResponse == null)
                 {
-                    return BadRequest(MiscellaneousHelper.GenerateBadRequest("Bad Request"));
+                    return BadRequest(ApiResponseFactory.GenerateBadRequest("Bad Request"));
 
                 }
 
@@ -135,23 +139,13 @@ namespace RzumeAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(MiscellaneousHelper.GenerateBadRequest(ex.Message));
+                return BadRequest(ApiResponseFactory.GenerateBadRequest(ex.Message));
 
             }
 
         }
 
 
-
-
-
-        // [HttpPost("user-onboarding")]
-
-        // public async Task<IActionResult> OnboardUser(OnboardUserRequestDTO onboardUserPayload)
-        // {
-
-
-        // }
 
 
 

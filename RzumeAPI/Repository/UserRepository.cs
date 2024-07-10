@@ -11,6 +11,7 @@ using RzumeAPI.Helpers;
 using RzumeAPI.Models;
 using RzumeAPI.Models.DTO;
 using RzumeAPI.Repository.IRepository;
+using RzumeAPI.Services;
 
 namespace RzumeAPI.Repository
 {
@@ -25,15 +26,15 @@ namespace RzumeAPI.Repository
 
         private IOtpRepository _dbOtp;
 
-        private readonly MiscellaneousHelper _helperService;
+        private readonly OtpService _otpService;
 
 
 
 
 
 
-        public UserRepository(ApplicationDbContext db, IConfiguration configuration,
-            UserManager<User> userManager, IMapper mapper, RoleManager<IdentityRole> roleManager, IEmailRepository emailService, IOtpRepository dbOtp, MiscellaneousHelper helperService)
+        public UserRepository(ApplicationDbContext db, IConfiguration configuration, OtpService otpService,
+            UserManager<User> userManager, IMapper mapper, IEmailRepository emailService, IOtpRepository dbOtp)
         {
             _db = db;
             secretKey = configuration.GetValue<string>("ApiSettings:Secret");
@@ -41,7 +42,7 @@ namespace RzumeAPI.Repository
             _userManager = userManager;
             _emailService = emailService;
             _dbOtp = dbOtp;
-            _helperService = helperService;
+            _otpService = otpService;
 
 
 
@@ -75,10 +76,10 @@ namespace RzumeAPI.Repository
                     else
                     {
                         throw new Exception("Failed to retrieve the created user.");
-                        
+
                     }
 
-                
+
 
                 }
                 else
@@ -96,9 +97,9 @@ namespace RzumeAPI.Repository
             {
                 Console.WriteLine($"Error: {ex}");
                 //   throw new Exception("An error occurred during registration.");
-                  return null;
+                return null;
             }
-           
+
         }
 
         public async Task<GetActiveUserResponse> GetActiveUser(string token)
@@ -180,7 +181,7 @@ namespace RzumeAPI.Repository
 
         private async Task GenerateMail(User user, string otpPurpose, bool isSigin)
         {
-            var token = MiscellaneousHelper.GenerateOtp();
+            var token = _otpService.GenerateOtp();
             DateTime currentDate = DateTime.Now;
             DateTime expirationDate = currentDate.AddMinutes(5);
 
@@ -265,7 +266,7 @@ namespace RzumeAPI.Repository
             };
 
             // var token = tokenHandler.CreateToken(tokenDescriptor);
-            var token = MiscellaneousHelper.GenerateToken(user.Id.ToString(), user.Email.ToString());
+            var token = TokenService.GenerateToken(user.Id.ToString(), user.Email.ToString());
 
             await _userManager.SetAuthenticationTokenAsync(user, "Login", "LoginToken", token);
 
@@ -313,7 +314,7 @@ namespace RzumeAPI.Repository
 
             var otpModel = await _dbOtp.GetAsync(u => u.UserId == user.Id);
 
-            OtpValidationResponseDTO otpConfirmedResponse = await _helperService.ConfirmOtp(user, passwordResetRequestModel.OtpValue.ToString()!);
+            OtpValidationResponseDTO otpConfirmedResponse = await _otpService.ConfirmOtp(user, passwordResetRequestModel.OtpValue.ToString()!);
 
             if (!otpConfirmedResponse.IsValid)
             {
