@@ -140,8 +140,8 @@ namespace RzumeAPI.Controllers
 
         }
 
-        [HttpGet("active-user")]
 
+        [HttpGet("active-user")]
         public async Task<IActionResult> GetActiveUser()
         {
             try

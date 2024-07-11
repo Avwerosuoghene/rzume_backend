@@ -7,8 +7,13 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using RzumeAPI.Services;
 using RzumeAPI.RegistoryConfig;
+using RzumeAPI.Options;
+
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<DatabaseOption>(builder.Configuration.GetSection(DatabaseOption.SectionName));
+
 
 builder.Configuration.AddJsonFile("appsettings.json");
 

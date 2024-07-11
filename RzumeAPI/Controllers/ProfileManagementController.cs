@@ -39,29 +39,6 @@ namespace RzumeAPI.Controllers
         }
 
 
-
-        // [HttpPost("file-upload")]
-
-        // public async Task<IActionResult> UploadFile(OnboardUserSecondStageRequestDTO fileModel)
-        // {
-
-
-        //     try
-        //     {
-        //         string path = Path.Combine("", fileModel.FileName)
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         Console.WriteLine(ex);
-        //     }
-
-        //     _response.StatusCode = HttpStatusCode.InternalServerError;
-        //     _response.IsSuccess = false;
-        //     _response.ErrorMessages.Add("An error occured");
-        //     return BadRequest(_response);
-        // }
-
-
         [HttpPost("upload")]
         public async Task<IActionResult> Upload([FromForm] IFormFile file)
         {
