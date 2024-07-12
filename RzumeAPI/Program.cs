@@ -13,6 +13,8 @@ using RzumeAPI.Options;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<DatabaseOption>(builder.Configuration.GetSection(DatabaseOption.SectionName));
+builder.Services.Configure<BaseUrlOptions>(builder.Configuration.GetSection(BaseUrlOptions.SectionName));
+
 
 
 builder.Configuration.AddJsonFile("appsettings.json");
@@ -79,9 +81,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnection"));
 });
 
-ServiceRegistry.RegisterServices(builder.Services);
+ServiceCollectionExtension.RegisterServices(builder.Services);
 
-RepositoryRegistry.RegisterRepository(builder.Services);
+RepositoryCollectionExtension.RegisterRepository(builder.Services);
+
+OptionsCollectionExtension.RegisterOptions(builder.Services, builder.Configuration);
 
 builder.Services.AddScoped<FileService>();
 

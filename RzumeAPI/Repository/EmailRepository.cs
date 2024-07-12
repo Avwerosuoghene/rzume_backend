@@ -2,8 +2,10 @@
 using System.Net;
 using System.Net.Mail;
 using System.Text;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using RzumeAPI.Models;
+using RzumeAPI.Options;
 using RzumeAPI.Repository.IRepository;
 
 namespace RzumeAPI.Repository
@@ -14,12 +16,15 @@ namespace RzumeAPI.Repository
 
         private readonly SMTPConfigModel _smtConfig;
 
+        private IConfiguration _configuration;
 
 
 
-        public EmailRepository(IOptions<SMTPConfigModel> smtConfig)
+
+        public EmailRepository(IOptions<SMTPConfigModel> smtConfig, IConfiguration configuration)
         {
             _smtConfig = smtConfig.Value;
+            _configuration = configuration;
         }
 
         private async Task SendEmail(UserEmailOptions userEmailOptions)
@@ -56,6 +61,8 @@ namespace RzumeAPI.Repository
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
+                throw new Exception("An error occured while sending verification mail");
+
             }
 
         }
@@ -82,16 +89,11 @@ namespace RzumeAPI.Repository
             return text;
         }
 
-        // public async Task SendTestEmail(UserEmailOptions userEmailOptions, string templatePath)
-        // {
-        //     userEmailOptions.Subject = UpdatePlaceHolder("This is a test email from {{userName}} ", userEmailOptions.Placeholders);
-        //     userEmailOptions.Body = UpdatePlaceHolder(GetEmailBody("TestEmail", templatePath), userEmailOptions.Placeholders);
 
-        //     await SendEmail(userEmailOptions);
-        // }
-
-        public async Task SendConfrirmationMail(User user, string token, string otpPurpose, bool isSigin)
+        public async Task SendConfrirmationMail(User user, string token, string otpPurpose, bool isSigin, string clientBaseUrl)
         {
+
+            var secret = _configuration["ApiSettings:Secret"];
 
 
             UserEmailOptions options = new UserEmailOptions
@@ -99,17 +101,19 @@ namespace RzumeAPI.Repository
                 ToEmails = new List<string> { user.Email },
                 Placeholders = new List<KeyValuePair<string, string>>(){
                     new KeyValuePair<string, string>("{{userName}}", user.UserName),
-                    new KeyValuePair<string, string>("{{link}}", token ),
+                    new KeyValuePair<string, string>("{{link}}" ,$"{clientBaseUrl}auth/email-confirmation?token=${token}"),
                     new KeyValuePair<string, string>("{{introText}}", otpPurpose ),
                     new  KeyValuePair<string, string>("{{isSignin}}", isSigin.ToString() ),
 
                 },
-                Subject = "Kindly confrim your email id.",
+                Subject = "Kindly click the link to validate your email.",
             };
 
             options.Body = UpdatePlaceHolder(GetEmailBody("EmailConfirm", templatePath), options.Placeholders);
+        
+                await SendEmail(options);
+       
 
-            await SendEmail(options);
         }
     }
 }

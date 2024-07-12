@@ -2,7 +2,7 @@
 using RzumeAPI.Services;
 
 namespace RzumeAPI.RegistoryConfig {
-public static class ServiceRegistry
+public static class ServiceCollectionExtension
 {
     public static void RegisterServices(IServiceCollection services)
     {

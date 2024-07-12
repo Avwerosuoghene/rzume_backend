@@ -1,13 +1,8 @@
-﻿using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+﻿
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using RzumeAPI.Data;
-using RzumeAPI.Helpers;
 using RzumeAPI.Models;
 using RzumeAPI.Models.DTO;
 using RzumeAPI.Repository.IRepository;
@@ -28,13 +23,15 @@ namespace RzumeAPI.Repository
 
         private readonly OtpService _otpService;
 
+        private TokenService _tokenService;
+
 
 
 
 
 
         public UserRepository(ApplicationDbContext db, IConfiguration configuration, OtpService otpService,
-            UserManager<User> userManager, IMapper mapper, IEmailRepository emailService, IOtpRepository dbOtp)
+            UserManager<User> userManager, IMapper mapper, IEmailRepository emailService, IOtpRepository dbOtp, TokenService tokenService)
         {
             _db = db;
             secretKey = configuration.GetValue<string>("ApiSettings:Secret");
@@ -43,12 +40,13 @@ namespace RzumeAPI.Repository
             _emailService = emailService;
             _dbOtp = dbOtp;
             _otpService = otpService;
+            _tokenService = tokenService;
 
 
 
         }
 
-        public async Task<UserDTO?> Register(RegistrationDTO registrationDTO)
+        public async Task<RegisterUserResponse> Register(RegistrationDTO registrationDTO, string  clientSideBaseUrl)
         {
             User user = new()
             {
@@ -70,8 +68,14 @@ namespace RzumeAPI.Repository
 
                     if (userToReturn != null)
                     {
-                        await GenerateMail(userToReturn, "Signup", true);
-                        return _mapper.Map<UserDTO>(userToReturn);
+                        // comment back in once google smtp starts working
+                        // await GenerateMail(userToReturn, "Signup", true, clientSideBaseUrl);
+
+                         GenerateMail(userToReturn, "Signup", true, clientSideBaseUrl);
+                        UserDTO returnedUser =_mapper.Map<UserDTO>(userToReturn);
+                        return new RegisterUserResponse(){
+                            User = returnedUser,
+                        };
                     }
                     else
                     {
@@ -95,9 +99,14 @@ namespace RzumeAPI.Repository
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error: {ex}");
+                Console.WriteLine($"Error: {ex.Message}");
                 //   throw new Exception("An error occurred during registration.");
-                return null;
+       
+                 return new RegisterUserResponse()
+                    {
+                        User = null,
+                        Message = ex.Message
+                    };
             }
 
         }
@@ -107,24 +116,15 @@ namespace RzumeAPI.Repository
             try
             {
 
-                var key = Encoding.ASCII.GetBytes(secretKey);
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var validations = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                };
-                var claimsPrincipal = tokenHandler.ValidateToken(token, validations, out var tokenSecure);
-                var userIdClaim = claimsPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email);
-                var userMail = userIdClaim?.Value;
+
+                TokenServiceResponse tokenServiceResponse = _tokenService.ValidateToken(token);
+                string? userMail = tokenServiceResponse.UserMail;
                 if (userMail == null)
                 {
                     return new GetActiveUserResponse()
                     {
                         User = null,
-                        Message = "Invalid Request"
+                        Message = tokenServiceResponse.Message
                     };
                 }
 
@@ -151,16 +151,7 @@ namespace RzumeAPI.Repository
 
 
             }
-            catch (SecurityTokenExpiredException ex)
-            {
-                Console.WriteLine($"Token expired: {ex.Message}");
 
-                return new GetActiveUserResponse()
-                {
-                    User = null,
-                    Message = "Token expired"
-                };
-            }
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
@@ -179,31 +170,26 @@ namespace RzumeAPI.Repository
             return await _userManager.FindByEmailAsync(email);
         }
 
-        private async Task GenerateMail(User user, string otpPurpose, bool isSigin)
+    // comment back in once google smtp starts working
+        // private async Task GenerateMail(User user, string otpPurpose, bool isSigin, string clientBaseUrl)
+        // {
+        //     DateTime expirationDate = DateTime.UtcNow.AddMinutes(5);
+        //     var token = _tokenService.GenerateToken(user.Id, user.Email, expirationDate);
+        //     Console.WriteLine($"token value is: {token}");
+
+        //     await _emailService.SendConfrirmationMail(user, token.ToString(), otpPurpose, isSigin, clientBaseUrl);
+        // }
+
+        private  void  GenerateMail(User user, string otpPurpose, bool isSigin, string clientBaseUrl)
         {
-            var token = _otpService.GenerateOtp();
-            DateTime currentDate = DateTime.Now;
-            DateTime expirationDate = currentDate.AddMinutes(5);
+            DateTime expirationDate = DateTime.UtcNow.AddMinutes(5);
+            var token = _tokenService.GenerateToken(user.Id, user.Email, expirationDate);
+            string validationUrl = $"http://localhost:4200/auth/email-confirmation?token={token}";
+            Console.WriteLine($"validation url is: {validationUrl}");
 
-
-
-            OtpDTO otp = new OtpDTO
-            {
-                UserId = user!.Id.ToString(),
-                ExpirationDate = expirationDate,
-                OtpValue = token.ToString(),
-                IsConfirmed = false
-
-            };
-
-            Otp otpModel = _mapper.Map<Otp>(otp);
-
-            await _dbOtp.CreateAsync(otpModel);
-
-
-
-            await _emailService.SendConfrirmationMail(user, token.ToString(), otpPurpose, isSigin);
         }
+
+    
 
 
 
@@ -226,7 +212,6 @@ namespace RzumeAPI.Repository
             {
                 return new LoginResponseDTO()
                 {
-                    //WeakReference couldn't use the token directly as it is of type SecurityToken
                     Token = "",
                     User = null,
                     Message = "Username or password is incorrect"
@@ -235,7 +220,6 @@ namespace RzumeAPI.Repository
 
             if (!user.EmailConfirmed)
             {
-                // await GenerateMail(user!, "Signup", true);
                 return new LoginResponseDTO()
                 {
                     Token = "",
@@ -244,35 +228,10 @@ namespace RzumeAPI.Repository
                     Message = "Kindly Validate User"
                 };
             }
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-
-            var key = Encoding.ASCII.GetBytes(secretKey);
-
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                //Describes what our token will contain
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name, user.Id.ToString()),
-                    new Claim(ClaimTypes.Email,user.Email.ToString())
-                }),
-
-                //Describes Token Expiration
-                Expires = DateTime.UtcNow.AddDays(7),
-
-                //Describes signin creddentials
-                SigningCredentials = new(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-
-            // var token = tokenHandler.CreateToken(tokenDescriptor);
-            var token = TokenService.GenerateToken(user.Id.ToString(), user.Email.ToString());
+            DateTime expirationDate = DateTime.UtcNow.AddDays(2);
+            var token = _tokenService.GenerateToken(user.Id.ToString(), user.Email.ToString(), expirationDate);
 
             await _userManager.SetAuthenticationTokenAsync(user, "Login", "LoginToken", token);
-
-
-            //    var result = await userManager.ResetPasswordAsync(user, model.Token, model.Password);
-
 
             LoginResponseDTO loginResponseDTO = new LoginResponseDTO()
             {

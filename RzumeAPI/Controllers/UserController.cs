@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using RzumeAPI.Services;
+using Microsoft.Extensions.Options;
+using RzumeAPI.Options;
 
 
 namespace RzumeAPI.Controllers
@@ -44,25 +46,27 @@ namespace RzumeAPI.Controllers
 
         [HttpPost("register")]
 
-        public async Task<IActionResult> Register([FromBody] RegistrationDTO model)
+        public async Task<IActionResult> Register([FromBody] RegistrationDTO model, [FromServices] IOptionsSnapshot<BaseUrlOptions> baseUrls)
         {
             bool userNameIsUnique = _userService.IsUniqueUser(model.Email);
-            // bool userNameIsUnique = true;
+            var _baseUrls = baseUrls.Value;
+            string clientSideBaseUrl = _baseUrls.ClientBaseUrl;
 
             if (!userNameIsUnique)
             {
                 _response.StatusCode = HttpStatusCode.BadRequest;
                 _response.IsSuccess = false;
-                _response.ErrorMessages.Add("Username already exists");
+                _response.ErrorMessages.Add("User already exists");
                 return BadRequest(_response);
             }
 
-             UserDTO? response = await _userRepo.Register(model)!;
-            if (response == null)
+            RegisterUserResponse response = await _userRepo.Register(model, clientSideBaseUrl)!;
+            if (response.User == null)
             {
+                string responseMsg = response.Message ?? "Error while registering";
                 _response.StatusCode = HttpStatusCode.BadRequest;
                 _response.IsSuccess = false;
-                _response.ErrorMessages.Add("Error while registering");
+                _response.ErrorMessages.Add(responseMsg);
                 return BadRequest(_response);
             }
 
@@ -83,9 +87,11 @@ namespace RzumeAPI.Controllers
 
         [HttpPost("login")]
 
-        public async Task<IActionResult> Login([FromBody] LoginRequestDTO model)
+        public async Task<IActionResult> Login([FromBody] LoginRequestDTO model, [FromServices] IOptionsSnapshot<BaseUrlOptions> baseUrls)
         {
 
+    var _baseUrls = baseUrls.Value;
+            string clientSideBaseUrl = _baseUrls.ClientBaseUrl;
             try
             {
                 var loginResponse = await _userRepo.Login(model);
@@ -105,7 +111,6 @@ namespace RzumeAPI.Controllers
                         Email = loginResponse.User.Email,
                         Purpose = "User Validation"
                     };
-                    await GenerateToken(otpPayload);
                     _response.StatusCode = HttpStatusCode.OK;
                     _response.IsSuccess = true;
                     _response.Result = new ResultObject
@@ -271,8 +276,10 @@ namespace RzumeAPI.Controllers
 
 
         [HttpPost("generate-token")]
-        public async Task<IActionResult> GenerateToken(GenerateOtpDTO otpPayload)
+        public async Task<IActionResult> GenerateToken(GenerateOtpDTO otpPayload, [FromServices] IOptionsSnapshot<BaseUrlOptions> baseUrls)
         {
+            var _baseUrls = baseUrls.Value;
+            string clientSideBaseUrl = _baseUrls.ClientBaseUrl;
             try
             {
                 var user = await _userRepo.GetUserByEmailAsync(otpPayload.Email);
@@ -307,7 +314,7 @@ namespace RzumeAPI.Controllers
                 }
 
 
-                await _emailRepo.SendConfrirmationMail(user, otpResponse.OtpValue, otpPayload.Purpose, false);
+                await _emailRepo.SendConfrirmationMail(user, otpResponse.OtpValue, otpPayload.Purpose, false, clientSideBaseUrl);
 
                 GenerateOtpResponseDTO otpGenerateResponse = new GenerateOtpResponseDTO
                 {
@@ -487,7 +494,7 @@ namespace RzumeAPI.Controllers
 
         [HttpPost("user-onboarding")]
 
-   
+
 
 
 

@@ -2,7 +2,7 @@ using RzumeAPI.Repository;
 using RzumeAPI.Repository.IRepository;
 
 namespace RzumeAPI.RegistoryConfig {
-    public static class RepositoryRegistry
+    public static class RepositoryCollectionExtension
 {
     public static void RegisterRepository(IServiceCollection services)
     {

@@ -48,8 +48,14 @@ namespace RzumeAPI.Models
 
     public class GetActiveUserResponse
     {
-        public UserDTO User { get; set; }
-        public string Message { get; set; } 
+        public UserDTO? User { get; set; }
+        public string Message { get; set; } = string.Empty;
+    }
+
+    public class RegisterUserResponse
+    {
+        public UserDTO? User { get; set; }
+        public string? Message { get; set; } = string.Empty;
     }
 
 }
