@@ -12,6 +12,12 @@ namespace RzumeAPI.Models
             public string Value { get; set; } = string.Empty;
         }
 
+          public static class TokenNames
+    {
+        public const string SignUp = "SignUp";
+        public const string Login = "Login";
+    }
+
 
 
 }

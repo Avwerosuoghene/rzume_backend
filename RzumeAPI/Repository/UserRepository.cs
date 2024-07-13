@@ -29,7 +29,7 @@ namespace RzumeAPI.Repository
 
 
 
-        public UserRepository(ApplicationDbContext db,OtpService otpService,
+        public UserRepository(ApplicationDbContext db, OtpService otpService,
             UserManager<User> userManager, IMapper mapper, IEmailRepository emailService, IOtpRepository dbOtp, TokenService tokenService)
         {
             _db = db;
@@ -47,20 +47,21 @@ namespace RzumeAPI.Repository
         public async Task<string> SendTokenEmailValidation(User user)
         {
 
-            
+
             var activeToken = await _userManager.GetAuthenticationTokenAsync(user, "Signup", "SignupToken");
             TokenServiceResponse tokenServiceResponse = _tokenService.ValidateToken(activeToken);
             if (tokenServiceResponse.Message != "Token Expired")
             {
                 return "Signup token still active, kindly check your mail";
             }
-            DateTime expirationDate = DateTime.UtcNow.AddMinutes(5);
-            var token = _tokenService.GenerateToken(user.Id, user.Email, expirationDate);
-            await _userManager.SetAuthenticationTokenAsync(user, "Signup", "SignupToken", token);
+
+            await GenerateToken(user, DateTime.UtcNow.AddMinutes(5), TokenNames.SignUp);
 
             return "Kindly check your mail for your activation token";
 
         }
+
+
 
 
 
@@ -90,10 +91,8 @@ namespace RzumeAPI.Repository
                         // await GenerateMail(userToReturn, "Signup", true, clientSideBaseUrl);
 
                         // GenerateMail(userToReturn, "Signup", true, clientSideBaseUrl);
-                        DateTime expirationDate = DateTime.UtcNow.AddMinutes(5);
 
-                        var token = _tokenService.GenerateToken(user.Id, user.Email, expirationDate);
-                        await _userManager.SetAuthenticationTokenAsync(user, "Signup", "SignupToken", token);
+                        string token = await GenerateToken(user, DateTime.UtcNow.AddMinutes(5), TokenNames.SignUp);
 
                         string validationUrl = $"http://localhost:4200/auth/email-confirmation?token={token}";
                         Console.WriteLine($"validation url is: {validationUrl}");
@@ -246,10 +245,9 @@ namespace RzumeAPI.Repository
                     Message = "Kindly Validate User"
                 };
             }
-            DateTime expirationDate = DateTime.UtcNow.AddDays(2);
-            var token = _tokenService.GenerateToken(user.Id.ToString(), user.Email.ToString(), expirationDate);
 
-            await _userManager.SetAuthenticationTokenAsync(user, "Login", "LoginToken", token);
+            string token = await GenerateToken(user, DateTime.UtcNow.AddHours(1), TokenNames.Login);
+
 
             LoginResponseDTO loginResponseDTO = new LoginResponseDTO()
             {
@@ -327,6 +325,14 @@ namespace RzumeAPI.Repository
         public async Task<IdentityResult> ConfirmEmail(string uid, string token)
         {
             return await _userManager.ConfirmEmailAsync(await _userManager.FindByIdAsync(uid), token);
+
+        }
+
+        private async Task<string> GenerateToken(User user, DateTime expirationDate, string tokenName)
+        {
+            var token = _tokenService.GenerateToken(user.Id, user.Email, expirationDate);
+            await _userManager.SetAuthenticationTokenAsync(user, tokenName, $"{tokenName}Token", token);
+            return token;
 
         }
 
