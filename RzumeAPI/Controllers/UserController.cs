@@ -48,15 +48,23 @@ namespace RzumeAPI.Controllers
 
         public async Task<IActionResult> Register([FromBody] RegistrationDTO model, [FromServices] IOptionsSnapshot<BaseUrlOptions> baseUrls)
         {
-            bool userNameIsUnique = _userService.IsUniqueUser(model.Email);
+            User? user = _userService.userExists(model.Email);
             var _baseUrls = baseUrls.Value;
             string clientSideBaseUrl = _baseUrls.ClientBaseUrl;
 
-            if (!userNameIsUnique)
+               if (user!= null && user.EmailConfirmed)
             {
-                _response.StatusCode = HttpStatusCode.BadRequest;
+                _response.StatusCode = HttpStatusCode.Conflict;
                 _response.IsSuccess = false;
-                _response.ErrorMessages.Add("User already exists");
+                _response.ErrorMessages.Add(UserExistingStatMsg.EmailConfirmedMsg);
+                return BadRequest(_response);
+            }
+
+            if (user!= null && !user.EmailConfirmed)
+            {
+                _response.StatusCode = HttpStatusCode.Conflict;
+                _response.IsSuccess = false;
+                _response.ErrorMessages.Add(UserExistingStatMsg.EmailNotConfirmedMsg);
                 return BadRequest(_response);
             }
 

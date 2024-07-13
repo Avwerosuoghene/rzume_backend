@@ -58,5 +58,11 @@ namespace RzumeAPI.Models
         public string? Message { get; set; } = string.Empty;
     }
 
+    public static class UserExistingStatMsg
+    {
+        public const string EmailConfirmedMsg = "User already exists";
+        public const string EmailNotConfirmedMsg = "Kindly validate mail";
+    }
+
 }
 
