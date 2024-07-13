@@ -52,7 +52,7 @@ namespace RzumeAPI.Controllers
             var _baseUrls = baseUrls.Value;
             string clientSideBaseUrl = _baseUrls.ClientBaseUrl;
 
-               if (user!= null && user.EmailConfirmed)
+            if (user != null && user.EmailConfirmed)
             {
                 _response.StatusCode = HttpStatusCode.Conflict;
                 _response.IsSuccess = false;
@@ -60,7 +60,7 @@ namespace RzumeAPI.Controllers
                 return BadRequest(_response);
             }
 
-            if (user!= null && !user.EmailConfirmed)
+            if (user != null && !user.EmailConfirmed)
             {
                 _response.StatusCode = HttpStatusCode.Conflict;
                 _response.IsSuccess = false;
@@ -98,7 +98,7 @@ namespace RzumeAPI.Controllers
         public async Task<IActionResult> Login([FromBody] LoginRequestDTO model, [FromServices] IOptionsSnapshot<BaseUrlOptions> baseUrls)
         {
 
-    var _baseUrls = baseUrls.Value;
+            var _baseUrls = baseUrls.Value;
             string clientSideBaseUrl = _baseUrls.ClientBaseUrl;
             try
             {
@@ -347,6 +347,56 @@ namespace RzumeAPI.Controllers
             _response.IsSuccess = false;
             return BadRequest(_response);
         }
+
+        [HttpGet("generate-email-token")]
+
+        public async Task<IActionResult> GenerateEmailToken([FromQuery] string Email, [FromServices] IOptionsSnapshot<BaseUrlOptions> baseUrls)
+        {
+            var _baseUrls = baseUrls.Value;
+            string clientSideBaseUrl = _baseUrls.ClientBaseUrl;
+            try
+            {
+
+                var user = await _userRepo.GetUserByEmailAsync(Email);
+
+                // var activeToken = user.Tokens.Any(t => t.IsActive)
+
+                //  return user.Tokens.Any(t => t.IsActive);
+                if (user == null)
+                {
+                    _response.StatusCode = HttpStatusCode.NotFound;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("User not found");
+                    return BadRequest(_response);
+                }
+
+                string validateMessage = await _userRepo.SendTokenEmailValidation(user);
+
+                _response.StatusCode = HttpStatusCode.OK;
+                _response.IsSuccess = true;
+                _response.Result = new ResultObject
+                {
+                    Message = validateMessage,
+                    Content = ""
+                };
+
+                return Ok(_response);
+
+            }
+            catch (Exception ex)
+            {
+                {
+                    Console.WriteLine(ex);
+                }
+
+                _response.StatusCode = HttpStatusCode.InternalServerError;
+                _response.IsSuccess = false;
+                return BadRequest(_response);
+            }
+
+
+        }
+
 
         [HttpPost("confirm-user")]
         public async Task<IActionResult> ConfirmEmail(OtpValidationDTO otpValidationPayload)

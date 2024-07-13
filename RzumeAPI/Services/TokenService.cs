@@ -18,6 +18,8 @@ namespace RzumeAPI.Services
             _configuration = configuration;
         }
 
+
+
         public TokenServiceResponse ValidateToken(string token)
         {
             var secretKey = _configuration["ApiSettings:Secret"];
@@ -42,7 +44,7 @@ namespace RzumeAPI.Services
                     Message = "Success"
                 };
 
-            }
+            }   
             catch (SecurityTokenExpiredException ex)
             {
                 Console.WriteLine($"Token expired: {ex.Message}");
@@ -64,7 +66,9 @@ namespace RzumeAPI.Services
             }
         }
 
+        // public string? GetTokenByUserId(string userId) {
 
+        // }
 
 
         public string GenerateToken(string userId, string userMail, DateTime expiration)
