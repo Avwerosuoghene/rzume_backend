@@ -48,6 +48,7 @@ namespace RzumeAPI.Controllers
 
         public async Task<IActionResult> Register([FromBody] RegistrationDTO model, [FromServices] IOptionsSnapshot<BaseUrlOptions> baseUrls)
         {
+            
             User? user = _userService.userExists(model.Email);
             var _baseUrls = baseUrls.Value;
             string clientSideBaseUrl = _baseUrls.ClientBaseUrl;
