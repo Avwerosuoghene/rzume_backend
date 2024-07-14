@@ -89,7 +89,7 @@ namespace RzumeAPI.Repository
                     {
 
 
-                        AccountActivated = false,
+                        AccountActivated = true,
                         Message = UserStatMsg.EmailValidated
 
                     };
@@ -103,7 +103,7 @@ namespace RzumeAPI.Repository
 
 
                     AccountActivated = true,
-                    Message = "Account validated"
+                    Message = "Account activated"
 
 
                 };

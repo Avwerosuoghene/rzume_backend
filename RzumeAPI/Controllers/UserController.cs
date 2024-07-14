@@ -294,7 +294,7 @@ namespace RzumeAPI.Controllers
                 var user = await _userRepo.GetUserByEmailAsync(otpPayload.Email);
                 if (user == null)
                 {
-                    _response.StatusCode = HttpStatusCode.NotFound;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
                     _response.ErrorMessages.Add(UserStatMsg.UserNotFound);
                     return BadRequest(_response);
@@ -362,7 +362,7 @@ namespace RzumeAPI.Controllers
 
                 if (user == null)
                 {
-                    _response.StatusCode = HttpStatusCode.NotFound;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
                     _response.ErrorMessages.Add(UserStatMsg.UserNotFound);
                     return BadRequest(_response);
@@ -370,7 +370,7 @@ namespace RzumeAPI.Controllers
 
                 if (user.EmailConfirmed)
                 {
-                    _response.StatusCode = HttpStatusCode.NotFound;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
                     _response.ErrorMessages.Add(UserStatMsg.EmailValidated);
                     return BadRequest(_response);
@@ -404,7 +404,7 @@ namespace RzumeAPI.Controllers
         }
 
 
-        [HttpPost("validate-user-account")]
+        [HttpGet("validate-user-account")]
         public async Task<IActionResult> ConfirmEmail([FromQuery] string token)
         {
             try
@@ -438,7 +438,7 @@ namespace RzumeAPI.Controllers
                 _response.Result = new ResultObject
                 {
                     Message = activateAccountReponse.Message,
-                    Content = null
+                    Content = activateAccountReponse.AccountActivated
                 };
                 return Ok(_response);
 
@@ -464,7 +464,7 @@ namespace RzumeAPI.Controllers
                 var user = await _userRepo.GetUserByEmailAsync(validatePayload.Email);
                 if (user == null)
                 {
-                    _response.StatusCode = HttpStatusCode.NotFound;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
                     _response.ErrorMessages.Add(UserStatMsg.UserNotFound);
                     return BadRequest(_response);

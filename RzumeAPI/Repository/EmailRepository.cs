@@ -101,7 +101,7 @@ namespace RzumeAPI.Repository
                 ToEmails = new List<string> { user.Email },
                 Placeholders = new List<KeyValuePair<string, string>>(){
                     new KeyValuePair<string, string>("{{userName}}", user.UserName),
-                    new KeyValuePair<string, string>("{{link}}" ,$"{clientBaseUrl}auth/email-confirmation?token=${token}"),
+                    new KeyValuePair<string, string>("{{link}}" ,$"{clientBaseUrl}auth/email-confirmation?token={token}"),
                     new KeyValuePair<string, string>("{{introText}}", otpPurpose ),
                     new  KeyValuePair<string, string>("{{isSignin}}", isSigin.ToString() ),
 
