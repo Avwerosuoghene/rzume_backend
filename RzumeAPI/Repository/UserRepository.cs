@@ -94,7 +94,7 @@ namespace RzumeAPI.Repository
 
                         string token = await GenerateToken(user, DateTime.UtcNow.AddMinutes(5), TokenNames.SignUp);
 
-                        string validationUrl = $"http://localhost:4200/auth/email-confirmation?token={token}";
+                        string validationUrl = $"{clientSideBaseUrl}auth/email-confirmation?token={token}";
                         Console.WriteLine($"validation url is: {validationUrl}");
                         UserDTO returnedUser = _mapper.Map<UserDTO>(userToReturn);
                         return new RegisterUserResponse()

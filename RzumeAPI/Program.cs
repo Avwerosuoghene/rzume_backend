@@ -17,7 +17,8 @@ builder.Services.Configure<BaseUrlOptions>(builder.Configuration.GetSection(Base
 
 
 
-builder.Configuration.AddJsonFile("appsettings.json");
+
+builder.Configuration.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true);
 
 var configuration = builder.Configuration;
 
