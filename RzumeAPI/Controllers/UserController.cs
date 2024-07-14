@@ -48,7 +48,7 @@ namespace RzumeAPI.Controllers
 
         public async Task<IActionResult> Register([FromBody] RegistrationDTO model, [FromServices] IOptionsSnapshot<BaseUrlOptions> baseUrls)
         {
-            
+
             User? user = _userService.userExists(model.Email);
             var _baseUrls = baseUrls.Value;
             string clientSideBaseUrl = _baseUrls.ClientBaseUrl;
@@ -57,7 +57,7 @@ namespace RzumeAPI.Controllers
             {
                 _response.StatusCode = HttpStatusCode.Conflict;
                 _response.IsSuccess = false;
-                _response.ErrorMessages.Add(UserExistingStatMsg.EmailConfirmedMsg);
+                _response.ErrorMessages.Add(UserStatMsg.UserExistsMsg);
                 return BadRequest(_response);
             }
 
@@ -65,7 +65,7 @@ namespace RzumeAPI.Controllers
             {
                 _response.StatusCode = HttpStatusCode.Conflict;
                 _response.IsSuccess = false;
-                _response.ErrorMessages.Add(UserExistingStatMsg.EmailNotConfirmedMsg);
+                _response.ErrorMessages.Add(UserStatMsg.EmailNotConfirmedMsg);
                 return BadRequest(_response);
             }
 
@@ -296,7 +296,7 @@ namespace RzumeAPI.Controllers
                 {
                     _response.StatusCode = HttpStatusCode.NotFound;
                     _response.IsSuccess = false;
-                    _response.ErrorMessages.Add("User not found");
+                    _response.ErrorMessages.Add(UserStatMsg.UserNotFound);
                     return BadRequest(_response);
                 }
 
@@ -360,18 +360,23 @@ namespace RzumeAPI.Controllers
 
                 var user = await _userRepo.GetUserByEmailAsync(Email);
 
-                // var activeToken = user.Tokens.Any(t => t.IsActive)
-
-                //  return user.Tokens.Any(t => t.IsActive);
                 if (user == null)
                 {
                     _response.StatusCode = HttpStatusCode.NotFound;
                     _response.IsSuccess = false;
-                    _response.ErrorMessages.Add("User not found");
+                    _response.ErrorMessages.Add(UserStatMsg.UserNotFound);
                     return BadRequest(_response);
                 }
 
-                string validateMessage = await _userRepo.SendTokenEmailValidation(user);
+                if (user.EmailConfirmed)
+                {
+                    _response.StatusCode = HttpStatusCode.NotFound;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add(UserStatMsg.EmailValidated);
+                    return BadRequest(_response);
+                }
+
+                string validateMessage = await _userRepo.SendTokenEmailValidation(user, clientSideBaseUrl);
 
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.IsSuccess = true;
@@ -399,63 +404,41 @@ namespace RzumeAPI.Controllers
         }
 
 
-        [HttpPost("confirm-user")]
-        public async Task<IActionResult> ConfirmEmail(OtpValidationDTO otpValidationPayload)
+        [HttpPost("validate-user-account")]
+        public async Task<IActionResult> ConfirmEmail([FromQuery] string token)
         {
             try
             {
-                var user = await _userRepo.GetUserByEmailAsync(otpValidationPayload.Email);
-                if (user == null)
+                if (token == null)
                 {
-                    _response.StatusCode = HttpStatusCode.NotFound;
+
+
+                    _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
-                    _response.ErrorMessages.Add("User not found");
+                    _response.ErrorMessages.Add("Invalid Request");
                     return BadRequest(_response);
                 }
 
-                if (user.EmailConfirmed)
+
+                ActivateUserAccountResponse activateAccountReponse = await _userRepo.ActivateUserAccount(token);
+
+                if (!activateAccountReponse.AccountActivated)
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
-                    _response.ErrorMessages.Add("Requested user already validated");
+                    _response.ErrorMessages.Add(activateAccountReponse.Message);
                     return BadRequest(_response);
                 }
 
-                OtpValidationResponseDTO otpConfirmedResponse = await _otpService.ConfirmOtp(user, otpValidationPayload.OtpValue.ToString()!);
 
-                if (!otpConfirmedResponse.IsValid)
-                {
-                    _response.StatusCode = HttpStatusCode.BadRequest;
-                    _response.IsSuccess = false;
-                    _response.ErrorMessages.Add(otpConfirmedResponse.Message);
-                    return BadRequest(_response);
-                }
 
-                user.EmailConfirmed = true;
-
-                User updatedUser = await _userRepo.UpdateAsync(user);
-
-                LoginRequestDTO loginPayload = new LoginRequestDTO
-                {
-                    UserName = otpValidationPayload.Email,
-                    Password = otpValidationPayload.Password
-                };
-
-                var loginResponse = await _userRepo.Login(loginPayload);
-                if (loginResponse.User == null || string.IsNullOrEmpty(loginResponse.Token))
-                {
-                    _response.StatusCode = HttpStatusCode.BadRequest;
-                    _response.IsSuccess = false;
-                    _response.ErrorMessages.Add("Username or password is incorrect");
-                    return BadRequest(_response);
-                }
 
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.IsSuccess = true;
                 _response.Result = new ResultObject
                 {
-                    Message = "Login Successful",
-                    Content = loginResponse
+                    Message = activateAccountReponse.Message,
+                    Content = null
                 };
                 return Ok(_response);
 
@@ -463,11 +446,12 @@ namespace RzumeAPI.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
+                _response.StatusCode = HttpStatusCode.InternalServerError;
+                _response.IsSuccess = false;
+                return BadRequest(_response);
             }
 
-            _response.StatusCode = HttpStatusCode.InternalServerError;
-            _response.IsSuccess = false;
-            return BadRequest(_response);
+
 
         }
 
@@ -482,7 +466,7 @@ namespace RzumeAPI.Controllers
                 {
                     _response.StatusCode = HttpStatusCode.NotFound;
                     _response.IsSuccess = false;
-                    _response.ErrorMessages.Add("User not found");
+                    _response.ErrorMessages.Add(UserStatMsg.UserNotFound);
                     return BadRequest(_response);
                 }
 

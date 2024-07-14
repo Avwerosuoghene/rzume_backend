@@ -44,7 +44,7 @@ namespace RzumeAPI.Repository
 
         }
 
-        public async Task<string> SendTokenEmailValidation(User user)
+        public async Task<string> SendTokenEmailValidation(User user, string clientSideBaseUrl)
         {
 
 
@@ -55,13 +55,72 @@ namespace RzumeAPI.Repository
                 return "Signup token still active, kindly check your mail";
             }
 
-            await GenerateToken(user, DateTime.UtcNow.AddMinutes(5), TokenNames.SignUp);
+
+            await GenerateMail(user, "Signup", true, clientSideBaseUrl);
 
             return "Kindly check your mail for your activation token";
 
         }
 
+        public async Task<ActivateUserAccountResponse> ActivateUserAccount(string token)
+        {
 
+            try
+            {
+                GetUserFromTokenResponse response = await GetUserFromToken(token);
+
+                User? user = response.User;
+
+                if (user == null)
+                {
+                    return new ActivateUserAccountResponse()
+                    {
+
+
+                        AccountActivated = false,
+                        Message = response.Message
+
+                    };
+                }
+
+                if (user.EmailConfirmed)
+                {
+                    return new ActivateUserAccountResponse()
+                    {
+
+
+                        AccountActivated = false,
+                        Message = UserStatMsg.EmailValidated
+
+                    };
+                }
+
+                user.EmailConfirmed = true;
+                await UpdateAsync(user);
+
+                return new ActivateUserAccountResponse()
+                {
+
+
+                    AccountActivated = true,
+                    Message = "Account validated"
+
+
+                };
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return new ActivateUserAccountResponse()
+                {
+                    AccountActivated = false,
+                    Message = "An error occurred"
+                };
+            }
+
+
+        }
 
 
 
@@ -87,15 +146,9 @@ namespace RzumeAPI.Repository
 
                     if (userToReturn != null)
                     {
-                        // comment back in once google smtp starts working
-                        // await GenerateMail(userToReturn, "Signup", true, clientSideBaseUrl);
+                    
+                        await GenerateMail(userToReturn, "Signup", true, clientSideBaseUrl);
 
-                        // GenerateMail(userToReturn, "Signup", true, clientSideBaseUrl);
-
-                        string token = await GenerateToken(user, DateTime.UtcNow.AddMinutes(5), TokenNames.SignUp);
-
-                        string validationUrl = $"{clientSideBaseUrl}auth/email-confirmation?token={token}";
-                        Console.WriteLine($"validation url is: {validationUrl}");
                         UserDTO returnedUser = _mapper.Map<UserDTO>(userToReturn);
                         return new RegisterUserResponse()
                         {
@@ -141,34 +194,27 @@ namespace RzumeAPI.Repository
             try
             {
 
+                GetUserFromTokenResponse response = await GetUserFromToken(token);
 
-                TokenServiceResponse tokenServiceResponse = _tokenService.ValidateToken(token);
-                string? userMail = tokenServiceResponse.UserMail;
-                if (userMail == null)
+                if (response.User == null)
                 {
                     return new GetActiveUserResponse()
                     {
+
+
                         User = null,
-                        Message = tokenServiceResponse.Message
+                        Message = response.Message
+
                     };
                 }
 
-                var user = await _db.ApplicationUsers.FirstOrDefaultAsync(u => u.UserName.ToLower() == userMail.ToLower());
 
-                if (user == null)
-                {
-                    return new GetActiveUserResponse()
-                    {
-                        User = null,
-                        Message = "User not found"
-                    };
-                }
 
                 return new GetActiveUserResponse()
                 {
 
 
-                    User = _mapper.Map<UserDTO>(user),
+                    User = _mapper.Map<UserDTO>(response.User),
                     Message = "Success"
 
                 };
@@ -189,6 +235,37 @@ namespace RzumeAPI.Repository
 
         }
 
+        private async Task<GetUserFromTokenResponse> GetUserFromToken(string token)
+        {
+            TokenServiceResponse tokenServiceResponse = _tokenService.ValidateToken(token);
+            string? userMail = tokenServiceResponse.UserMail;
+            if (userMail == null)
+            {
+                return new GetUserFromTokenResponse()
+                {
+                    User = null,
+                    Message = tokenServiceResponse.Message
+                };
+            }
+
+            var user = await _db.ApplicationUsers.FirstOrDefaultAsync(u => u.UserName.ToLower() == userMail.ToLower());
+
+            if (user == null)
+            {
+                return new GetUserFromTokenResponse()
+                {
+                    User = null,
+                    Message = UserStatMsg.UserNotFound
+                };
+            }
+
+            return new GetUserFromTokenResponse()
+            {
+                User = user,
+                Message = UserStatMsg.UserFound
+            };
+        }
+
 
         public async Task<User> GetUserByEmailAsync(string email)
         {
@@ -196,14 +273,14 @@ namespace RzumeAPI.Repository
         }
 
         // comment back in once google smtp starts working
-        // private async Task GenerateMail(User user, string otpPurpose, bool isSigin, string clientBaseUrl)
-        // {
-        //     DateTime expirationDate = DateTime.UtcNow.AddMinutes(5);
-        //     var token = _tokenService.GenerateToken(user.Id, user.Email, expirationDate);
-        //     Console.WriteLine($"token value is: {token}");
+        private async Task GenerateMail(User user, string otpPurpose, bool isSigin, string clientBaseUrl)
+        {
+            DateTime expirationDate = DateTime.UtcNow.AddMinutes(5);
+            var token = _tokenService.GenerateToken(user.Id, user.Email, expirationDate);
+            Console.WriteLine($"token value is: {token}");
 
-        //     await _emailService.SendConfrirmationMail(user, token.ToString(), otpPurpose, isSigin, clientBaseUrl);
-        // }
+            await _emailService.SendConfrirmationMail(user, token.ToString(), otpPurpose, isSigin, clientBaseUrl);
+        }
 
 
 

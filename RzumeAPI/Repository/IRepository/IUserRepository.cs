@@ -26,7 +26,9 @@ namespace RzumeAPI.Repository.IRepository
          Task<GenericResponseDTO> OnboardingFirstStage(OnboardUserFirstStageRequestDTO onboardRequestPayload, string userMail);
 
 
-         Task<string> SendTokenEmailValidation(User user);
+         Task<string> SendTokenEmailValidation(User user, string clientSideBaseUrl);
+
+        Task<ActivateUserAccountResponse> ActivateUserAccount( string token);
     };
 }
 

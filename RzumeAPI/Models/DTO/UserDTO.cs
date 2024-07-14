@@ -24,6 +24,8 @@ namespace RzumeAPI.Models.DTO
 
         public byte? OnBoardingStage { get; set; }
 
+        public bool EmailConfirmed { get; set; }
+
 
 
     }
