@@ -1,7 +1,8 @@
-﻿using System;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using RzumeAPI.Models;
 using RzumeAPI.Models.DTO;
+using RzumeAPI.Models.Responses;
+
 
 namespace RzumeAPI.Repository.IRepository
 {

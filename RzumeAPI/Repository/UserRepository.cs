@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using RzumeAPI.Data;
 using RzumeAPI.Models;
 using RzumeAPI.Models.DTO;
+using RzumeAPI.Models.Responses;
+using RzumeAPI.Models.Utilities;
 using RzumeAPI.Repository.IRepository;
 using RzumeAPI.Services;
 
@@ -48,7 +50,7 @@ namespace RzumeAPI.Repository
         {
 
 
-            var activeToken = await _userManager.GetAuthenticationTokenAsync(user, "Signup", "SignupToken");
+            var activeToken = await _userManager.GetAuthenticationTokenAsync(user, TokenTypes.SignUp, $"{TokenTypes.SignUp}Token");
             TokenServiceResponse tokenServiceResponse = _tokenService.ValidateToken(activeToken);
             if (tokenServiceResponse.Message != TokenStatMsg.TokenExpired)
             {
@@ -56,7 +58,7 @@ namespace RzumeAPI.Repository
             }
 
 
-            await GenerateMail(user, "Signup", true, clientSideBaseUrl);
+            await GenerateMail(user, TokenTypes.SignUp, true, clientSideBaseUrl);
 
             return TokenStatMsg.ActivationTokenSent;
 
@@ -95,7 +97,7 @@ namespace RzumeAPI.Repository
                     };
                 }
 
-                string loginToken = await GenerateToken(user, DateTime.UtcNow.AddHours(5), TokenNames.Login);
+                string loginToken = await GenerateToken(user, DateTime.UtcNow.AddHours(5), TokenTypes.Login);
 
 
                 user.EmailConfirmed = true;
@@ -117,7 +119,7 @@ namespace RzumeAPI.Repository
                 return new ActivateUserAccountResponse()
                 {
                     AccountActivated = false,
-                    Message = "An error occurred"
+                    Message = ErrorMsgs.Default
                 };
             }
 
@@ -149,7 +151,7 @@ namespace RzumeAPI.Repository
                     if (userToReturn != null)
                     {
 
-                        await GenerateMail(userToReturn, "Signup", true, clientSideBaseUrl);
+                        await GenerateMail(userToReturn, TokenTypes.SignUp, true, clientSideBaseUrl);
 
                         UserDTO returnedUser = _mapper.Map<UserDTO>(userToReturn);
                         return new RegisterUserResponse()
@@ -159,7 +161,7 @@ namespace RzumeAPI.Repository
                     }
                     else
                     {
-                        throw new Exception("Failed to retrieve the created user.");
+                        throw new Exception(ErrorMsgs.UserRetrievalError);
 
                     }
 
@@ -174,7 +176,7 @@ namespace RzumeAPI.Repository
                         Console.WriteLine($"Error: {error.Description}");
                     }
 
-                    throw new Exception("Registration failed.");
+                    throw new Exception(ErrorMsgs.RegistrationFailed);
                 }
             }
             catch (Exception ex)
@@ -217,7 +219,7 @@ namespace RzumeAPI.Repository
 
 
                     User = _mapper.Map<UserDTO>(response.User),
-                    Message = "Success"
+                    Message = SuccessMsg.Default
 
                 };
 
@@ -231,7 +233,7 @@ namespace RzumeAPI.Repository
                 return new GetActiveUserResponse()
                 {
                     User = null,
-                    Message = "An error occurred"
+                    Message = ErrorMsgs.Default
                 };
             }
 
@@ -257,14 +259,14 @@ namespace RzumeAPI.Repository
                 return new GetUserFromTokenResponse()
                 {
                     User = null,
-                    Message = UserStatMsg.UserNotFound
+                    Message = UserStatMsg.NotFound
                 };
             }
 
             return new GetUserFromTokenResponse()
             {
                 User = user,
-                Message = UserStatMsg.UserFound
+                Message = UserStatMsg.Found
             };
         }
 
@@ -325,7 +327,7 @@ namespace RzumeAPI.Repository
                 };
             }
 
-            string token = await GenerateToken(user, DateTime.UtcNow.AddHours(5), TokenNames.Login);
+            string token = await GenerateToken(user, DateTime.UtcNow.AddHours(5), TokenTypes.Login);
 
 
             LoginResponseDTO loginResponseDTO = new LoginResponseDTO()
@@ -350,7 +352,7 @@ namespace RzumeAPI.Repository
             {
                 return false;
             }
-            await _userManager.RemoveAuthenticationTokenAsync(user, "Login", "LoginToken");
+            await _userManager.RemoveAuthenticationTokenAsync(user, TokenTypes.Login, $"{TokenTypes.Login}Token");
             return true;
 
         }
@@ -362,7 +364,7 @@ namespace RzumeAPI.Repository
             if (user == null)
             {
                 passwordResetResponse.IsSuccess = false;
-                passwordResetResponse.Message = "User not found";
+                passwordResetResponse.Message =UserStatMsg.NotFound;
                 return passwordResetResponse;
             }
 
@@ -385,13 +387,13 @@ namespace RzumeAPI.Repository
             if (result.Succeeded)
             {
                 passwordResetResponse.IsSuccess = true;
-                passwordResetResponse.Message = "Password Reset Succesful";
+                passwordResetResponse.Message = PasswordStatMsgs.SuccesfulReset;
                 return passwordResetResponse;
             }
             else
             {
                 passwordResetResponse.IsSuccess = false;
-                passwordResetResponse.Message = "Password Reset Failed";
+                passwordResetResponse.Message = PasswordStatMsgs.FailedReset;
                 return passwordResetResponse;
             }
 
@@ -426,12 +428,12 @@ namespace RzumeAPI.Repository
             var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == userMail.ToLower());
             if (user == null)
             {
-                genericResponse.Message = "User does not exist";
+                genericResponse.Message = UserStatMsg.NotFound;
                 return genericResponse;
             }
             user.Name = $"{onboardRequestPayload.FirstName} {onboardRequestPayload.LastName}";
             user.OnBoardingStage = 1;
-            genericResponse.Message = "updated succesfully";
+            genericResponse.Message = SuccessMsg.Updated;
             genericResponse.IsSuccess = true;
             await UpdateAsync(user);
             return genericResponse;

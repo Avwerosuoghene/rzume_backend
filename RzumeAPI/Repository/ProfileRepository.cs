@@ -5,6 +5,7 @@ using RzumeAPI.Data;
 using RzumeAPI.Models;
 using RzumeAPI.Models.DTO;
 using RzumeAPI.Repository.IRepository;
+using RzumeAPI.Models.Utilities;
 
 namespace RzumeAPI.Repository
 {
@@ -46,13 +47,13 @@ namespace RzumeAPI.Repository
             var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == userMail.ToLower());
             if (user == null)
             {
-                return GenerateErrorResponse("User does not exist");
+                return GenerateErrorResponse(UserStatMsg.NotFound);
             }
             user.Name = $"{onboardRequestPayload.FirstName} {onboardRequestPayload.LastName}";
             user.OnBoardingStage = 1;
             await UpdateAsync(user);
 
-            return GenerateSuccessResponse("updated succesfully");
+            return GenerateSuccessResponse(SuccessMsg.Updated);
         }
 
         public async Task<GenericResponseDTO> OnboardingSecondStage(OnboardUserSecondStageRequestDTO onboardRequestPayload, string userMail)
@@ -63,7 +64,7 @@ namespace RzumeAPI.Repository
             var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == userMail.ToLower());
             if (user == null)
             {
-                return GenerateErrorResponse("User does not exist");
+                return GenerateErrorResponse(UserStatMsg.NotFound);
             }
 
 
@@ -81,7 +82,7 @@ namespace RzumeAPI.Repository
             UserFile userFileModel = _mapper.Map<UserFile>(file);
 
             await _dbUserFile.CreateAsync(userFileModel);
-            return GenerateSuccessResponse("uploaded succesfully");
+            return GenerateSuccessResponse(SuccessMsg.Uploaded);
 
         }
 
@@ -91,7 +92,7 @@ namespace RzumeAPI.Repository
             var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == userMail.ToLower());
             if (user == null)
             {
-                return GenerateErrorResponse("User does not exist");
+                return GenerateErrorResponse(UserStatMsg.NotFound);
             }
 
             List<Education> userEducationItems = _db.Education.Where(education => education.UserId == user.Id).ToList();
@@ -99,7 +100,7 @@ namespace RzumeAPI.Repository
             if (userEducationItems.Count >= 3)
 
             {
-                return GenerateErrorResponse("Maximum number of education created for user");
+                return GenerateErrorResponse(EducationStatMsgs.MaximumExceeded);
             }
 
 
@@ -110,12 +111,12 @@ namespace RzumeAPI.Repository
 
             if (receivedEducationList.Count + userEducationItems.Count > 3)
             {
-                return GenerateErrorResponse("A user cannot have more than 3 education records");
+                return GenerateErrorResponse(EducationStatMsgs.MaximumRecords);
             }
 
             await _dbEducation.BulkUpdateAsync(onboardRequestPayload.EducationList, user.Id);
 
-            return GenerateSuccessResponse("education updated succesfully");
+            return GenerateSuccessResponse(SuccessMsg.Updated);
         }
 
 
@@ -124,7 +125,7 @@ namespace RzumeAPI.Repository
             var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == userMail.ToLower());
             if (user == null)
             {
-                return GenerateErrorResponse("User does not exist");
+                return GenerateErrorResponse(UserStatMsg.NotFound);
             }
 
             await _dbExperience.BulkUpdateAsync(onboardRequestPayload.ExperienceList, user.Id);

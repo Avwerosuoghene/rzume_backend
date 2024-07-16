@@ -1,4 +1,4 @@
-namespace RzumeAPI.Models {
+namespace RzumeAPI.Models.Responses {
 public class  TokenServiceResponse
     {
          public string? UserMail { get; set; }

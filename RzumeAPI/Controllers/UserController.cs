@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using RzumeAPI.Services;
 using Microsoft.Extensions.Options;
 using RzumeAPI.Options;
+using RzumeAPI.Models.Responses;
 
 
 namespace RzumeAPI.Controllers
