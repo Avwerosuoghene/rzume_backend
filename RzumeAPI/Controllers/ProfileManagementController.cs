@@ -15,6 +15,8 @@ namespace RzumeAPI.Controllers
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [ApiVersionNeutral]
+
+    
     public class ProfileManagementController : Controller
     {
 
@@ -24,6 +26,8 @@ namespace RzumeAPI.Controllers
 
      
         protected APIResponse _response;
+
+        
 
         public ProfileManagementController(IProfileRepository profileRepo,IOtpRepository otpRepo)
         {

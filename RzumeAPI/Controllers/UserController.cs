@@ -95,7 +95,6 @@ namespace RzumeAPI.Controllers
         }
 
         [HttpPost("login")]
-
         public async Task<IActionResult> Login([FromBody] LoginRequestDTO model, [FromServices] IOptionsSnapshot<BaseUrlOptions> baseUrls)
         {
 
@@ -198,7 +197,6 @@ namespace RzumeAPI.Controllers
             _response.IsSuccess = false;
             return BadRequest(_response);
         }
-
 
 
         [HttpPost("logout")]
@@ -350,7 +348,6 @@ namespace RzumeAPI.Controllers
         }
 
         [HttpGet("generate-email-token")]
-
         public async Task<IActionResult> GenerateEmailToken([FromQuery] string Email, [FromServices] IOptionsSnapshot<BaseUrlOptions> baseUrls)
         {
             var _baseUrls = baseUrls.Value;
@@ -456,46 +453,46 @@ namespace RzumeAPI.Controllers
         }
 
 
-        [HttpPost("validate-email")]
-        public async Task<IActionResult> ValidateEmail(ValidateEmailDTO validatePayload)
-        {
-            try
-            {
-                var user = await _userRepo.GetUserByEmailAsync(validatePayload.Email);
-                if (user == null)
-                {
-                    _response.StatusCode = HttpStatusCode.BadRequest;
-                    _response.IsSuccess = false;
-                    _response.ErrorMessages.Add(UserStatMsg.UserNotFound);
-                    return BadRequest(_response);
-                }
+        // [HttpPost("validate-email")]
+        // public async Task<IActionResult> ValidateEmail(ValidateEmailDTO validatePayload)
+        // {
+        //     try
+        //     {
+        //         var user = await _userRepo.GetUserByEmailAsync(validatePayload.Email);
+        //         if (user == null)
+        //         {
+        //             _response.StatusCode = HttpStatusCode.BadRequest;
+        //             _response.IsSuccess = false;
+        //             _response.ErrorMessages.Add(UserStatMsg.UserNotFound);
+        //             return BadRequest(_response);
+        //         }
 
-                ValidateEmailResponseDTO validateResponse = new ValidateEmailResponseDTO
-                {
-                    isValidated = true
-                };
+        //         ValidateEmailResponseDTO validateResponse = new ValidateEmailResponseDTO
+        //         {
+        //             isValidated = true
+        //         };
 
 
-                _response.StatusCode = HttpStatusCode.OK;
-                _response.IsSuccess = true;
-                _response.Result = new ResultObject
-                {
-                    Message = "Succesful",
-                    Content = validateResponse
-                };
-                return Ok(_response);
+        //         _response.StatusCode = HttpStatusCode.OK;
+        //         _response.IsSuccess = true;
+        //         _response.Result = new ResultObject
+        //         {
+        //             Message = "Succesful",
+        //             Content = validateResponse
+        //         };
+        //         return Ok(_response);
 
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         Console.WriteLine(ex);
+        //     }
 
-            _response.StatusCode = HttpStatusCode.InternalServerError;
-            _response.IsSuccess = false;
-            return BadRequest(_response);
+        //     _response.StatusCode = HttpStatusCode.InternalServerError;
+        //     _response.IsSuccess = false;
+        //     return BadRequest(_response);
 
-        }
+        // }
 
 
 

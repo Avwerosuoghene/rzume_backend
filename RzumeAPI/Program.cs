@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using RzumeAPI.Services;
 using RzumeAPI.RegistoryConfig;
 using RzumeAPI.Options;
+using Serilog;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +16,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<DatabaseOption>(builder.Configuration.GetSection(DatabaseOption.SectionName));
 builder.Services.Configure<BaseUrlOptions>(builder.Configuration.GetSection(BaseUrlOptions.SectionName));
 
+builder.Logging.ClearProviders();
+
+var logger = new LoggerConfiguration().WriteTo.File(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs/log.txt"), rollingInterval: RollingInterval.Day, retainedFileCountLimit: 90).CreateLogger();
+builder.Logging.AddSerilog(logger);
 
 
 
