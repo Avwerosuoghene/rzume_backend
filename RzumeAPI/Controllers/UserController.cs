@@ -98,8 +98,7 @@ namespace RzumeAPI.Controllers
         public async Task<IActionResult> Login([FromBody] LoginRequestDTO model, [FromServices] IOptionsSnapshot<BaseUrlOptions> baseUrls)
         {
 
-            var _baseUrls = baseUrls.Value;
-            string clientSideBaseUrl = _baseUrls.ClientBaseUrl;
+  
             try
             {
                 var loginResponse = await _userRepo.Login(model);
@@ -114,11 +113,7 @@ namespace RzumeAPI.Controllers
 
                 if (!loginResponse.EmailConfirmed)
                 {
-                    GenerateOtpDTO otpPayload = new GenerateOtpDTO
-                    {
-                        Email = loginResponse.User.Email,
-                        Purpose = "User Validation"
-                    };
+                  
                     _response.StatusCode = HttpStatusCode.OK;
                     _response.IsSuccess = true;
                     _response.Result = new ResultObject

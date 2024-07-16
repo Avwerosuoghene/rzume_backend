@@ -10,7 +10,6 @@ namespace RzumeAPI.Models.DTO
         {
             OnBoardingStage = 0;
         }
-        public string ID { get; set; } 
 
         public string? FirstName { get; set; }
 
