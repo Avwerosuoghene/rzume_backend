@@ -77,7 +77,7 @@ namespace RzumeAPI.Repository
                     {
 
 
-                        User = null,
+                        AccountActivated = false,
                         Message = response.Message
 
                     };
@@ -89,7 +89,7 @@ namespace RzumeAPI.Repository
                     {
 
 
-                        User = null,
+                        AccountActivated = true,
                         Message = UserStatMsg.EmailValidated
 
                     };
@@ -104,9 +104,9 @@ namespace RzumeAPI.Repository
                 return new ActivateUserAccountResponse()
                 {
 
+                    Message = UserStatMsg.AccountActivated,
 
-                    User = _mapper.Map<UserDTO>(user),
-                    Token = loginToken
+                    AccountActivated = true,
 
                 };
 
@@ -116,7 +116,7 @@ namespace RzumeAPI.Repository
                 Console.WriteLine(ex);
                 return new ActivateUserAccountResponse()
                 {
-                    User = null,
+                    AccountActivated = false,
                     Message = "An error occurred"
                 };
             }
@@ -333,7 +333,7 @@ namespace RzumeAPI.Repository
                 Token = token,
                 User = _mapper.Map<UserDTO>(user),
                 EmailConfirmed = true,
-                Message = "Login Succesful"
+
 
             };
 

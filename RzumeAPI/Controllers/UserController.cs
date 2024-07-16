@@ -414,7 +414,7 @@ namespace RzumeAPI.Controllers
 
                 ActivateUserAccountResponse activateAccountReponse = await _userRepo.ActivateUserAccount(token);
 
-                if (activateAccountReponse.User == null)
+                if (!activateAccountReponse.AccountActivated)
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
@@ -429,8 +429,8 @@ namespace RzumeAPI.Controllers
                 _response.IsSuccess = true;
                 _response.Result = new ResultObject
                 {
-                    Message = UserStatMsg.AccountActivated,
-                    Content = activateAccountReponse
+                    Message = activateAccountReponse.Message,
+                    Content = activateAccountReponse.AccountActivated
                 };
                 return Ok(_response);
 
