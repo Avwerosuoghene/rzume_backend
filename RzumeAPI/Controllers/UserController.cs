@@ -103,7 +103,7 @@ namespace RzumeAPI.Controllers
             {
                 var loginResponse = await _userRepo.Login(model);
 
-                if (loginResponse.User == null)
+                if (loginResponse.User == null )
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
@@ -113,7 +113,7 @@ namespace RzumeAPI.Controllers
 
                 if (!loginResponse.EmailConfirmed)
                 {
-                  
+                    loginResponse.User = null;
                     _response.StatusCode = HttpStatusCode.OK;
                     _response.IsSuccess = true;
                     _response.Result = new ResultObject
@@ -414,7 +414,7 @@ namespace RzumeAPI.Controllers
 
                 ActivateUserAccountResponse activateAccountReponse = await _userRepo.ActivateUserAccount(token);
 
-                if (!activateAccountReponse.AccountActivated)
+                if (activateAccountReponse.User == null)
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
@@ -429,8 +429,8 @@ namespace RzumeAPI.Controllers
                 _response.IsSuccess = true;
                 _response.Result = new ResultObject
                 {
-                    Message = activateAccountReponse.Message,
-                    Content = activateAccountReponse.AccountActivated
+                    Message = UserStatMsg.AccountActivated,
+                    Content = activateAccountReponse
                 };
                 return Ok(_response);
 

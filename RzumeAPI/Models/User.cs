@@ -49,7 +49,9 @@ namespace RzumeAPI.Models
     public class ActivateUserAccountResponse {
         public string Message { get; set; } = string.Empty;
 
-        public bool AccountActivated { get; set; } 
+        public UserDTO? User { get; set; } 
+
+        public string? Token { get; set; } = string.Empty;
     }
 
     public class GetActiveUserResponse
@@ -79,6 +81,9 @@ namespace RzumeAPI.Models
 
         public const string UserNotFound = "User not found";
         public const string UserFound = "User found";
+
+        public const string InvalidDetails = "Username or password is incorrect";
+        public const string AccountActivated = "Account activated";
 
     }
 

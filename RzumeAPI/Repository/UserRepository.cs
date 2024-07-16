@@ -50,15 +50,15 @@ namespace RzumeAPI.Repository
 
             var activeToken = await _userManager.GetAuthenticationTokenAsync(user, "Signup", "SignupToken");
             TokenServiceResponse tokenServiceResponse = _tokenService.ValidateToken(activeToken);
-            if (tokenServiceResponse.Message != "Token Expired")
+            if (tokenServiceResponse.Message != TokenStatMsg.TokenExpired)
             {
-                return "Signup token still active, kindly check your mail";
+                return TokenStatMsg.ActivationTokenActive;
             }
 
 
             await GenerateMail(user, "Signup", true, clientSideBaseUrl);
 
-            return "Kindly check your mail for your activation token";
+            return TokenStatMsg.ActivationTokenSent;
 
         }
 
@@ -77,7 +77,7 @@ namespace RzumeAPI.Repository
                     {
 
 
-                        AccountActivated = false,
+                        User = null,
                         Message = response.Message
 
                     };
@@ -89,11 +89,14 @@ namespace RzumeAPI.Repository
                     {
 
 
-                        AccountActivated = true,
+                        User = null,
                         Message = UserStatMsg.EmailValidated
 
                     };
                 }
+
+                string loginToken = await GenerateToken(user, DateTime.UtcNow.AddHours(5), TokenNames.Login);
+
 
                 user.EmailConfirmed = true;
                 await UpdateAsync(user);
@@ -102,9 +105,8 @@ namespace RzumeAPI.Repository
                 {
 
 
-                    AccountActivated = true,
-                    Message = "Account activated"
-
+                    User = _mapper.Map<UserDTO>(user),
+                    Token = loginToken
 
                 };
 
@@ -114,7 +116,7 @@ namespace RzumeAPI.Repository
                 Console.WriteLine(ex);
                 return new ActivateUserAccountResponse()
                 {
-                    AccountActivated = false,
+                    User = null,
                     Message = "An error occurred"
                 };
             }
@@ -146,7 +148,7 @@ namespace RzumeAPI.Repository
 
                     if (userToReturn != null)
                     {
-                    
+
                         await GenerateMail(userToReturn, "Signup", true, clientSideBaseUrl);
 
                         UserDTO returnedUser = _mapper.Map<UserDTO>(userToReturn);
@@ -293,7 +295,7 @@ namespace RzumeAPI.Repository
         {
 
             // The async version of this method is FirstOrDefaultAsync
-            var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == loginRequestDTO.UserName.ToLower());
+            var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == loginRequestDTO.Email.ToLower());
             bool isValid = false;
 
             if (user != null)
@@ -308,7 +310,7 @@ namespace RzumeAPI.Repository
                 {
                     Token = "",
                     User = null,
-                    Message = "Username or password is incorrect"
+                    Message = UserStatMsg.InvalidDetails
                 };
             }
 
@@ -319,11 +321,11 @@ namespace RzumeAPI.Repository
                     Token = "",
                     User = _mapper.Map<UserDTO>(user),
                     EmailConfirmed = false,
-                    Message = "Kindly Validate User"
+                    Message = UserStatMsg.EmailNotConfirmedMsg
                 };
             }
 
-            string token = await GenerateToken(user, DateTime.UtcNow.AddHours(1), TokenNames.Login);
+            string token = await GenerateToken(user, DateTime.UtcNow.AddHours(5), TokenNames.Login);
 
 
             LoginResponseDTO loginResponseDTO = new LoginResponseDTO()
