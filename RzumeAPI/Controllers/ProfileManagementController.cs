@@ -6,6 +6,7 @@ using System.Net;
 using RzumeAPI.Helpers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using RzumeAPI.Models.Utilities;
 
 
 
@@ -16,7 +17,7 @@ namespace RzumeAPI.Controllers
     [ApiController]
     [ApiVersionNeutral]
 
-    
+
     public class ProfileManagementController : Controller
     {
 
@@ -24,16 +25,16 @@ namespace RzumeAPI.Controllers
 
         private readonly string _uploadDirectory;
 
-     
+
         protected APIResponse _response;
 
-        
 
-        public ProfileManagementController(IProfileRepository profileRepo,IOtpRepository otpRepo)
+
+        public ProfileManagementController(IProfileRepository profileRepo, IOtpRepository otpRepo)
         {
             _profileRepo = profileRepo;
             _response = new();
-        
+
 
             _uploadDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
             if (!Directory.Exists(_uploadDirectory))
@@ -80,7 +81,7 @@ namespace RzumeAPI.Controllers
 
 
 
-                    return BadRequest(ApiResponseFactory.GenerateBadRequest("Please provide onboarding stage payload"));
+                    return BadRequest(ApiResponseFactory.GenerateBadRequest(ErrorMsgs.InavlidPayload));
 
                 }
                 JObject payloadObject = JObject.Parse(onboardUserPayload.OnboardUserPayload.ToString());

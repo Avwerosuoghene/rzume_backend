@@ -11,6 +11,7 @@ using RzumeAPI.Services;
 using Microsoft.Extensions.Options;
 using RzumeAPI.Options;
 using RzumeAPI.Models.Responses;
+using RzumeAPI.Models.Utilities;
 
 
 namespace RzumeAPI.Controllers
@@ -290,7 +291,7 @@ namespace RzumeAPI.Controllers
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
-                    _response.ErrorMessages.Add(UserStatMsg.UserNotFound);
+                    _response.ErrorMessages.Add(UserStatMsg.NotFound);
                     return BadRequest(_response);
                 }
 
@@ -357,7 +358,7 @@ namespace RzumeAPI.Controllers
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
-                    _response.ErrorMessages.Add(UserStatMsg.UserNotFound);
+                    _response.ErrorMessages.Add(UserStatMsg.NotFound);
                     return BadRequest(_response);
                 }
 

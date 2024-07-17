@@ -49,7 +49,7 @@ namespace RzumeAPI.Repository
             {
                 return GenerateErrorResponse(UserStatMsg.NotFound);
             }
-            user.Name = $"{onboardRequestPayload.FirstName} {onboardRequestPayload.LastName}";
+            user.UserName = onboardRequestPayload.UserName;
             user.OnBoardingStage = 1;
             await UpdateAsync(user);
 
