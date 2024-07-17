@@ -44,7 +44,7 @@ namespace RzumeAPI.Repository
         {
 
 
-            var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == userMail.ToLower());
+            var user = _db.ApplicationUsers.FirstOrDefault(u => u.Email.ToLower() == userMail.ToLower());
             if (user == null)
             {
                 return GenerateErrorResponse(UserStatMsg.NotFound);
@@ -61,7 +61,7 @@ namespace RzumeAPI.Repository
 
 
 
-            var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == userMail.ToLower());
+            var user = _db.ApplicationUsers.FirstOrDefault(u => u.Email.ToLower() == userMail.ToLower());
             if (user == null)
             {
                 return GenerateErrorResponse(UserStatMsg.NotFound);

@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using RzumeAPI.Models;
+using RzumeAPI.Models.Utilities;
 using RzumeAPI.Options;
 using RzumeAPI.Repository.IRepository;
 

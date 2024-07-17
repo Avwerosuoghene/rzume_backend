@@ -21,9 +21,14 @@ namespace RzumeAPI.Helpers
 
             foreach (var property in expectedProperties)
             {
-                if (!stringedPayload.ContainsKey(property.Name))
-                    allPropertiesPresent = false;
+                bool propertyExists = stringedPayload.Properties()
+                    .Any(p => string.Equals(p.Name, property.Name, StringComparison.OrdinalIgnoreCase));
 
+                if (!propertyExists)
+                {
+                    allPropertiesPresent = false;
+                    break;
+                }
             }
 
 

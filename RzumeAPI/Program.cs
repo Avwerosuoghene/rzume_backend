@@ -9,6 +9,7 @@ using RzumeAPI.Services;
 using RzumeAPI.RegistoryConfig;
 using RzumeAPI.Options;
 using Serilog;
+using RzumeAPI.Models.Utilities;
 
 
 var builder = WebApplication.CreateBuilder(args);

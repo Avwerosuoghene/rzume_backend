@@ -327,7 +327,6 @@ namespace RzumeAPI.Repository
 
             string token = await GenerateToken(user, DateTime.UtcNow.AddHours(5), TokenTypes.Login);
 
-
             LoginResponseDTO loginResponseDTO = new LoginResponseDTO()
             {
                 Token = token,
