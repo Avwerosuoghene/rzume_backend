@@ -78,8 +78,7 @@ namespace RzumeAPI.Repository
                     return new ActivateUserAccountResponse()
                     {
 
-
-                        AccountActivated = false,
+                        User = null,
                         Message = response.Message
 
                     };
@@ -91,7 +90,7 @@ namespace RzumeAPI.Repository
                     {
 
 
-                        AccountActivated = true,
+                        User = null,
                         Message = UserStatMsg.EmailValidated
 
                     };
@@ -106,9 +105,8 @@ namespace RzumeAPI.Repository
                 return new ActivateUserAccountResponse()
                 {
 
-                    Message = UserStatMsg.AccountActivated,
-
-                    AccountActivated = true,
+                    User = _mapper.Map<UserDTO>(user),
+                    Token = loginToken
 
                 };
 
@@ -118,8 +116,8 @@ namespace RzumeAPI.Repository
                 Console.WriteLine(ex);
                 return new ActivateUserAccountResponse()
                 {
-                    AccountActivated = false,
-                    Message = ErrorMsgs.Default
+                    User = null,
+                    Message = "An error occurred"
                 };
             }
 
@@ -364,7 +362,7 @@ namespace RzumeAPI.Repository
             if (user == null)
             {
                 passwordResetResponse.IsSuccess = false;
-                passwordResetResponse.Message =UserStatMsg.NotFound;
+                passwordResetResponse.Message = UserStatMsg.NotFound;
                 return passwordResetResponse;
             }
 
@@ -417,27 +415,6 @@ namespace RzumeAPI.Repository
 
         }
 
-        public async Task<GenericResponseDTO> OnboardingFirstStage(OnboardUserFirstStageRequestDTO onboardRequestPayload, string userMail)
-        {
-            GenericResponseDTO genericResponse = new GenericResponseDTO
-            {
-                IsSuccess = false,
-                Message = ""
-            };
-
-            var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == userMail.ToLower());
-            if (user == null)
-            {
-                genericResponse.Message = UserStatMsg.NotFound;
-                return genericResponse;
-            }
-            user.Name = $"{onboardRequestPayload.FirstName} {onboardRequestPayload.LastName}";
-            user.OnBoardingStage = 1;
-            genericResponse.Message = SuccessMsg.Updated;
-            genericResponse.IsSuccess = true;
-            await UpdateAsync(user);
-            return genericResponse;
-        }
 
 
         public async Task<User> UpdateAsync(User user)
