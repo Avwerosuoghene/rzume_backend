@@ -4,11 +4,11 @@ namespace RzumeAPI.Models.Utilities;
 
 public class SMTPConfigModel
 {
-    public string SenderAddress { get; set; }
-    public string SenderDisplayName { get; set; }
-    public string UserName { get; set; }
-    public string Password { get; set; }
-    public string Host { get; set; }
+    public required string SenderAddress { get; set; }
+    public required string SenderDisplayName { get; set; }
+    public required string UserName { get; set; }
+    public required string Password { get; set; }
+    public required string Host { get; set; }
     public int Port { get; set; }
     public bool EnableSSL { get; set; }
     public bool UserDefaulCredentials { get; set; }

@@ -3,7 +3,7 @@ namespace RzumeAPI.Models
 {
     public class EmailConfirm
     {
-        public string Email { get; set; } 
+        public required string Email { get; set; } 
 
         public bool IsConfirmed { get; set; }
 

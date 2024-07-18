@@ -9,18 +9,14 @@ namespace RzumeAPI.Models.DTO
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string EducationID { get; set; }
+        public required string EducationID { get; set; }
 
 
-        public string UserId { get; set; }
+        public required string  UserId { get; set; }
 
-        public string InstitutionName { get; set; } 
+        public required string InstitutionName { get; set; } 
 
-        public string CourseOfStudy { get; set; } 
-
-        // public string? Grade { get; set; }
-
-
+        public required string CourseOfStudy { get; set; } 
 
         public DateTime GraduationDate { get; set; }
 

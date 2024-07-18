@@ -6,6 +6,9 @@ using RzumeAPI.Models;
 using RzumeAPI.Models.DTO;
 using RzumeAPI.Repository.IRepository;
 using RzumeAPI.Models.Utilities;
+using RzumeAPI.Models.DO;
+using RzumeAPI.Models.Requests;
+using RzumeAPI.Models.Responses;
 
 namespace RzumeAPI.Repository
 {
@@ -20,11 +23,11 @@ namespace RzumeAPI.Repository
 
         private readonly IUserFileRepository _dbUserFile = dbUserFile;
 
-        public async Task<GenericResponseDTO> OnboardingFirstStage(OnboardUserFirstStageRequestDTO onboardRequestPayload, string userMail)
+        public async Task<GenericResponse> OnboardingFirstStage(OnboardUserFirstStageRequest onboardRequestPayload, string userMail)
         {
 
 
-            var user = _db.ApplicationUsers.FirstOrDefault(u => u.Email.ToLower() == userMail.ToLower());
+            var user = _db.ApplicationUsers.Where(u => u.Email != null).FirstOrDefault(u => u.Email!.Equals(userMail, StringComparison.CurrentCultureIgnoreCase));
             if (user == null)
             {
                 return GenerateErrorResponse(UserStatMsg.NotFound);
@@ -36,12 +39,12 @@ namespace RzumeAPI.Repository
             return GenerateSuccessResponse(SuccessMsg.Updated);
         }
 
-        public async Task<GenericResponseDTO> OnboardingSecondStage(OnboardUserSecondStageRequestDTO onboardRequestPayload, string userMail)
+        public async Task<GenericResponse> OnboardingSecondStage(OnboardUserSecondStageRequest onboardRequestPayload, string userMail)
         {
 
 
 
-            var user = _db.ApplicationUsers.FirstOrDefault(u => u.Email.ToLower() == userMail.ToLower());
+            var user = _db.ApplicationUsers.Where(u => u.Email != null).FirstOrDefault(u => u.Email!.Equals(userMail, StringComparison.CurrentCultureIgnoreCase));
             if (user == null)
             {
                 return GenerateErrorResponse(UserStatMsg.NotFound);
@@ -50,7 +53,7 @@ namespace RzumeAPI.Repository
 
 
 
-            UserFileDTO file = new UserFileDTO
+            UserFileDTO file = new()
             {
                 FileName = onboardRequestPayload.FileName,
                 FileCategory = onboardRequestPayload.FileCat.ToString(),
@@ -67,9 +70,9 @@ namespace RzumeAPI.Repository
         }
 
 
-        public async Task<GenericResponseDTO> OnboardingThirdStage(OnboardUserThirdStageRequestDTO onboardRequestPayload, string userMail)
+        public async Task<GenericResponse> OnboardingThirdStage(OnboardUserThirdStageRequest onboardRequestPayload, string userMail)
         {
-            var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == userMail.ToLower());
+            var user = _db.ApplicationUsers.Where(u => u.Email != null).FirstOrDefault(u => u.Email!.Equals(userMail, StringComparison.CurrentCultureIgnoreCase));
             if (user == null)
             {
                 return GenerateErrorResponse(UserStatMsg.NotFound);
@@ -100,9 +103,9 @@ namespace RzumeAPI.Repository
         }
 
 
-   public async Task<GenericResponseDTO> OnboardingFourthStage(OnboardUserFourthStageRequestDTO onboardRequestPayload, string userMail)
+   public async Task<GenericResponse> OnboardingFourthStage(OnboardUserFourthStageRequest onboardRequestPayload, string userMail)
         {
-            var user = _db.ApplicationUsers.FirstOrDefault(u => u.Email.Equals(userMail, StringComparison.CurrentCultureIgnoreCase));
+            var user = _db.ApplicationUsers.Where(u => u.Email != null).FirstOrDefault(u => u.Email!.Equals(userMail, StringComparison.CurrentCultureIgnoreCase));
             if (user == null)
             {
                 return GenerateErrorResponse(UserStatMsg.NotFound);
@@ -126,18 +129,18 @@ namespace RzumeAPI.Repository
 
 
 
-        private GenericResponseDTO GenerateErrorResponse(string message)
+        private static GenericResponse GenerateErrorResponse(string message)
         {
-            return new GenericResponseDTO
+            return new GenericResponse
             {
                 IsSuccess = false,
                 Message = message
             };
         }
 
-        private GenericResponseDTO GenerateSuccessResponse(string message)
+        private static GenericResponse GenerateSuccessResponse(string message)
         {
-            return new GenericResponseDTO
+            return new GenericResponse
             {
                 IsSuccess = true,
                 Message = message

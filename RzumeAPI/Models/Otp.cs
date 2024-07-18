@@ -8,12 +8,12 @@ namespace RzumeAPI.Models
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string OtpID { get; set; } 
+        public required string OtpID { get; set; } 
 
         [ForeignKey("User")]
-        public string UserId { get; set; } 
+        public required string UserId { get; set; } 
 
-        public string OtpValue { get; set; } 
+        public required string OtpValue { get; set; } 
 
         public bool IsConfirmed {get; set;}
 
@@ -21,7 +21,7 @@ namespace RzumeAPI.Models
         public DateTime ExpirationDate { get; set; }
 
 
-        public User User { get; set; }
+        public required User User { get; set; }
     }
 
 

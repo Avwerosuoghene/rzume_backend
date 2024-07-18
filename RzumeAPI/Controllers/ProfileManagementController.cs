@@ -7,6 +7,8 @@ using RzumeAPI.Helpers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RzumeAPI.Models.Utilities;
+using RzumeAPI.Models.Requests;
+using RzumeAPI.Models.Responses;
 
 
 
@@ -72,7 +74,7 @@ namespace RzumeAPI.Controllers
 
         [HttpPost("user-onboarding")]
 
-        public async Task<IActionResult> OnboardUser(OnboardUserRequestDTO onboardUserPayload)
+        public async Task<IActionResult> OnboardUser(OnboardUserRequest onboardUserPayload)
         {
             try
             {
@@ -87,11 +89,11 @@ namespace RzumeAPI.Controllers
                 JObject payloadObject = JObject.Parse(onboardUserPayload.OnboardUserPayload.ToString());
                 bool validProperties = true;
 
-                GenericResponseDTO? response;
+                GenericResponse response;
                 switch (onboardUserPayload.OnBoardingStage)
                 {
                     case 0:
-                        validProperties = PayloadValidator.CheckOnboardPayloadValidaty<OnboardUserFirstStageRequestDTO>(payloadObject);
+                        validProperties = PayloadValidator.CheckOnboardPayloadValidaty<OnboardUserFirstStageRequest>(payloadObject);
 
                         if (!validProperties)
                         {
@@ -99,42 +101,42 @@ namespace RzumeAPI.Controllers
 
                         }
 
-                        OnboardUserFirstStageRequestDTO onboardUserFirstStagePayload = JsonConvert.DeserializeObject<OnboardUserFirstStageRequestDTO>(onboardUserPayload.OnboardUserPayload.ToString());
+                        OnboardUserFirstStageRequest onboardUserFirstStagePayload = JsonConvert.DeserializeObject<OnboardUserFirstStageRequest>(onboardUserPayload.OnboardUserPayload.ToString());
                         response = await _profileRepo.OnboardingFirstStage(onboardUserFirstStagePayload, onboardUserPayload.UserMail);
                         break;
                     case 1:
-                        validProperties = PayloadValidator.CheckOnboardPayloadValidaty<OnboardUserSecondStageRequestDTO>(payloadObject);
+                        validProperties = PayloadValidator.CheckOnboardPayloadValidaty<OnboardUserSecondStageRequest>(payloadObject);
                         if (!validProperties)
                         {
                             return BadRequest(ApiResponseFactory.GenerateBadRequest("Bad Request"));
 
                         }
 
-                        OnboardUserSecondStageRequestDTO onboardUserSecondStagePayload = JsonConvert.DeserializeObject<OnboardUserSecondStageRequestDTO>(onboardUserPayload.OnboardUserPayload.ToString());
+                        OnboardUserSecondStageRequest onboardUserSecondStagePayload = JsonConvert.DeserializeObject<OnboardUserSecondStageRequest>(onboardUserPayload.OnboardUserPayload.ToString());
                         response = await _profileRepo.OnboardingSecondStage(onboardUserSecondStagePayload, onboardUserPayload.UserMail);
 
                         break;
                     case 2:
-                        validProperties = PayloadValidator.CheckOnboardPayloadValidaty<OnboardUserThirdStageRequestDTO>(payloadObject);
+                        validProperties = PayloadValidator.CheckOnboardPayloadValidaty<OnboardUserThirdStageRequest>(payloadObject);
                         if (!validProperties)
                         {
                             return BadRequest(ApiResponseFactory.GenerateBadRequest("Bad Request"));
 
                         }
 
-                        OnboardUserThirdStageRequestDTO onboardUserThirdStagePayload = JsonConvert.DeserializeObject<OnboardUserThirdStageRequestDTO>(onboardUserPayload.OnboardUserPayload.ToString());
+                        OnboardUserThirdStageRequest onboardUserThirdStagePayload = JsonConvert.DeserializeObject<OnboardUserThirdStageRequest>(onboardUserPayload.OnboardUserPayload.ToString());
                         response = await _profileRepo.OnboardingThirdStage(onboardUserThirdStagePayload, onboardUserPayload.UserMail);
                         break;
                     case 3:
 
-                        validProperties = PayloadValidator.CheckOnboardPayloadValidaty<OnboardUserFourthStageRequestDTO>(payloadObject);
+                        validProperties = PayloadValidator.CheckOnboardPayloadValidaty<OnboardUserFourthStageRequest>(payloadObject);
                         if (!validProperties)
                         {
 
                             return BadRequest(ApiResponseFactory.GenerateBadRequest("Bad Request"));
                         }
 
-                        OnboardUserFourthStageRequestDTO onboardUserFourthStagePayload = JsonConvert.DeserializeObject<OnboardUserFourthStageRequestDTO>(onboardUserPayload.OnboardUserPayload.ToString());
+                        OnboardUserFourthStageRequest onboardUserFourthStagePayload = JsonConvert.DeserializeObject<OnboardUserFourthStageRequest>(onboardUserPayload.OnboardUserPayload.ToString());
                         response = await _profileRepo.OnboardingFourthStage(onboardUserFourthStagePayload, onboardUserPayload.UserMail);
                         break;
 

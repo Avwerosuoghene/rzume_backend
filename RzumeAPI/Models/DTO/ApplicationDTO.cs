@@ -10,14 +10,14 @@ namespace RzumeAPI.Models.DTO
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Required]
-        public string ApplicationID { get; set; } 
+        public required string ApplicationID { get; set; } 
 
         public string? UserId { get; set; } 
 
 
-        public string Position { get; set; } 
+        public required string Position { get; set; } 
 
-        public  string ApplicationDate { get; set; } 
+        public required string ApplicationDate { get; set; } 
 
         public List<string>? AdditionalDocuments { get; set; }
 

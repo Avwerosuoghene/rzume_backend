@@ -1,7 +1,6 @@
-﻿using System;
-using Microsoft.AspNetCore.Identity;
-using RzumeAPI.Models;
-using RzumeAPI.Models.DTO;
+﻿
+using RzumeAPI.Models.Responses;
+using RzumeAPI.Models.Requests;
 
 namespace RzumeAPI.Repository.IRepository
 {
@@ -9,10 +8,10 @@ namespace RzumeAPI.Repository.IRepository
     {
 
        
-         Task<GenericResponseDTO> OnboardingFirstStage(OnboardUserFirstStageRequestDTO onboardRequestPayload, string userMail);
-         Task<GenericResponseDTO> OnboardingSecondStage(OnboardUserSecondStageRequestDTO onboardRequestPayload, string userMail);
-         Task<GenericResponseDTO> OnboardingThirdStage(OnboardUserThirdStageRequestDTO onboardRequestPayload, string userMail);
-         Task<GenericResponseDTO> OnboardingFourthStage(OnboardUserFourthStageRequestDTO onboardRequestPayload, string userMail);
+         Task<GenericResponse> OnboardingFirstStage(OnboardUserFirstStageRequest onboardRequestPayload, string userMail);
+         Task<GenericResponse> OnboardingSecondStage(OnboardUserSecondStageRequest onboardRequestPayload, string userMail);
+         Task<GenericResponse> OnboardingThirdStage(OnboardUserThirdStageRequest onboardRequestPayload, string userMail);
+         Task<GenericResponse> OnboardingFourthStage(OnboardUserFourthStageRequest onboardRequestPayload, string userMail);
     };
 }
 

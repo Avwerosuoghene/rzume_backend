@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using RzumeAPI.Data;
 using RzumeAPI.Models;
 using RzumeAPI.Models.DTO;
+using RzumeAPI.Models.Requests;
 using RzumeAPI.Models.Responses;
 using RzumeAPI.Models.Utilities;
 using RzumeAPI.Repository.IRepository;
@@ -12,45 +13,26 @@ using RzumeAPI.Services;
 
 namespace RzumeAPI.Repository
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository(ApplicationDbContext db, OtpService otpService,
+        UserManager<User> userManager, IMapper mapper, IEmailRepository emailService, IOtpRepository dbOtp, TokenService tokenService) : IUserRepository
     {
-        private ApplicationDbContext _db;
-        private readonly UserManager<User> _userManager;
-        private readonly IEmailRepository _emailService;
-        private readonly IMapper _mapper;
+        private ApplicationDbContext _db = db;
+        private readonly UserManager<User> _userManager = userManager;
+        private readonly IEmailRepository _emailService = emailService;
+        private readonly IMapper _mapper = mapper;
 
 
-        private IOtpRepository _dbOtp;
+        private readonly IOtpRepository _dbOtp = dbOtp;
 
-        private readonly OtpService _otpService;
+        private readonly OtpService _otpService = otpService;
 
-        private TokenService _tokenService;
-
-
-
-
-
-
-        public UserRepository(ApplicationDbContext db, OtpService otpService,
-            UserManager<User> userManager, IMapper mapper, IEmailRepository emailService, IOtpRepository dbOtp, TokenService tokenService)
-        {
-            _db = db;
-            _mapper = mapper;
-            _userManager = userManager;
-            _emailService = emailService;
-            _dbOtp = dbOtp;
-            _otpService = otpService;
-            _tokenService = tokenService;
-
-
-
-        }
+        private TokenService _tokenService = tokenService;
 
         public async Task<string> SendTokenEmailValidation(User user, string clientSideBaseUrl)
         {
 
 
-            var activeToken = await _userManager.GetAuthenticationTokenAsync(user, TokenTypes.SignUp, $"{TokenTypes.SignUp}Token");
+            var activeToken = await _userManager.GetAuthenticationTokenAsync(user, TokenTypes.SignUp, $"{TokenTypes.SignUp}Token") ?? throw new ArgumentException(TokenStatMsg.NotFound);
             TokenServiceResponse tokenServiceResponse = _tokenService.ValidateToken(activeToken);
             if (tokenServiceResponse.Message != TokenStatMsg.TokenExpired)
             {
@@ -126,7 +108,7 @@ namespace RzumeAPI.Repository
 
 
 
-        public async Task<RegisterUserResponse> Register(RegistrationDTO registrationDTO, string clientSideBaseUrl)
+        public async Task<RegisterUserResponse> Register(RegistrationRequest registrationDTO, string clientSideBaseUrl)
         {
             User user = new()
             {
@@ -250,7 +232,7 @@ namespace RzumeAPI.Repository
                 };
             }
 
-            var user = await _db.ApplicationUsers.FirstOrDefaultAsync(u => u.UserName.ToLower() == userMail.ToLower());
+            var user = await _db.ApplicationUsers.FirstOrDefaultAsync(u => u.Email!.Equals(userMail, StringComparison.CurrentCultureIgnoreCase));
 
             if (user == null)
             {
@@ -269,7 +251,7 @@ namespace RzumeAPI.Repository
         }
 
 
-        public async Task<User> GetUserByEmailAsync(string email)
+        public async Task<User?> GetUserByEmailAsync(string email)
         {
             return await _userManager.FindByEmailAsync(email);
         }
@@ -278,7 +260,7 @@ namespace RzumeAPI.Repository
         private async Task GenerateMail(User user, string otpPurpose, bool isSigin, string clientBaseUrl)
         {
             DateTime expirationDate = DateTime.UtcNow.AddMinutes(5);
-            var token = _tokenService.GenerateToken(user.Id, user.Email, expirationDate);
+            var token = _tokenService.GenerateToken(user.Id, user!.Email, expirationDate);
             Console.WriteLine($"token value is: {token}");
 
             await _emailService.SendConfrirmationMail(user, token.ToString(), otpPurpose, isSigin, clientBaseUrl);
@@ -291,22 +273,22 @@ namespace RzumeAPI.Repository
 
 
 
-        public async Task<LoginResponseDTO> Login(LoginRequestDTO loginRequestDTO)
+        public async Task<LoginResponse> Login(LoginRequest loginRequest)
         {
 
             // The async version of this method is FirstOrDefaultAsync
-            var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == loginRequestDTO.Email.ToLower());
+            var user = _db.ApplicationUsers.Where(u => u.Email != null).FirstOrDefault(u => u.Email!.ToLower() == loginRequest.Email.ToLower());
             bool isValid = false;
 
             if (user != null)
             {
-                isValid = await _userManager.CheckPasswordAsync(user, loginRequestDTO.Password);
+                isValid = await _userManager.CheckPasswordAsync(user, loginRequest!.Password);
 
             }
 
             if (user == null || isValid == false)
             {
-                return new LoginResponseDTO()
+                return new LoginResponse()
                 {
                     Token = "",
                     User = null,
@@ -316,7 +298,7 @@ namespace RzumeAPI.Repository
 
             if (!user.EmailConfirmed)
             {
-                return new LoginResponseDTO()
+                return new LoginResponse()
                 {
                     Token = "",
                     User = _mapper.Map<UserDTO>(user),
@@ -327,7 +309,7 @@ namespace RzumeAPI.Repository
 
             string token = await GenerateToken(user, DateTime.UtcNow.AddHours(5), TokenTypes.Login);
 
-            LoginResponseDTO loginResponseDTO = new LoginResponseDTO()
+            LoginResponse loginResponseDTO = new()
             {
                 Token = token,
                 User = _mapper.Map<UserDTO>(user),
@@ -342,9 +324,14 @@ namespace RzumeAPI.Repository
         }
 
 
-        public async Task<bool> Logout(LogoutRequestDTO logoutRequestDTO)
+        public async Task<bool> Logout(LogoutRequest logoutRequestDTO)
         {
-            var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == logoutRequestDTO.UserName.ToLower());
+            // var user = _db.ApplicationUsers.FirstOrDefault(u =>  u.Email?.ToLower() ?? u.Email?.ToLower() == logoutRequestDTO.Email.ToLower());
+
+            var user = _db.ApplicationUsers
+    .Where(u => u.Email != null)
+    .FirstOrDefault(u => u.Email!.Equals(logoutRequestDTO.Email, StringComparison.CurrentCultureIgnoreCase));
+
             if (user == null)
             {
                 return false;
@@ -356,7 +343,7 @@ namespace RzumeAPI.Repository
 
         public async Task<OtpPasswordResetRequestResponseDTO> InitiateOtpResetPassword(OtpPasswordResetRequestDTO passwordResetRequestModel)
         {
-            var user = _db.ApplicationUsers.FirstOrDefault(u => u.Email.ToLower() == passwordResetRequestModel.Email.ToLower());
+            var user = _db.ApplicationUsers.FirstOrDefault(u => u.Email!.ToLower() == passwordResetRequestModel.Email.ToLower());
             OtpPasswordResetRequestResponseDTO passwordResetResponse = new OtpPasswordResetRequestResponseDTO();
             if (user == null)
             {
@@ -400,15 +387,10 @@ namespace RzumeAPI.Repository
 
         }
 
-        public async Task<IdentityResult> ConfirmEmail(string uid, string token)
-        {
-            return await _userManager.ConfirmEmailAsync(await _userManager.FindByIdAsync(uid), token);
-
-        }
 
         private async Task<string> GenerateToken(User user, DateTime expirationDate, string tokenName)
         {
-            var token = _tokenService.GenerateToken(user.Id, user.Email, expirationDate);
+            var token = _tokenService.GenerateToken(user.Id, user!.Email!, expirationDate);
             await _userManager.SetAuthenticationTokenAsync(user, tokenName, $"{tokenName}Token", token);
             return token;
 

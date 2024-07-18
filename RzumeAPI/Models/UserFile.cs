@@ -10,17 +10,17 @@ namespace RzumeAPI.Models
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string FileId { get; set; } 
+        public required string FileId { get; set; } 
 
-        public string FileName { get; set; } 
+        public required string FileName { get; set; } 
 
-        public string FileCategory { get; set; } 
+        public required string FileCategory { get; set; } 
 
-        public string FileBytes { get; set; } 
+        public required string FileBytes { get; set; } 
 
-        public string UserId { get; set; } 
+        public required string UserId { get; set; } 
 
-        public User User { get; set; }
+        public required User User { get; set; }
     }
 
 }

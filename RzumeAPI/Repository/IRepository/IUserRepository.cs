@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using RzumeAPI.Models;
 using RzumeAPI.Models.DTO;
+using RzumeAPI.Models.Requests;
 using RzumeAPI.Models.Responses;
 
 
@@ -9,17 +10,16 @@ namespace RzumeAPI.Repository.IRepository
     public interface IUserRepository
     {
 
-        Task<RegisterUserResponse> Register(RegistrationDTO registrationRequestDTO, string clientSideBaseUrl);
+        Task<RegisterUserResponse> Register(RegistrationRequest registrationRequestDTO, string clientSideBaseUrl);
 
-        Task<LoginResponseDTO> Login(LoginRequestDTO loginRequestDTO);
-        Task<bool> Logout(LogoutRequestDTO logoutRequestDTO);
+        Task<LoginResponse> Login(LoginRequest loginRequestDTO);
+        Task<bool> Logout(LogoutRequest logoutRequestDTO);
 
           Task<OtpPasswordResetRequestResponseDTO> InitiateOtpResetPassword(OtpPasswordResetRequestDTO passwordResetRequestModel);
-        Task<IdentityResult> ConfirmEmail(string uid, string token);
 
         // Task GenerateEmailConfirmationToken(User user);
 
-        Task<User> GetUserByEmailAsync (string email);
+        Task<User?> GetUserByEmailAsync (string email);
 
         Task<User> UpdateAsync(User user);
 

@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using RzumeAPI.Data;
 using RzumeAPI.Models;
 using RzumeAPI.Models.DTO;
+using RzumeAPI.Models.Requests;
+using RzumeAPI.Models.Responses;
 using RzumeAPI.Repository.IRepository;
 
 
@@ -31,23 +33,23 @@ namespace RzumeAPI.Repository
         }
 
 
-        public async Task<UploadCountriesResponseDTO> UpdateCountryList(UploadCountryRequestDTO updateCountryListPayload)
+        public async Task<UploadCountriesResponse> UpdateCountryList(UploadCountryRequest updateCountryListPayload)
         {
 
 
 
 
-            List<CountryDTO> countriesAlreadyExisting = new();
-            List<Country> countriesToSave = new();
+            List<CountryDTO> countriesAlreadyExisting = [];
+            List<Country> countriesToSave = [];
 
 
-            List<Country> countryModelList = new();
+            List<Country> countryModelList = [];
 
             updateCountryListPayload.CountryList.ForEach((CountryDTO countryItem) =>
          {
 
 
-             var countryItemReturned = _db.Country.FirstOrDefault(countryInDb => countryInDb.Name.ToLower() == countryItem.Name.ToLower());
+             var countryItemReturned = _db.Country.FirstOrDefault(countryInDb => countryInDb.Name.Equals(countryItem.Name, StringComparison.CurrentCultureIgnoreCase));
              if (countryItemReturned != null)
              {
                  CountryDTO countryDTOModel = _mapper.Map<CountryDTO>(countryItem);
@@ -63,7 +65,7 @@ namespace RzumeAPI.Repository
 
          });
 
-            UploadCountriesResponseDTO uploadContryRequestResponse = new();
+            UploadCountriesResponse uploadContryRequestResponse = new();
             if (countriesAlreadyExisting.Count > 0)
             {
                 uploadContryRequestResponse.IsSuccess = false;
@@ -124,18 +126,18 @@ namespace RzumeAPI.Repository
         // }
 
 
-        private GenericResponseDTO GenerateErrorResponse(string message)
+        private GenericResponse GenerateErrorResponse(string message)
         {
-            return new GenericResponseDTO
+            return new GenericResponse
             {
                 IsSuccess = false,
                 Message = message
             };
         }
 
-        private GenericResponseDTO GenerateSuccessResponse(string message)
+        private GenericResponse GenerateSuccessResponse(string message)
         {
-            return new GenericResponseDTO
+            return new GenericResponse
             {
                 IsSuccess = true,
                 Message = message

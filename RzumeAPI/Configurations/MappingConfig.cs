@@ -1,6 +1,7 @@
 ﻿using System;
 using AutoMapper;
 using RzumeAPI.Models;
+using RzumeAPI.Models.DO;
 using RzumeAPI.Models.DTO;
 
 namespace RzumeAPI.Configurations

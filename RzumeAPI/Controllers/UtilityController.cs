@@ -4,7 +4,8 @@ using RzumeAPI.Models.DTO;
 using RzumeAPI.Repository.IRepository;
 using System.Net;
 using RzumeAPI.Helpers;
-using RzumeAPI.Services;
+using RzumeAPI.Models.Requests;
+using RzumeAPI.Models.Responses;
 
 
 
@@ -34,7 +35,7 @@ namespace RzumeAPI.Controllers
 
 
         [HttpPost("update-country-list")]
-        public async Task<IActionResult> UpdateCountryList(UploadCountryRequestDTO countryList)
+        public async Task<IActionResult> UpdateCountryList(UploadCountryRequest countryList)
         {
             try
             {
@@ -47,7 +48,7 @@ namespace RzumeAPI.Controllers
 
                 }
 
-                UploadCountriesResponseDTO uploadRequestResponse = await _utilityRepo.UpdateCountryList(countryList);
+                UploadCountriesResponse uploadRequestResponse = await _utilityRepo.UpdateCountryList(countryList);
 
 
 
@@ -59,7 +60,7 @@ namespace RzumeAPI.Controllers
                     return BadRequest(ApiResponseFactory.GenerateBadRequest("Bad Request"));
                 }
 
-                List<CountryDTO> existingCountries = uploadRequestResponse.ExistingCountries;
+                List<CountryDTO> existingCountries = uploadRequestResponse!.ExistingCountries!;
                 int numberOfExistingCountries = existingCountries.Count;
                 if (numberOfExistingCountries > 0)
                 {
@@ -120,7 +121,7 @@ namespace RzumeAPI.Controllers
 
                 }
 
-                GetCountryResponseDTO obtainedCountryList = new()
+                GetCountryResponse obtainedCountryList = new()
                 {
                     CountryList = getCountriesResponse
                 };

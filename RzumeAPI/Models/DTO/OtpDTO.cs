@@ -31,11 +31,11 @@ namespace RzumeAPI.Models.DTO
         public DateTime ExpirationDate { get; set; }
     }
 
-    public class GenerateOtpDTO
+    public class GenerateOtpPayload
     {
-        public string Email { get; set; } 
+        public required string Email { get; set; } 
 
-        public string Purpose { get; set; } 
+        public required string Purpose { get; set; } 
 
     }
 

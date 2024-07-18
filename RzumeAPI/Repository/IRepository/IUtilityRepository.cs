@@ -1,4 +1,6 @@
 ﻿using RzumeAPI.Models.DTO;
+using RzumeAPI.Models.Responses;
+using RzumeAPI.Models.Requests;
 
 namespace RzumeAPI.Repository.IRepository
 {
@@ -6,7 +8,7 @@ namespace RzumeAPI.Repository.IRepository
     {
 
        
-        Task<UploadCountriesResponseDTO> UpdateCountryList(UploadCountryRequestDTO updateCountryListPayload);
+        Task<UploadCountriesResponse> UpdateCountryList(UploadCountryRequest updateCountryListPayload);
         Task<List<CountryDTO>> GetCountryList();
 
     };

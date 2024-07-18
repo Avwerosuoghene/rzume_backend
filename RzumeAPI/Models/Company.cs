@@ -8,9 +8,9 @@ namespace RzumeAPI.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string CompanyID { get; set; } 
+        public required string CompanyID { get; set; } 
 
-        public  string Name { get; set; } 
+        public required string Name { get; set; } 
 
         public string? Email { get; set; }
 

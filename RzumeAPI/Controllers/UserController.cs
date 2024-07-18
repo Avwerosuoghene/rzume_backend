@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 using RzumeAPI.Options;
 using RzumeAPI.Models.Responses;
 using RzumeAPI.Models.Utilities;
+using RzumeAPI.Models.Requests;
 
 
 namespace RzumeAPI.Controllers
@@ -48,7 +49,7 @@ namespace RzumeAPI.Controllers
 
         [HttpPost("register")]
 
-        public async Task<IActionResult> Register([FromBody] RegistrationDTO model, [FromServices] IOptionsSnapshot<BaseUrlOptions> baseUrls)
+        public async Task<IActionResult> Register([FromBody] RegistrationRequest model, [FromServices] IOptionsSnapshot<BaseUrlOptions> baseUrls)
         {
 
             User? user = _userService.userExists(model.Email);
@@ -81,7 +82,7 @@ namespace RzumeAPI.Controllers
                 return BadRequest(_response);
             }
 
-            RegistrationResponseDTO signupResponse = new RegistrationResponseDTO
+            RegistrationResponse signupResponse = new RegistrationResponse
             {
                 IsCreated = true
             };
@@ -97,7 +98,7 @@ namespace RzumeAPI.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequestDTO model, [FromServices] IOptionsSnapshot<BaseUrlOptions> baseUrls)
+        public async Task<IActionResult> Login([FromBody] LoginRequest model, [FromServices] IOptionsSnapshot<BaseUrlOptions> baseUrls)
         {
 
   
@@ -197,7 +198,7 @@ namespace RzumeAPI.Controllers
 
 
         [HttpPost("logout")]
-        public async Task<IActionResult> Logout([FromBody] LogoutRequestDTO model)
+        public async Task<IActionResult> Logout([FromBody] LogoutRequest model)
         {
 
             try
@@ -280,7 +281,7 @@ namespace RzumeAPI.Controllers
 
 
         [HttpPost("generate-token")]
-        public async Task<IActionResult> GenerateToken(GenerateOtpDTO otpPayload, [FromServices] IOptionsSnapshot<BaseUrlOptions> baseUrls)
+        public async Task<IActionResult> GenerateToken(GenerateOtpPayload otpPayload, [FromServices] IOptionsSnapshot<BaseUrlOptions> baseUrls)
         {
             var _baseUrls = baseUrls.Value;
             string clientSideBaseUrl = _baseUrls.ClientBaseUrl;
@@ -298,7 +299,7 @@ namespace RzumeAPI.Controllers
 
                 var otpModel = await _otpRepo.GetAsync(u => u.UserId == user.Id);
 
-
+                Console.WriteLine(otpModel);
                 var token = _otpService.GenerateOtp();
                 DateTime currentDate = DateTime.Now;
                 DateTime expirationDate = currentDate.AddMinutes(5);

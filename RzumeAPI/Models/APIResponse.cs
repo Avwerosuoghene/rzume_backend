@@ -7,7 +7,7 @@ namespace RzumeAPI.Models
     {
         public APIResponse()
         {
-            ErrorMessages = new List<string>();
+            ErrorMessages = [];
         }
         public HttpStatusCode StatusCode { get; set; }
 
@@ -22,7 +22,7 @@ namespace RzumeAPI.Models
 
       public class ResultObject
         {
-            public string Message { get; set; }
+            public required string Message { get; set; }
             public object? Content { get; set; }
         }
 
