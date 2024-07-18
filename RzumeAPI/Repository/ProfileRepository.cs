@@ -9,36 +9,16 @@ using RzumeAPI.Models.Utilities;
 
 namespace RzumeAPI.Repository
 {
-    public class ProfileRepository : IProfileRepository
+    public class ProfileRepository(ApplicationDbContext db,
+  IMapper mapper, IUserFileRepository dbUserFile, IEducationRepository dbEducation, IExperienceRepository dbExperience) : IProfileRepository
     {
-        private readonly ApplicationDbContext _db;
-        private readonly IEducationRepository _dbEducation;
-        private readonly IExperienceRepository _dbExperience;
+        private readonly ApplicationDbContext _db = db;
+        private readonly IEducationRepository _dbEducation = dbEducation;
+        private readonly IExperienceRepository _dbExperience = dbExperience;
 
-        private readonly IMapper _mapper;
+        private readonly IMapper _mapper = mapper;
 
-        private readonly IUserFileRepository _dbUserFile;
-        
-        public ProfileRepository(ApplicationDbContext db,
-  IMapper mapper, IUserFileRepository dbUserFile, IEducationRepository dbEducation, IExperienceRepository dbExperience)
-        {
-            _db = db;
-
-            _dbUserFile = dbUserFile;
-
-            _mapper = mapper;
-
-            _dbEducation = dbEducation;
-
-            _dbExperience = dbExperience;
-
-
-
-
-        }
-
-
-
+        private readonly IUserFileRepository _dbUserFile = dbUserFile;
 
         public async Task<GenericResponseDTO> OnboardingFirstStage(OnboardUserFirstStageRequestDTO onboardRequestPayload, string userMail)
         {
@@ -122,7 +102,7 @@ namespace RzumeAPI.Repository
 
    public async Task<GenericResponseDTO> OnboardingFourthStage(OnboardUserFourthStageRequestDTO onboardRequestPayload, string userMail)
         {
-            var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == userMail.ToLower());
+            var user = _db.ApplicationUsers.FirstOrDefault(u => u.Email.Equals(userMail, StringComparison.CurrentCultureIgnoreCase));
             if (user == null)
             {
                 return GenerateErrorResponse(UserStatMsg.NotFound);
