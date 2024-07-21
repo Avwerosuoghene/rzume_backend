@@ -35,5 +35,6 @@ namespace RzumeAPI.Helpers
 
             return allPropertiesPresent;
         }
+  
     }
 }

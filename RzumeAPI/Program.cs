@@ -10,9 +10,12 @@ using RzumeAPI.RegistoryConfig;
 using RzumeAPI.Options;
 using Serilog;
 using RzumeAPI.Models.Utilities;
+using RzumeAPI.Middleware;
+using RzumeAPI.Models.Mappings;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 builder.Services.Configure<DatabaseOption>(builder.Configuration.GetSection(DatabaseOption.SectionName));
 builder.Services.Configure<BaseUrlOptions>(builder.Configuration.GetSection(BaseUrlOptions.SectionName));
@@ -79,7 +82,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 
-builder.Services.AddRouting(options => {
+builder.Services.AddRouting(options =>
+{
     options.LowercaseUrls = true;
 });
 
@@ -101,6 +105,9 @@ var app = builder.Build();
 app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
 app.UseAuthentication();
+
+app.UsePayloadValidation(PayloadTypeMappings.Mappings);
+
 
 
 if (app.Environment.IsDevelopment())
