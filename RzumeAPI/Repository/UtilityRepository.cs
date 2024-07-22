@@ -48,8 +48,7 @@ namespace RzumeAPI.Repository
             updateCountryListPayload.CountryList.ForEach((CountryDTO countryItem) =>
          {
 
-
-             var countryItemReturned = _db.Country.FirstOrDefault(countryInDb => countryInDb.Name.Equals(countryItem.Name, StringComparison.CurrentCultureIgnoreCase));
+             var countryItemReturned = _db.Country.FirstOrDefault(countryInDb => countryInDb.Name == countryItem.Name);
              if (countryItemReturned != null)
              {
                  CountryDTO countryDTOModel = _mapper.Map<CountryDTO>(countryItem);

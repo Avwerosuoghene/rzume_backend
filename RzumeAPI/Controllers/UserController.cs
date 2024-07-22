@@ -101,12 +101,12 @@ namespace RzumeAPI.Controllers
         public async Task<IActionResult> Login([FromBody] LoginRequest model, [FromServices] IOptionsSnapshot<BaseUrlOptions> baseUrls)
         {
 
-  
+
             try
             {
                 var loginResponse = await _userRepo.Login(model);
 
-                if (loginResponse.User == null )
+                if (loginResponse.User == null)
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
@@ -372,6 +372,13 @@ namespace RzumeAPI.Controllers
                 }
 
                 string validateMessage = await _userRepo.SendTokenEmailValidation(user, clientSideBaseUrl);
+                if (validateMessage == TokenStatMsg.NotFound)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add(TokenStatMsg.NotFound);
+                    return BadRequest(_response);
+                }
 
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.IsSuccess = true;

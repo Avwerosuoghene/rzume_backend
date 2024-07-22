@@ -27,7 +27,7 @@ namespace RzumeAPI.Repository
         {
 
 
-            var user = _db.ApplicationUsers.Where(u => u.Email != null).FirstOrDefault(u => u.Email!.Equals(userMail, StringComparison.CurrentCultureIgnoreCase));
+            var user = _db.ApplicationUsers.Where(u => u.Email != null).FirstOrDefault(u => u.Email.ToLower() == userMail.ToLower());
             if (user == null)
             {
                 return GenerateErrorResponse(UserStatMsg.NotFound);
@@ -44,7 +44,7 @@ namespace RzumeAPI.Repository
 
 
 
-            var user = _db.ApplicationUsers.Where(u => u.Email != null).FirstOrDefault(u => u.Email!.Equals(userMail, StringComparison.CurrentCultureIgnoreCase));
+            var user = _db.ApplicationUsers.Where(u => u.Email != null).FirstOrDefault(u => u.Email.ToLower() == userMail.ToLower());
             if (user == null)
             {
                 return GenerateErrorResponse(UserStatMsg.NotFound);
@@ -72,7 +72,7 @@ namespace RzumeAPI.Repository
 
         public async Task<GenericResponse> OnboardingThirdStage(OnboardUserThirdStageRequest onboardRequestPayload, string userMail)
         {
-            var user = _db.ApplicationUsers.Where(u => u.Email != null).FirstOrDefault(u => u.Email!.Equals(userMail, StringComparison.CurrentCultureIgnoreCase));
+            var user = _db.ApplicationUsers.Where(u => u.Email != null).FirstOrDefault(u => u.Email.ToLower() == userMail.ToLower());
             if (user == null)
             {
                 return GenerateErrorResponse(UserStatMsg.NotFound);
@@ -105,7 +105,7 @@ namespace RzumeAPI.Repository
 
    public async Task<GenericResponse> OnboardingFourthStage(OnboardUserFourthStageRequest onboardRequestPayload, string userMail)
         {
-            var user = _db.ApplicationUsers.Where(u => u.Email != null).FirstOrDefault(u => u.Email!.Equals(userMail, StringComparison.CurrentCultureIgnoreCase));
+            var user = _db.ApplicationUsers.Where(u => u.Email != null).FirstOrDefault(u => u.Email.ToLower() == userMail.ToLower());
             if (user == null)
             {
                 return GenerateErrorResponse(UserStatMsg.NotFound);

@@ -32,7 +32,12 @@ namespace RzumeAPI.Repository
         {
 
 
-            var activeToken = await _userManager.GetAuthenticationTokenAsync(user, TokenTypes.SignUp, $"{TokenTypes.SignUp}Token") ?? throw new ArgumentException(TokenStatMsg.NotFound);
+            var activeToken = await _userManager.GetAuthenticationTokenAsync(user, TokenTypes.SignUp, $"{TokenTypes.SignUp}Token");
+            Console.WriteLine(activeToken);
+            if (activeToken == null)
+            {
+                return TokenStatMsg.NotFound;
+            }
             TokenServiceResponse tokenServiceResponse = _tokenService.ValidateToken(activeToken);
             if (tokenServiceResponse.Message != TokenStatMsg.TokenExpired)
             {
@@ -41,6 +46,7 @@ namespace RzumeAPI.Repository
 
 
             await GenerateMail(user, TokenTypes.SignUp, true, clientSideBaseUrl);
+            
 
             return TokenStatMsg.ActivationTokenSent;
 
@@ -130,6 +136,7 @@ namespace RzumeAPI.Repository
 
                     if (userToReturn != null)
                     {
+
 
                         await GenerateMail(userToReturn, TokenTypes.SignUp, true, clientSideBaseUrl);
 
@@ -232,8 +239,7 @@ namespace RzumeAPI.Repository
                 };
             }
 
-            var user = await _db.ApplicationUsers.FirstOrDefaultAsync(u => u.Email!.Equals(userMail, StringComparison.CurrentCultureIgnoreCase));
-
+var user = await _db.ApplicationUsers.FirstOrDefaultAsync(u => u.Email.ToLower() == userMail.ToLower());
             if (user == null)
             {
                 return new GetUserFromTokenResponse()
@@ -259,9 +265,11 @@ namespace RzumeAPI.Repository
         // comment back in once google smtp starts working
         private async Task GenerateMail(User user, string otpPurpose, bool isSigin, string clientBaseUrl)
         {
-            DateTime expirationDate = DateTime.UtcNow.AddMinutes(5);
-            var token = _tokenService.GenerateToken(user.Id, user!.Email, expirationDate);
+
+            string token = await GenerateToken(user, DateTime.UtcNow.AddHours(5), TokenTypes.SignUp);
             Console.WriteLine($"token value is: {token}");
+
+
 
             await _emailService.SendConfrirmationMail(user, token.ToString(), otpPurpose, isSigin, clientBaseUrl);
         }
@@ -330,7 +338,7 @@ namespace RzumeAPI.Repository
 
             var user = _db.ApplicationUsers
     .Where(u => u.Email != null)
-    .FirstOrDefault(u => u.Email!.Equals(logoutRequestDTO.Email, StringComparison.CurrentCultureIgnoreCase));
+    .FirstOrDefault(u => u.Email.ToLower() == logoutRequestDTO.Email.ToLower());
 
             if (user == null)
             {
