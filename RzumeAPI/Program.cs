@@ -57,8 +57,7 @@ builder.Services.AddVersionedApiExplorer(options =>
 });
 
 
-builder.Services.AddIdentity<User, IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+builder.Services.AddCustomIdentity();
 
 builder.Services.Configure<SMTPConfigModel>(configuration.GetSection("SMTPConfig"));
 
