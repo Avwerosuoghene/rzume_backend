@@ -21,36 +21,28 @@ namespace RzumeAPI.Controllers
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [ApiVersionNeutral]
-    public class UserController : Controller
+    public class UserController(IUserRepository userRepo, IEmailRepository emailRepository, OtpService otpService, IOtpRepository otpRepo, UserService userService, ILogger<UserController> logger) : Controller
     {
 
-        private readonly IUserRepository _userRepo;
-        private readonly OtpService _otpService;
+        private readonly IUserRepository _userRepo = userRepo;
+        private readonly OtpService _otpService = otpService;
 
-        private readonly IEmailRepository _emailRepo;
+        private readonly IEmailRepository _emailRepo = emailRepository;
 
-        private readonly IOtpRepository _otpRepo;
-        private readonly UserService _userService;
+        private readonly IOtpRepository _otpRepo = otpRepo;
+        private readonly UserService _userService = userService;
 
 
-        //Marking this as protected makes it accessible to the parent class
-        //and any other class that inherits from this parent class
-        protected APIResponse _response;
+        private readonly ILogger<UserController> _logger = logger;
 
-        public UserController(IUserRepository userRepo, IEmailRepository emailRepository, OtpService otpService, IOtpRepository otpRepo, UserService userService)
-        {
-            _userRepo = userRepo;
-            _response = new();
-            _emailRepo = emailRepository;
-            _otpService = otpService;
-            _otpRepo = otpRepo;
-            _userService = userService;
-        }
+        protected APIResponse _response = new();
 
         [HttpPost("register")]
 
         public async Task<IActionResult> Register([FromBody] RegistrationRequest model, [FromServices] IOptionsSnapshot<BaseUrlOptions> baseUrls)
         {
+
+            _logger.LogInformation("Register method called with model: {@Request}", model);
 
             User? user = _userService.userExists(model.Email);
             var _baseUrls = baseUrls.Value;
@@ -61,6 +53,8 @@ namespace RzumeAPI.Controllers
                 _response.StatusCode = HttpStatusCode.Conflict;
                 _response.IsSuccess = false;
                 _response.ErrorMessages.Add(UserStatMsg.UserExistsMsg);
+                _logger.LogWarning("User already exists and email is confirmed. Response: {@Response}", _response);
+
                 return BadRequest(_response);
             }
 
@@ -69,6 +63,7 @@ namespace RzumeAPI.Controllers
                 _response.StatusCode = HttpStatusCode.Conflict;
                 _response.IsSuccess = false;
                 _response.ErrorMessages.Add(UserStatMsg.EmailNotConfirmedMsg);
+                _logger.LogWarning("User exists but email is not confirmed. Response: {@Response}", _response);
                 return BadRequest(_response);
             }
 
@@ -79,6 +74,7 @@ namespace RzumeAPI.Controllers
                 _response.StatusCode = HttpStatusCode.BadRequest;
                 _response.IsSuccess = false;
                 _response.ErrorMessages.Add(responseMsg);
+                _logger.LogError("Error while registering user. Response: {@Response}", _response);
                 return BadRequest(_response);
             }
 
@@ -93,6 +89,7 @@ namespace RzumeAPI.Controllers
                 Message = "Kindly check your mail for the confirmation token",
                 Content = signupResponse
             };
+            _logger.LogInformation("User registered successfully. Response: {@Response}", _response);
 
             return Ok(_response);
         }
@@ -101,6 +98,7 @@ namespace RzumeAPI.Controllers
         public async Task<IActionResult> Login([FromBody] LoginRequest model, [FromServices] IOptionsSnapshot<BaseUrlOptions> baseUrls)
         {
 
+            _logger.LogInformation("Login method called with model: {@Request}", model);
 
             try
             {
@@ -111,6 +109,7 @@ namespace RzumeAPI.Controllers
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
                     _response.ErrorMessages.Add("Username or password is incorrect");
+                    _logger.LogWarning("Login failed due to incorrect username or password. Response: {@Response}", _response);
                     return BadRequest(_response);
                 }
 
@@ -124,6 +123,8 @@ namespace RzumeAPI.Controllers
                         Message = "Kindly Validate your Account",
                         Content = loginResponse
                     };
+                    _logger.LogInformation("User email not confirmed. Response: {@Response}", _response);
+
                     return Ok(_response);
                 }
 
@@ -136,12 +137,13 @@ namespace RzumeAPI.Controllers
                     Content = loginResponse
                 };
 
+                _logger.LogInformation("User logged in successfully. Response: {@Response}", _response);
 
                 return Ok(_response);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                _logger.LogError(ex, "Exception occurred during login");
             }
 
             _response.StatusCode = HttpStatusCode.InternalServerError;
@@ -155,6 +157,8 @@ namespace RzumeAPI.Controllers
         [HttpGet("active-user")]
         public async Task<IActionResult> GetActiveUser()
         {
+            _logger.LogInformation("GetActiveUser method called");
+
             try
             {
                 var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
@@ -165,6 +169,8 @@ namespace RzumeAPI.Controllers
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
                     _response.ErrorMessages.Add("Invalid Request");
+                    _logger.LogWarning("Authorization token is missing");
+
                     return BadRequest(_response);
                 }
                 GetActiveUserResponse response = await _userRepo.GetActiveUser(token);
@@ -173,6 +179,8 @@ namespace RzumeAPI.Controllers
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
                     _response.ErrorMessages.Add(response.Message);
+                    _logger.LogWarning("User not found. Response: {@Response}", _response);
+
                     return BadRequest(_response);
                 }
 
@@ -183,12 +191,14 @@ namespace RzumeAPI.Controllers
                     Message = "User Retrieved Succesfully",
                     Content = response
                 };
+                _logger.LogInformation("Active user retrieved successfully. Response: {@Response}", _response);
                 return Ok(_response);
 
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                _logger.LogError(ex, "Exception occurred while retrieving active user");
+
             }
 
             _response.StatusCode = HttpStatusCode.InternalServerError;
@@ -200,6 +210,7 @@ namespace RzumeAPI.Controllers
         [HttpPost("logout")]
         public async Task<IActionResult> Logout([FromBody] LogoutRequest model)
         {
+            _logger.LogInformation("Logout method called with model: {@Request}", model);
 
             try
             {
@@ -210,6 +221,8 @@ namespace RzumeAPI.Controllers
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
                     _response.ErrorMessages.Add("Something went wrong");
+                    _logger.LogWarning("Logout failed. Response: {@Response}", _response);
+
                     return BadRequest(_response);
 
                 }
@@ -221,12 +234,14 @@ namespace RzumeAPI.Controllers
                     Message = "Logout Successful",
                     Content = null
                 };
+                _logger.LogInformation("User logged out successfully. Response: {@Response}", _response);
 
                 return Ok(_response);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                _logger.LogError(ex, "Exception occurred while logging user out");
+
             }
 
             _response.StatusCode = HttpStatusCode.InternalServerError;
@@ -237,6 +252,7 @@ namespace RzumeAPI.Controllers
         [HttpPost("otp-reset-pass")]
         public async Task<IActionResult> InitiateOtpResetPassword([FromBody] OtpPasswordResetRequestDTO model)
         {
+            _logger.LogInformation("OtpResetPassword method called with model: {@Request}", model);
 
             try
             {
@@ -247,6 +263,7 @@ namespace RzumeAPI.Controllers
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
                     _response.ErrorMessages.Add(otpPasswordResetResponse.Message);
+                    _logger.LogWarning("OTP reset password initiation failed. Response: {@Response}", _response);
                     return BadRequest(_response);
 
 
@@ -261,6 +278,7 @@ namespace RzumeAPI.Controllers
                     Message = otpPasswordResetResponse.Message!,
                     Content = otpPasswordResetResponse
                 };
+                _logger.LogInformation("Password reset successful. Response: {@Response}", _response);
 
                 return Ok(_response);
 
@@ -268,7 +286,8 @@ namespace RzumeAPI.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                _logger.LogError(ex, "Exception occurred while reseting password");
+
             }
 
             _response.StatusCode = HttpStatusCode.InternalServerError;

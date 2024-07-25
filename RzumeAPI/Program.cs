@@ -10,6 +10,7 @@ using RzumeAPI.RegistoryConfig;
 using RzumeAPI.Options;
 using Serilog;
 using RzumeAPI.Models.Utilities;
+using Serilog.Formatting.Json;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,12 @@ builder.Services.Configure<DatabaseOption>(builder.Configuration.GetSection(Data
 builder.Services.Configure<BaseUrlOptions>(builder.Configuration.GetSection(BaseUrlOptions.SectionName));
 
 builder.Logging.ClearProviders();
+builder.Host.UseSerilog((context, config) =>
+{
+    config.Enrich.FromLogContext().WriteTo.File(
+     "logs/log.txt", rollingInterval: RollingInterval.Day
+    ).WriteTo.Console(new JsonFormatter()).ReadFrom.Configuration(context.Configuration);
+});
 
 var logger = new LoggerConfiguration().WriteTo.File(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs/log.txt"), rollingInterval: RollingInterval.Day, retainedFileCountLimit: 90).CreateLogger();
 builder.Logging.AddSerilog(logger);
