@@ -9,15 +9,22 @@ using RzumeAPI.Models.Utilities;
 using RzumeAPI.Models.DO;
 using RzumeAPI.Models.Requests;
 using RzumeAPI.Models.Responses;
+using RzumeAPI.Services;
 
 namespace RzumeAPI.Repository
 {
     public class ProfileRepository(ApplicationDbContext db,
-  IMapper mapper, IUserFileRepository dbUserFile, IEducationRepository dbEducation, IExperienceRepository dbExperience) : IProfileRepository
+  IMapper mapper, IUserFileRepository dbUserFile, IEducationRepository dbEducation, IExperienceRepository dbExperience, TokenService tokenService, IEmailRepository emailService) : IProfileRepository
     {
         private readonly ApplicationDbContext _db = db;
         private readonly IEducationRepository _dbEducation = dbEducation;
         private readonly IExperienceRepository _dbExperience = dbExperience;
+
+        private readonly TokenService _tokenService = tokenService;
+
+        private readonly IEmailRepository _emailService = emailService;
+
+
 
         private readonly IMapper _mapper = mapper;
 
@@ -103,7 +110,7 @@ namespace RzumeAPI.Repository
         }
 
 
-   public async Task<GenericResponse> OnboardingFourthStage(OnboardUserFourthStageRequest onboardRequestPayload, string userMail)
+        public async Task<GenericResponse> OnboardingFourthStage(OnboardUserFourthStageRequest onboardRequestPayload, string userMail)
         {
             var user = _db.ApplicationUsers.Where(u => u.Email != null).FirstOrDefault(u => u.Email.ToLower() == userMail.ToLower());
             if (user == null)
@@ -115,6 +122,40 @@ namespace RzumeAPI.Repository
 
             return GenerateSuccessResponse("experience updated succesfully");
         }
+
+
+        public async Task<GenericResponse> RequestPasswordReset(RequestPasswordReset requestPasswordRequest, string clientSideBaseUrl)
+        {
+
+
+
+
+            var user = _db.ApplicationUsers.Where(u => u.Email != null).FirstOrDefault(u => u.Email.ToLower() == requestPasswordRequest.Email.ToLower());
+            if (user == null)
+            {
+                {
+                    return GenerateErrorResponse(UserStatMsg.NotFound);
+                }
+
+            }
+
+            if (!user.EmailConfirmed)
+            {
+                {
+                    return GenerateErrorResponse(UserStatMsg.EmailNotConfirmedMsg);
+                }
+            }
+
+
+            string token = await _tokenService.GenerateToken(user, DateTime.UtcNow.AddHours(5), TokenTypes.ResetPass);
+
+
+            await GenerateMail(user, TokenTypes.ResetPass, false, clientSideBaseUrl, token);
+            return GenerateSuccessResponse("Password reset succesfully initiated");
+
+        }
+
+
 
 
         public async Task<User> UpdateAsync(User user)
@@ -145,6 +186,31 @@ namespace RzumeAPI.Repository
                 IsSuccess = true,
                 Message = message
             };
+        }
+
+
+        private async Task GenerateMail(User user, string mailPurpose, bool isSigin, string clientBaseUrl, string token)
+        {
+
+
+            string linkPath = $"{clientBaseUrl}auth/reset-password?token={token}";
+            string templatePath = @"EmailTemplate/{0}.html";
+            string templateName = "ResetPassConfirm";
+            string mailSubject = "Kindly click the link to reset your password.";
+            SendConfirmEmailProps confirmMailProps = new()
+            {
+                User = user,
+                Token = token,
+                MailPurpose = mailPurpose,
+                IsSigin = isSigin,
+                LinkPath = linkPath,
+                TemplatePath = templatePath,
+                TemplateName = templateName,
+                Subject = mailSubject,
+            };
+
+
+            await _emailService.SendConfrirmationMail(confirmMailProps);
         }
     }
 

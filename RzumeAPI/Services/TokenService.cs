@@ -1,27 +1,19 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using RzumeAPI.Models;
 using RzumeAPI.Models.Responses;
 
 namespace RzumeAPI.Services
 {
-    public class TokenService
+    public class TokenService(IConfiguration configuration, UserManager<User> userManager)
     {
 
-        private IConfiguration _configuration;
+        private IConfiguration _configuration = configuration;
 
-
-
-        public TokenService(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
-
-        
-
-
+        private readonly UserManager<User> _userManager = userManager;
 
         public TokenServiceResponse ValidateToken(string token)
         {
@@ -47,7 +39,7 @@ namespace RzumeAPI.Services
                     Message = "Success"
                 };
 
-            }   
+            }
             catch (SecurityTokenExpiredException ex)
             {
                 Console.WriteLine($"Token expired: {ex.Message}");
@@ -74,7 +66,7 @@ namespace RzumeAPI.Services
         // }
 
 
-        public string GenerateToken(string userId, string userMail, DateTime expiration)
+        public async Task<string> GenerateToken(User user, DateTime expiration, string tokenName)
         {
             var secretKey = _configuration["ApiSettings:Secret"];
 
@@ -88,8 +80,8 @@ namespace RzumeAPI.Services
                 //Describes what our token will contain
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, userId),
-                    new Claim(ClaimTypes.Email,userMail)
+                    new Claim(ClaimTypes.Name, user.Id),
+                    new Claim(ClaimTypes.Email,user.Email!)
                 }),
 
                 //Describes Token Expiration
@@ -100,6 +92,8 @@ namespace RzumeAPI.Services
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var uniqueGenerateToken = tokenHandler.WriteToken(token);
+            await _userManager.SetAuthenticationTokenAsync(user, tokenName, $"{tokenName}Token", uniqueGenerateToken);
+
             return uniqueGenerateToken;
         }
 

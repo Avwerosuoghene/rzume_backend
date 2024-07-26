@@ -26,27 +26,28 @@ namespace RzumeAPI.Repository
 
         private readonly OtpService _otpService = otpService;
 
-        private TokenService _tokenService = tokenService;
+        private readonly TokenService _tokenService = tokenService;
 
         public async Task<string> SendTokenEmailValidation(User user, string clientSideBaseUrl)
         {
 
 
             var activeToken = await _userManager.GetAuthenticationTokenAsync(user, TokenTypes.SignUp, $"{TokenTypes.SignUp}Token");
-            Console.WriteLine(activeToken);
-            if (activeToken == null)
+            if (activeToken != null)
             {
-                return TokenStatMsg.NotFound;
-            }
-            TokenServiceResponse tokenServiceResponse = _tokenService.ValidateToken(activeToken);
-            if (tokenServiceResponse.Message != TokenStatMsg.TokenExpired)
-            {
-                return TokenStatMsg.ActivationTokenActive;
+                TokenServiceResponse tokenServiceResponse = _tokenService.ValidateToken(activeToken);
+                if (tokenServiceResponse.Message != TokenStatMsg.TokenExpired)
+                {
+                    return TokenStatMsg.ActivationTokenActive;
+                }
+
             }
 
+            string token = await _tokenService.GenerateToken(user, DateTime.UtcNow.AddHours(5), TokenTypes.SignUp);
 
-            await GenerateMail(user, TokenTypes.SignUp, true, clientSideBaseUrl);
-            
+
+            await GenerateMail(user, TokenTypes.SignUp, true, clientSideBaseUrl, token);
+
 
             return TokenStatMsg.ActivationTokenSent;
 
@@ -84,8 +85,7 @@ namespace RzumeAPI.Repository
                     };
                 }
 
-                string loginToken = await GenerateToken(user, DateTime.UtcNow.AddHours(5), TokenTypes.Login);
-
+                string loginToken = await _tokenService.GenerateToken(user, DateTime.UtcNow.AddHours(5), TokenTypes.Login);
 
                 user.EmailConfirmed = true;
                 await UpdateAsync(user);
@@ -136,9 +136,9 @@ namespace RzumeAPI.Repository
 
                     if (userToReturn != null)
                     {
+                        string token = await _tokenService.GenerateToken(user, DateTime.UtcNow.AddHours(5), TokenTypes.SignUp);
 
-
-                        await GenerateMail(userToReturn, TokenTypes.SignUp, true, clientSideBaseUrl);
+                        await GenerateMail(userToReturn, TokenTypes.SignUp, true, clientSideBaseUrl, token);
 
                         UserDTO returnedUser = _mapper.Map<UserDTO>(userToReturn);
                         return new RegisterUserResponse()
@@ -239,7 +239,7 @@ namespace RzumeAPI.Repository
                 };
             }
 
-var user = await _db.ApplicationUsers.FirstOrDefaultAsync(u => u.Email.ToLower() == userMail.ToLower());
+            var user = await _db.ApplicationUsers.FirstOrDefaultAsync(u => u.Email.ToLower() == userMail.ToLower());
             if (user == null)
             {
                 return new GetUserFromTokenResponse()
@@ -262,16 +262,28 @@ var user = await _db.ApplicationUsers.FirstOrDefaultAsync(u => u.Email.ToLower()
             return await _userManager.FindByEmailAsync(email);
         }
 
-        // comment back in once google smtp starts working
-        private async Task GenerateMail(User user, string otpPurpose, bool isSigin, string clientBaseUrl)
+        private async Task GenerateMail(User user, string mailPurpose, bool isSigin, string clientBaseUrl, string token)
         {
 
-            string token = await GenerateToken(user, DateTime.UtcNow.AddHours(5), TokenTypes.SignUp);
-            Console.WriteLine($"token value is: {token}");
+
+            string linkPath = $"{clientBaseUrl}auth/email-confirmation?token={token}";
+            string templatePath = @"EmailTemplate/{0}.html";
+            string mailSubject = "Kindly click the link to validate your email.";
+            string templateName = "EmailConfirm";
+            SendConfirmEmailProps confirmMailProps = new()
+            {
+                User = user,
+                Token = token,
+                MailPurpose = mailPurpose,
+                IsSigin = isSigin,
+                LinkPath = linkPath,
+                TemplatePath = templatePath,
+                TemplateName = templateName,
+                Subject = mailSubject,
+            };
 
 
-
-            await _emailService.SendConfrirmationMail(user, token.ToString(), otpPurpose, isSigin, clientBaseUrl);
+            await _emailService.SendConfrirmationMail(confirmMailProps);
         }
 
 
@@ -315,7 +327,9 @@ var user = await _db.ApplicationUsers.FirstOrDefaultAsync(u => u.Email.ToLower()
                 };
             }
 
-            string token = await GenerateToken(user, DateTime.UtcNow.AddHours(5), TokenTypes.Login);
+            string token = await _tokenService.GenerateToken(user, DateTime.UtcNow.AddHours(5), TokenTypes.Login);
+
+
 
             LoginResponse loginResponseDTO = new()
             {
@@ -392,15 +406,6 @@ var user = await _db.ApplicationUsers.FirstOrDefaultAsync(u => u.Email.ToLower()
 
 
 
-
-        }
-
-
-        private async Task<string> GenerateToken(User user, DateTime expirationDate, string tokenName)
-        {
-            var token = _tokenService.GenerateToken(user.Id, user!.Email!, expirationDate);
-            await _userManager.SetAuthenticationTokenAsync(user, tokenName, $"{tokenName}Token", token);
-            return token;
 
         }
 

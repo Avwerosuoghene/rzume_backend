@@ -337,8 +337,27 @@ namespace RzumeAPI.Controllers
                     return BadRequest(_response);
                 }
 
+                string linkPath = $"{clientSideBaseUrl}auth/reset-password?token={token}";
+                string templatePath = @"ResetPassConfirm/{0}.html";
+                string mailSubject = "Kindly click the link to reset your password.";
+                string templateName = "EmailConfirm";
 
-                await _emailRepo.SendConfrirmationMail(user, otpResponse.OtpValue, otpPayload.Purpose, false, clientSideBaseUrl);
+
+
+                SendConfirmEmailProps confirmMailProps = new()
+                {
+                    User = user,
+                    Token = token,
+                    MailPurpose = TokenTypes.ResetPass,
+                    IsSigin = false,
+                    LinkPath = linkPath,
+                    TemplatePath = templatePath,
+                    TemplateName = templateName,
+                    Subject = mailSubject,
+                };
+
+
+                await _emailRepo.SendConfrirmationMail(confirmMailProps);
 
                 GenerateOtpResponseDTO otpGenerateResponse = new GenerateOtpResponseDTO
                 {

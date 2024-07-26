@@ -9,6 +9,8 @@ using Newtonsoft.Json.Linq;
 using RzumeAPI.Models.Utilities;
 using RzumeAPI.Models.Requests;
 using RzumeAPI.Models.Responses;
+using Microsoft.Extensions.Options;
+using RzumeAPI.Options;
 
 namespace RzumeAPI.Controllers
 {
@@ -163,5 +165,56 @@ namespace RzumeAPI.Controllers
                 return BadRequest(ApiResponseFactory.GenerateBadRequest(ex.Message));
             }
         }
+
+
+
+        [HttpPost("request-password-reset")]
+        public async Task<IActionResult> RequestPasswordReset(RequestPasswordReset requestPasswordReset, [FromServices] IOptionsSnapshot<BaseUrlOptions> baseUrls)
+        {
+            _logger.LogInformation("Passowrd reset request made with email: {@Request}", requestPasswordReset);
+            var _baseUrls = baseUrls.Value;
+            string clientSideBaseUrl = _baseUrls.ClientBaseUrl;
+
+            try
+            {
+
+                var response = await _profileRepo.RequestPasswordReset(requestPasswordReset, clientSideBaseUrl);
+
+                if (response.IsSuccess == false)
+                {
+                    _logger.LogWarning("Password reset initiation failed Message: {Message}", response.Message);
+                    return BadRequest(ApiResponseFactory.GenerateBadRequest(response.Message));
+                }
+
+
+                GenericContentVal content = new()
+                {
+                    IsSuccess = true
+                };
+
+                _response.StatusCode = HttpStatusCode.OK;
+                _response.IsSuccess = true;
+                _response.Result = new ResultObject
+                {
+                    Message = response.Message,
+                    Content = content
+                };
+                _logger.LogInformation("Password reset request initiated succesfully. Message: {Message}", response.Message);
+                return Ok(_response);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Exception occurred during password reset request");
+            }
+
+            _response.StatusCode = HttpStatusCode.InternalServerError;
+            _response.IsSuccess = false;
+            return BadRequest(_response);
+        }
+
     }
+
+
+
 }

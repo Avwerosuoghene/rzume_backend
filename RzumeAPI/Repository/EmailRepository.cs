@@ -4,6 +4,7 @@ using System.Net.Mail;
 using System.Text;
 using Microsoft.Extensions.Options;
 using RzumeAPI.Models;
+using RzumeAPI.Models.Requests;
 using RzumeAPI.Models.Utilities;
 using RzumeAPI.Repository.IRepository;
 
@@ -87,28 +88,32 @@ namespace RzumeAPI.Repository
         }
 
 
-        public async Task SendConfrirmationMail(User user, string token, string otpPurpose, bool isSigin, string clientBaseUrl)
+        public async Task SendConfrirmationMail(SendConfirmEmailProps confirmationProps)
         {
+
+            
 
 
             UserEmailOptions options = new()
             {
-                ToEmails = [user!.Email],
+                ToEmails = [confirmationProps.User!.Email],
                 Placeholders = [
-                    new("{{userName}}", user!.UserName),
-                    new KeyValuePair<string, string>("{{link}}" ,$"{clientBaseUrl}auth/email-confirmation?token={token}"),
-                    new KeyValuePair<string, string>("{{introText}}", otpPurpose ),
-                    new  KeyValuePair<string, string>("{{isSignin}}", isSigin.ToString() ),
+                    new("{{userName}}", confirmationProps.User.UserName!),
+                    new KeyValuePair<string, string>("{{link}}" ,confirmationProps.LinkPath),
+                    new KeyValuePair<string, string>("{{introText}}",confirmationProps.MailPurpose ),
+                    new  KeyValuePair<string, string>("{{isSignin}}", confirmationProps.IsSigin.ToString() ),
 
                 ],
-                Subject = "Kindly click the link to validate your email.",
+                Subject = confirmationProps.Subject,
             };
 
-            options.Body = UpdatePlaceHolder(GetEmailBody("EmailConfirm", templatePath), options.Placeholders);
+            options.Body = UpdatePlaceHolder(GetEmailBody(confirmationProps.TemplateName, confirmationProps.TemplatePath), options.Placeholders);
 
             await SendEmail(options);
 
 
         }
+
+    
     }
 }

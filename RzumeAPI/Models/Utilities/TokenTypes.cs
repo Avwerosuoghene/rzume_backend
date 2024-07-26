@@ -5,4 +5,5 @@ namespace RzumeAPI.Models.Utilities;
   {
     public const string SignUp = "SignUp";
     public const string Login = "Login";
+    public const string ResetPass = "PasswordReset";
   }

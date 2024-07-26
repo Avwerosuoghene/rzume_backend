@@ -5,9 +5,6 @@ using RzumeAPI.Models.DTO;
 namespace RzumeAPI.Models.Responses;
 
 
-
-
-
 public class UploadCountriesResponse
 {
     public bool IsSuccess { get; set; }
