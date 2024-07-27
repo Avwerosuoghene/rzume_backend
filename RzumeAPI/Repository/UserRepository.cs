@@ -239,6 +239,17 @@ namespace RzumeAPI.Repository
                 };
             }
 
+            if (tokenServiceResponse.Message == TokenStatMsg.TokenExpired)
+            {
+
+
+                return new GetUserFromTokenResponse()
+                {
+                    User = null,
+                    Message = TokenStatMsg.ActivationTokenActive
+                };
+            }
+
             var user = await _db.ApplicationUsers.FirstOrDefaultAsync(u => u.Email.ToLower() == userMail.ToLower());
             if (user == null)
             {

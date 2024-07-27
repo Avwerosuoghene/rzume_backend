@@ -15,6 +15,8 @@ namespace RzumeAPI.Repository.IRepository
 
         Task<GenericResponse> RequestPasswordReset(RequestPasswordReset requestPasswordRequest, string clientSideBaseUrl);
 
+         Task<GenericResponse> ResetPassword(ResetPassword resetPasswordPayload);
+
     };
 }
 

@@ -6,3 +6,4 @@ public class RequestPasswordReset
     public required string Email { get; set; }
 
 }
+

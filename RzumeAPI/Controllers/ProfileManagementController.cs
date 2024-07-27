@@ -213,6 +213,51 @@ namespace RzumeAPI.Controllers
             return BadRequest(_response);
         }
 
+
+   [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword(ResetPassword resetPassword)
+        {
+            _logger.LogInformation("Passowrd reset initiated with email: {@Request}", resetPassword.Email);
+    
+
+            try
+            {
+
+                GenericResponse passwordResetResponse = await _profileRepo.ResetPassword(resetPassword);
+
+                if (passwordResetResponse.IsSuccess == false)
+                {
+                    _logger.LogWarning("Password reset failed Message: {Message}", passwordResetResponse.Message);
+                    return BadRequest(ApiResponseFactory.GenerateBadRequest(passwordResetResponse.Message));
+                }
+
+
+                GenericContentVal content = new()
+                {
+                    IsSuccess = true
+                };
+
+                _response.StatusCode = HttpStatusCode.OK;
+                _response.IsSuccess = true;
+                _response.Result = new ResultObject
+                {
+                    Message = passwordResetResponse.Message,
+                    Content = content
+                };
+                _logger.LogInformation("Password reset succesful. Message: {Message}", passwordResetResponse.Message);
+                return Ok(_response);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Exception occurred during password reset");
+            }
+
+            _response.StatusCode = HttpStatusCode.InternalServerError;
+            _response.IsSuccess = false;
+            return BadRequest(_response);
+        }
+
     }
 
 

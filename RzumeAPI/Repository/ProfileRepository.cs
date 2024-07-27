@@ -10,11 +10,12 @@ using RzumeAPI.Models.DO;
 using RzumeAPI.Models.Requests;
 using RzumeAPI.Models.Responses;
 using RzumeAPI.Services;
+using Microsoft.AspNetCore.Identity;
 
 namespace RzumeAPI.Repository
 {
     public class ProfileRepository(ApplicationDbContext db,
-  IMapper mapper, IUserFileRepository dbUserFile, IEducationRepository dbEducation, IExperienceRepository dbExperience, TokenService tokenService, IEmailRepository emailService) : IProfileRepository
+  IMapper mapper, IUserFileRepository dbUserFile, IEducationRepository dbEducation, IExperienceRepository dbExperience, TokenService tokenService, IEmailRepository emailService, IUserRepository userRepo, UserManager<User> userManager) : IProfileRepository
     {
         private readonly ApplicationDbContext _db = db;
         private readonly IEducationRepository _dbEducation = dbEducation;
@@ -23,6 +24,12 @@ namespace RzumeAPI.Repository
         private readonly TokenService _tokenService = tokenService;
 
         private readonly IEmailRepository _emailService = emailService;
+
+        private readonly IUserRepository _userRepo = userRepo;
+
+        private readonly UserManager<User> _userManager = userManager;
+
+
 
 
 
@@ -147,11 +154,49 @@ namespace RzumeAPI.Repository
             }
 
 
-            string token = await _tokenService.GenerateToken(user, DateTime.UtcNow.AddHours(5), TokenTypes.ResetPass);
+
+            var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
 
 
-            await GenerateMail(user, TokenTypes.ResetPass, false, clientSideBaseUrl, token);
-            return GenerateSuccessResponse("Password reset succesfully initiated");
+
+
+
+            await GenerateMail(user, TokenTypes.ResetPass, false, clientSideBaseUrl, resetToken);
+            return GenerateSuccessResponse("Password reset succesfully initiated. kindly check your email for instructions");
+
+        }
+
+
+
+        public async Task<GenericResponse> ResetPassword(ResetPassword resetPasswordPayload)
+        {
+
+
+            User? user = await _userRepo.GetUserByEmailAsync(resetPasswordPayload.Email);
+
+            if (user == null)
+            {
+                return new GenericResponse()
+                {
+                    IsSuccess = false,
+                    Message = UserStatMsg.NotFound
+                };
+            }
+
+            var result = await _userManager.ResetPasswordAsync(user, resetPasswordPayload.ResetToken, resetPasswordPayload.Password);
+
+
+            if (result.Succeeded)
+            {
+                return GenerateSuccessResponse(PasswordStatMsgs.SuccesfulReset);
+            }
+
+            return GenerateErrorResponse(PasswordStatMsgs.FailedReset);
+
+
+
+
+
 
         }
 
