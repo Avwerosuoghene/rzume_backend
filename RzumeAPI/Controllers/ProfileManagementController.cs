@@ -207,18 +207,17 @@ namespace RzumeAPI.Controllers
             {
                 _logger.LogError(ex, "Exception occurred during password reset request");
             }
+            return BadRequest(ApiResponseFactory.GenerateBadRequest("Exception occurred during password reset request"));
 
-            _response.StatusCode = HttpStatusCode.InternalServerError;
-            _response.IsSuccess = false;
-            return BadRequest(_response);
+
         }
 
 
-   [HttpPost("reset-password")]
+        [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword(ResetPassword resetPassword)
         {
             _logger.LogInformation("Passowrd reset initiated with email: {@Request}", resetPassword.Email);
-    
+
 
             try
             {
@@ -252,11 +251,12 @@ namespace RzumeAPI.Controllers
             {
                 _logger.LogError(ex, "Exception occurred during password reset");
             }
-
-            _response.StatusCode = HttpStatusCode.InternalServerError;
-            _response.IsSuccess = false;
-            return BadRequest(_response);
+            return BadRequest(ApiResponseFactory.GenerateBadRequest("Exception occurred during password reset"));
         }
+
+        
+
+        
 
     }
 

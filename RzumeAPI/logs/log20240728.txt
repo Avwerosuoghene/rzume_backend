@@ -1,0 +1,121 @@
+2024-07-28 11:36:57.143 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/profilemanagement/request-password-reset - null null
+2024-07-28 11:36:57.187 +01:00 [INF] CORS policy execution successful.
+2024-07-28 11:36:57.196 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/profilemanagement/request-password-reset - 204 null null 55.7879ms
+2024-07-28 11:36:57.206 +01:00 [INF] Request starting HTTP/2 POST https://localhost:7159/api/v1/profilemanagement/request-password-reset - application/json 30
+2024-07-28 11:36:57.240 +01:00 [INF] CORS policy execution successful.
+2024-07-28 11:36:57.262 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.ProfileManagementController.RequestPasswordReset (RzumeAPI)'
+2024-07-28 11:36:57.284 +01:00 [INF] Route matched with {action = "RequestPasswordReset", controller = "ProfileManagement"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] RequestPasswordReset(RzumeAPI.Models.Requests.RequestPasswordReset, Microsoft.Extensions.Options.IOptionsSnapshot`1[RzumeAPI.Options.BaseUrlOptions]) on controller RzumeAPI.Controllers.ProfileManagementController (RzumeAPI).
+2024-07-28 11:36:57.374 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-07-28 11:36:57.410 +01:00 [INF] Passowrd reset request made with email: {"Email":"kesuion1@gmail.com","$type":"RequestPasswordReset"}
+2024-07-28 11:36:57.701 +01:00 [INF] Executed DbCommand (21ms) [Parameters=[@__ToLower_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[Skills], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE ([a].[Email] IS NOT NULL) AND (LOWER([a].[Email]) = @__ToLower_0)
+2024-07-28 11:37:00.869 +01:00 [INF] Password reset request initiated succesfully. Message: Password reset succesfully initiated. kindly check your email for instructions
+2024-07-28 11:37:00.871 +01:00 [INF] Executing OkObjectResult, writing value of type 'RzumeAPI.Models.APIResponse'.
+2024-07-28 11:37:00.874 +01:00 [INF] Executed action RzumeAPI.Controllers.ProfileManagementController.RequestPasswordReset (RzumeAPI) in 3589.1615ms
+2024-07-28 11:37:00.874 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.ProfileManagementController.RequestPasswordReset (RzumeAPI)'
+2024-07-28 11:37:00.875 +01:00 [INF] Request finished HTTP/2 POST https://localhost:7159/api/v1/profilemanagement/request-password-reset - 200 185 application/json; charset=utf-8 3669.285ms
+2024-07-28 12:00:22.148 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/profilemanagement/request-password-reset - null null
+2024-07-28 12:00:22.164 +01:00 [INF] CORS policy execution successful.
+2024-07-28 12:00:22.166 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/profilemanagement/request-password-reset - 204 null null 66.8174ms
+2024-07-28 12:00:22.199 +01:00 [INF] Request starting HTTP/2 POST https://localhost:7159/api/v1/profilemanagement/request-password-reset - application/json 30
+2024-07-28 12:00:22.225 +01:00 [INF] CORS policy execution successful.
+2024-07-28 12:00:22.248 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.ProfileManagementController.RequestPasswordReset (RzumeAPI)'
+2024-07-28 12:00:22.254 +01:00 [INF] Route matched with {action = "RequestPasswordReset", controller = "ProfileManagement"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] RequestPasswordReset(RzumeAPI.Models.Requests.RequestPasswordReset, Microsoft.Extensions.Options.IOptionsSnapshot`1[RzumeAPI.Options.BaseUrlOptions]) on controller RzumeAPI.Controllers.ProfileManagementController (RzumeAPI).
+2024-07-28 12:00:22.293 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-07-28 12:00:22.317 +01:00 [INF] Passowrd reset request made with email: {"Email":"kesuion1@gmail.com","$type":"RequestPasswordReset"}
+2024-07-28 12:00:22.498 +01:00 [INF] Executed DbCommand (19ms) [Parameters=[@__ToLower_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[Skills], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE ([a].[Email] IS NOT NULL) AND (LOWER([a].[Email]) = @__ToLower_0)
+2024-07-28 12:00:25.336 +01:00 [INF] Password reset request initiated succesfully. Message: Password reset succesfully initiated. kindly check your email for instructions
+2024-07-28 12:00:25.341 +01:00 [INF] Executing OkObjectResult, writing value of type 'RzumeAPI.Models.APIResponse'.
+2024-07-28 12:00:25.343 +01:00 [INF] Executed action RzumeAPI.Controllers.ProfileManagementController.RequestPasswordReset (RzumeAPI) in 3089.3531ms
+2024-07-28 12:00:25.344 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.ProfileManagementController.RequestPasswordReset (RzumeAPI)'
+2024-07-28 12:00:25.344 +01:00 [INF] Request finished HTTP/2 POST https://localhost:7159/api/v1/profilemanagement/request-password-reset - 200 185 application/json; charset=utf-8 3171.3979ms
+2024-07-28 15:26:41.922 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/profilemanagement/request-password-reset - null null
+2024-07-28 15:26:41.960 +01:00 [INF] CORS policy execution successful.
+2024-07-28 15:26:41.969 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/profilemanagement/request-password-reset - 204 null null 47.3455ms
+2024-07-28 15:26:41.972 +01:00 [INF] Request starting HTTP/2 POST https://localhost:7159/api/v1/profilemanagement/request-password-reset - application/json 30
+2024-07-28 15:26:41.978 +01:00 [INF] CORS policy execution successful.
+2024-07-28 15:26:41.985 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.ProfileManagementController.RequestPasswordReset (RzumeAPI)'
+2024-07-28 15:26:41.990 +01:00 [INF] Route matched with {action = "RequestPasswordReset", controller = "ProfileManagement"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] RequestPasswordReset(RzumeAPI.Models.Requests.RequestPasswordReset, Microsoft.Extensions.Options.IOptionsSnapshot`1[RzumeAPI.Options.BaseUrlOptions]) on controller RzumeAPI.Controllers.ProfileManagementController (RzumeAPI).
+2024-07-28 15:26:42.011 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-07-28 15:26:42.024 +01:00 [INF] Passowrd reset request made with email: {"Email":"kesuion1@gmail.com","$type":"RequestPasswordReset"}
+2024-07-28 15:26:42.145 +01:00 [INF] Executed DbCommand (20ms) [Parameters=[@__ToLower_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[Skills], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE ([a].[Email] IS NOT NULL) AND (LOWER([a].[Email]) = @__ToLower_0)
+2024-07-28 15:28:04.259 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/profilemanagement/request-password-reset - null null
+2024-07-28 15:28:04.263 +01:00 [INF] CORS policy execution successful.
+2024-07-28 15:28:04.263 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/profilemanagement/request-password-reset - 204 null null 29.1948ms
+2024-07-28 15:28:04.279 +01:00 [INF] Request starting HTTP/2 POST https://localhost:7159/api/v1/profilemanagement/request-password-reset - application/json 30
+2024-07-28 15:28:04.328 +01:00 [INF] CORS policy execution successful.
+2024-07-28 15:28:04.329 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.ProfileManagementController.RequestPasswordReset (RzumeAPI)'
+2024-07-28 15:28:04.330 +01:00 [INF] Route matched with {action = "RequestPasswordReset", controller = "ProfileManagement"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] RequestPasswordReset(RzumeAPI.Models.Requests.RequestPasswordReset, Microsoft.Extensions.Options.IOptionsSnapshot`1[RzumeAPI.Options.BaseUrlOptions]) on controller RzumeAPI.Controllers.ProfileManagementController (RzumeAPI).
+2024-07-28 15:28:04.333 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-07-28 15:28:04.335 +01:00 [INF] Passowrd reset request made with email: {"Email":"kesuion1@gmail.com","$type":"RequestPasswordReset"}
+2024-07-28 15:28:04.370 +01:00 [INF] Executed DbCommand (26ms) [Parameters=[@__ToLower_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[Skills], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE ([a].[Email] IS NOT NULL) AND (LOWER([a].[Email]) = @__ToLower_0)
+2024-07-28 15:28:15.178 +01:00 [INF] Password reset request initiated succesfully. Message: Password reset succesfully initiated. kindly check your email for instructions
+2024-07-28 15:28:15.181 +01:00 [INF] Executing OkObjectResult, writing value of type 'RzumeAPI.Models.APIResponse'.
+2024-07-28 15:28:15.185 +01:00 [INF] Executed action RzumeAPI.Controllers.ProfileManagementController.RequestPasswordReset (RzumeAPI) in 10854.6421ms
+2024-07-28 15:28:15.186 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.ProfileManagementController.RequestPasswordReset (RzumeAPI)'
+2024-07-28 15:28:15.187 +01:00 [INF] Request finished HTTP/2 POST https://localhost:7159/api/v1/profilemanagement/request-password-reset - 200 185 application/json; charset=utf-8 10908.0034ms
+2024-07-28 15:28:33.982 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/profilemanagement/request-password-reset - null null
+2024-07-28 15:28:34.008 +01:00 [INF] CORS policy execution successful.
+2024-07-28 15:28:34.009 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/profilemanagement/request-password-reset - 204 null null 110.0874ms
+2024-07-28 15:28:34.016 +01:00 [INF] Request starting HTTP/2 POST https://localhost:7159/api/v1/profilemanagement/request-password-reset - application/json 30
+2024-07-28 15:28:34.038 +01:00 [INF] CORS policy execution successful.
+2024-07-28 15:28:34.038 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.ProfileManagementController.RequestPasswordReset (RzumeAPI)'
+2024-07-28 15:28:34.039 +01:00 [INF] Route matched with {action = "RequestPasswordReset", controller = "ProfileManagement"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] RequestPasswordReset(RzumeAPI.Models.Requests.RequestPasswordReset, Microsoft.Extensions.Options.IOptionsSnapshot`1[RzumeAPI.Options.BaseUrlOptions]) on controller RzumeAPI.Controllers.ProfileManagementController (RzumeAPI).
+2024-07-28 15:28:34.043 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-07-28 15:28:34.046 +01:00 [INF] Passowrd reset request made with email: {"Email":"kesuion1@gmail.com","$type":"RequestPasswordReset"}
+2024-07-28 15:28:34.084 +01:00 [INF] Executed DbCommand (34ms) [Parameters=[@__ToLower_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[Skills], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE ([a].[Email] IS NOT NULL) AND (LOWER([a].[Email]) = @__ToLower_0)
+2024-07-28 15:28:42.265 +01:00 [INF] Password reset request initiated succesfully. Message: Password reset succesfully initiated. kindly check your email for instructions
+2024-07-28 15:28:42.268 +01:00 [INF] Executing OkObjectResult, writing value of type 'RzumeAPI.Models.APIResponse'.
+2024-07-28 15:28:42.270 +01:00 [INF] Executed action RzumeAPI.Controllers.ProfileManagementController.RequestPasswordReset (RzumeAPI) in 8231.1346ms
+2024-07-28 15:28:42.271 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.ProfileManagementController.RequestPasswordReset (RzumeAPI)'
+2024-07-28 15:28:42.348 +01:00 [INF] Request finished HTTP/2 POST https://localhost:7159/api/v1/profilemanagement/request-password-reset - 200 185 application/json; charset=utf-8 8257.0052ms
+2024-07-28 15:32:00.385 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/profilemanagement/request-password-reset - null null
+2024-07-28 15:32:00.409 +01:00 [INF] CORS policy execution successful.
+2024-07-28 15:32:00.409 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/profilemanagement/request-password-reset - 204 null null 25.6994ms
+2024-07-28 15:32:00.415 +01:00 [INF] Request starting HTTP/2 POST https://localhost:7159/api/v1/profilemanagement/request-password-reset - application/json 30
+2024-07-28 15:32:00.446 +01:00 [INF] CORS policy execution successful.
+2024-07-28 15:32:00.449 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.ProfileManagementController.RequestPasswordReset (RzumeAPI)'
+2024-07-28 15:32:00.457 +01:00 [INF] Route matched with {action = "RequestPasswordReset", controller = "ProfileManagement"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] RequestPasswordReset(RzumeAPI.Models.Requests.RequestPasswordReset, Microsoft.Extensions.Options.IOptionsSnapshot`1[RzumeAPI.Options.BaseUrlOptions]) on controller RzumeAPI.Controllers.ProfileManagementController (RzumeAPI).
+2024-07-28 15:32:00.479 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-07-28 15:32:00.494 +01:00 [INF] Passowrd reset request made with email: {"Email":"kesuion1@gmail.com","$type":"RequestPasswordReset"}
+2024-07-28 15:32:00.531 +01:00 [INF] Executed DbCommand (29ms) [Parameters=[@__ToLower_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[Skills], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE ([a].[Email] IS NOT NULL) AND (LOWER([a].[Email]) = @__ToLower_0)
+2024-07-28 15:32:08.685 +01:00 [INF] Password reset request initiated succesfully. Message: Password reset succesfully initiated. kindly check your email for instructions
+2024-07-28 15:32:08.692 +01:00 [INF] Executing OkObjectResult, writing value of type 'RzumeAPI.Models.APIResponse'.
+2024-07-28 15:32:08.693 +01:00 [INF] Executed action RzumeAPI.Controllers.ProfileManagementController.RequestPasswordReset (RzumeAPI) in 8236.0444ms
+2024-07-28 15:32:08.694 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.ProfileManagementController.RequestPasswordReset (RzumeAPI)'
+2024-07-28 15:32:08.694 +01:00 [INF] Request finished HTTP/2 POST https://localhost:7159/api/v1/profilemanagement/request-password-reset - 200 185 application/json; charset=utf-8 8279.8612ms
+2024-07-28 15:32:34.498 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/profilemanagement/request-password-reset - null null
+2024-07-28 15:32:34.500 +01:00 [INF] CORS policy execution successful.
+2024-07-28 15:32:34.500 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/profilemanagement/request-password-reset - 204 null null 53.7088ms
+2024-07-28 15:32:34.506 +01:00 [INF] Request starting HTTP/2 POST https://localhost:7159/api/v1/profilemanagement/request-password-reset - application/json 38
+2024-07-28 15:32:34.532 +01:00 [INF] CORS policy execution successful.
+2024-07-28 15:32:34.533 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.ProfileManagementController.RequestPasswordReset (RzumeAPI)'
+2024-07-28 15:32:34.534 +01:00 [INF] Route matched with {action = "RequestPasswordReset", controller = "ProfileManagement"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] RequestPasswordReset(RzumeAPI.Models.Requests.RequestPasswordReset, Microsoft.Extensions.Options.IOptionsSnapshot`1[RzumeAPI.Options.BaseUrlOptions]) on controller RzumeAPI.Controllers.ProfileManagementController (RzumeAPI).
+2024-07-28 15:32:34.537 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-07-28 15:32:34.539 +01:00 [INF] Passowrd reset request made with email: {"Email":"avwerosuodarhare@gmail.com","$type":"RequestPasswordReset"}
+2024-07-28 15:32:34.580 +01:00 [INF] Executed DbCommand (36ms) [Parameters=[@__ToLower_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[Skills], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE ([a].[Email] IS NOT NULL) AND (LOWER([a].[Email]) = @__ToLower_0)
+2024-07-28 15:32:34.583 +01:00 [WRN] Password reset initiation failed Message: User not found
+2024-07-28 15:32:34.586 +01:00 [INF] Executing BadRequestObjectResult, writing value of type 'RzumeAPI.Models.APIResponse'.
+2024-07-28 15:32:34.587 +01:00 [INF] Executed action RzumeAPI.Controllers.ProfileManagementController.RequestPasswordReset (RzumeAPI) in 53.402ms
+2024-07-28 15:32:34.587 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.ProfileManagementController.RequestPasswordReset (RzumeAPI)'
+2024-07-28 15:32:34.587 +01:00 [INF] Request finished HTTP/2 POST https://localhost:7159/api/v1/profilemanagement/request-password-reset - 400 85 application/json; charset=utf-8 81.074ms

@@ -11,6 +11,7 @@ using RzumeAPI.Models.Requests;
 using RzumeAPI.Models.Responses;
 using RzumeAPI.Services;
 using Microsoft.AspNetCore.Identity;
+using System.Net;
 
 namespace RzumeAPI.Repository
 {
@@ -161,6 +162,7 @@ namespace RzumeAPI.Repository
 
 
 
+
             await GenerateMail(user, TokenTypes.ResetPass, false, clientSideBaseUrl, resetToken);
             return GenerateSuccessResponse("Password reset succesfully initiated. kindly check your email for instructions");
 
@@ -237,8 +239,10 @@ namespace RzumeAPI.Repository
         private async Task GenerateMail(User user, string mailPurpose, bool isSigin, string clientBaseUrl, string token)
         {
 
+            string encodedToken = WebUtility.UrlEncode(token);
+            string encodedEmail = WebUtility.UrlEncode(user.Email!);
 
-            string linkPath = $"{clientBaseUrl}auth/reset-password?token={token}";
+            string linkPath = $"{clientBaseUrl}auth/reset-password/{encodedToken}/{encodedEmail}";
             string templatePath = @"EmailTemplate/{0}.html";
             string templateName = "ResetPassConfirm";
             string mailSubject = "Kindly click the link to reset your password.";
