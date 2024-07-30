@@ -19,7 +19,7 @@ namespace RzumeAPI.Models
         public required string ApplicationDate { get; set; } 
 
         [NotMapped]
-        public List<string>? AdditionalDocuments { get; set; }
+        public List<string> AdditionalDocuments { get; set; } = [];
 
         public Status Status { get; set; }
 

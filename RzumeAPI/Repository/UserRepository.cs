@@ -119,6 +119,7 @@ namespace RzumeAPI.Repository
             User user = new()
             {
                 Email = registrationDTO.Email,
+                Name = string.Empty,
                 NormalizedEmail = registrationDTO.Email.ToUpper(),
                 UserName = registrationDTO.Email,
                 TwoFactorEnabled = true,

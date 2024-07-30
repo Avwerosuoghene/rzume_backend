@@ -13,7 +13,7 @@ namespace RzumeAPI.Models
         public User? User { get; set; }
         public required string UserId { get; set; }
 
-        public ICollection<Application>? Applications { get; set; }
+        public ICollection<Application> Applications { get; set; } = [];
 
         public string? ApplicationID { get; set; }
 

@@ -338,6 +338,21 @@ namespace RzumeAPI.Migrations
                     b.ToTable("Otp");
                 });
 
+            modelBuilder.Entity("RzumeAPI.Models.Skill", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Skill");
+                });
+
             modelBuilder.Entity("RzumeAPI.Models.User", b =>
                 {
                     b.Property<string>("Id")
@@ -361,6 +376,7 @@ namespace RzumeAPI.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Location")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
@@ -370,6 +386,7 @@ namespace RzumeAPI.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
@@ -399,9 +416,6 @@ namespace RzumeAPI.Migrations
                         .HasColumnType("varbinary(max)");
 
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Skills")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -451,6 +465,21 @@ namespace RzumeAPI.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Userfile");
+                });
+
+            modelBuilder.Entity("SkillUser", b =>
+                {
+                    b.Property<Guid>("SkillsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UsersId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("SkillsId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("SkillUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -576,6 +605,21 @@ namespace RzumeAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SkillUser", b =>
+                {
+                    b.HasOne("RzumeAPI.Models.Skill", null)
+                        .WithMany()
+                        .HasForeignKey("SkillsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RzumeAPI.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("RzumeAPI.Models.Favorites", b =>

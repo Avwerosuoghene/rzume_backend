@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.AspNetCore.Identity;
-using RzumeAPI.Models.DTO;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace RzumeAPI.Models
 {
@@ -12,30 +10,30 @@ namespace RzumeAPI.Models
             OnBoardingStage = 0;
         }
 
-        public string? Name { get; set; }
+        public required string  Name { get; set; }
 
 
-        public string? Location { get; set; }
+        public string Location { get; set; } = string.Empty;
 
 
-        public ICollection<Education>? Education { get; set; }
+        public ICollection<Education> Education { get; set; } = [];
 
-        public ICollection<Experience>? Experience { get; set; }
+        public ICollection<Experience> Experience { get; set; } =[];
 
 
-        public string? Skills { get; set; }
+        public ICollection<Skill> Skills { get; set; } = [];
 
 
         public Favorites? Favorites { get; set; }
 
-        public ICollection<UserFile>? UserFiles { get; set; }
+        public ICollection<UserFile> UserFiles { get; set; } = [];
 
 
 
         public byte[]? ProfilePicture { get; set; }
 
 
-        public ICollection<Application>? Applications { get; set; }
+        public ICollection<Application> Applications { get; set; } = [];
 
         public string? Bio { get; set; }
 

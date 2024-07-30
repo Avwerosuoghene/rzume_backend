@@ -19,8 +19,8 @@ namespace RzumeAPI.Data
              Experience = Set<Experience>();
              Application = Set<Application>();
              Otp = Set<Otp>();
-             Favorites = Set<Favorites>();
              Country = Set<Country>();
+             Skill = Set<Skill>();
 
 
         }
@@ -42,10 +42,9 @@ namespace RzumeAPI.Data
 
         public DbSet<Application> Application { get; set; }
 
-        public DbSet<Favorites> Favorites { get; set; }
-
         public DbSet<Otp> Otp { get; set; }
         public DbSet<Country> Country { get; set; }
+        public DbSet<Skill> Skill { get; set; }
 
     }
 }
