@@ -165,9 +165,6 @@ namespace RzumeAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FavoritesID")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Position")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -288,27 +285,6 @@ namespace RzumeAPI.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Experience");
-                });
-
-            modelBuilder.Entity("RzumeAPI.Models.Favorites", b =>
-                {
-                    b.Property<string>("FavoritesID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ApplicationID")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("FavoritesID");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("Favorites");
                 });
 
             modelBuilder.Entity("RzumeAPI.Models.Otp", b =>
@@ -535,19 +511,11 @@ namespace RzumeAPI.Migrations
 
             modelBuilder.Entity("RzumeAPI.Models.Application", b =>
                 {
-                    b.HasOne("RzumeAPI.Models.Favorites", "Favorites")
-                        .WithMany("Applications")
-                        .HasForeignKey("ApplicationID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("RzumeAPI.Models.User", "User")
                         .WithMany("Applications")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Favorites");
 
                     b.Navigation("User");
                 });
@@ -569,17 +537,6 @@ namespace RzumeAPI.Migrations
                         .WithMany("Experience")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("RzumeAPI.Models.Favorites", b =>
-                {
-                    b.HasOne("RzumeAPI.Models.User", "User")
-                        .WithOne("Favorites")
-                        .HasForeignKey("RzumeAPI.Models.Favorites", "UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("User");
@@ -622,11 +579,6 @@ namespace RzumeAPI.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RzumeAPI.Models.Favorites", b =>
-                {
-                    b.Navigation("Applications");
-                });
-
             modelBuilder.Entity("RzumeAPI.Models.User", b =>
                 {
                     b.Navigation("Applications");
@@ -634,8 +586,6 @@ namespace RzumeAPI.Migrations
                     b.Navigation("Education");
 
                     b.Navigation("Experience");
-
-                    b.Navigation("Favorites");
 
                     b.Navigation("UserFiles");
                 });

@@ -9,11 +9,7 @@ namespace RzumeAPI.Data.configuaration
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-             builder
-                .HasOne(x => x.Favorites)
-                .WithOne(x => x.User)
-                .HasForeignKey<Favorites>(u => u.UserId)
-                .OnDelete(DeleteBehavior.NoAction);
+           
         }
     }
 }
