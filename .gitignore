@@ -407,3 +407,7 @@ ASALocalRun/
 
 # Local History for Visual Studio
 .localhistory/
+RzumeAPI/appsettings.Development.json
+RzumeAPI/appsettings.Development.json
+RzumeAPI/appsettings.Production.json
+RzumeAPI/appsettings.json
