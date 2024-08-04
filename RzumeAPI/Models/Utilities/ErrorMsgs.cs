@@ -7,4 +7,6 @@ public static class ErrorMsgs
     public const string UserRetrievalError  = "Failed to retrieve the created user";
     public const string RegistrationFailed  = "Failed to retrieve the created user";
     public const string InavlidPayload  = "Invalid payload";
+
+    public const string InvalidRegReq = "Invalid registration request type";
 }

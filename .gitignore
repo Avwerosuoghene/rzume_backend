@@ -49,6 +49,9 @@ Temporary Items
 Thumbs.db
 ehthumbs.db
 ehthumbs_vista.db
+appsettings.json
+appsettings.Development.json
+appsettings.Production.json
 
 # Dump file
 *.stackdump

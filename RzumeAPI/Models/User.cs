@@ -24,9 +24,10 @@ namespace RzumeAPI.Models
         public ICollection<Skill> Skills { get; set; } = [];
 
 
-        public Favorites? Favorites { get; set; }
 
         public ICollection<UserFile> UserFiles { get; set; } = [];
+
+        public string GoogleId { get; set; } = string.Empty;
 
 
 

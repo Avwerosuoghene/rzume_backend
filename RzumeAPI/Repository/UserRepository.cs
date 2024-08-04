@@ -114,32 +114,56 @@ namespace RzumeAPI.Repository
 
 
 
-        public async Task<RegisterUserResponse> Register(RegistrationRequest registrationDTO, string clientSideBaseUrl)
+        public async Task<RegisterUserResponse> Register(object registrationDTO, string clientSideBaseUrl)
         {
-            User user = new()
-            {
-                Email = registrationDTO.Email,
-                Name = string.Empty,
-                NormalizedEmail = registrationDTO.Email.ToUpper(),
-                UserName = registrationDTO.Email,
-                TwoFactorEnabled = true,
 
+
+            if (registrationDTO is RegistrationRequest emailRequest)
+            {
+                return await HandleEmailSignup(emailRequest, clientSideBaseUrl);
+
+
+            }
+            else if (registrationDTO is GoogleSigninRequest googleRequest)
+            {
+                return await HandleGoogleSignup(googleRequest);
+
+            }
+            else
+            {
+                throw new Exception(ErrorMsgs.InvalidRegReq);
+            }
+
+        }
+
+
+
+        private async Task<RegisterUserResponse> HandleEmailSignup(RegistrationRequest emailRequest, string clientBaseUrl)
+        {
+
+            User user = new User
+            {
+                Email = emailRequest.Email,
+                Name = string.Empty,
+                NormalizedEmail = emailRequest.Email.ToUpper(),
+                UserName = emailRequest.Email,
+                TwoFactorEnabled = true,
             };
+            IdentityResult result = await _userManager.CreateAsync(user, emailRequest.Password);
 
             try
             {
-                var result = await _userManager.CreateAsync(user, registrationDTO.Password);
 
                 if (result.Succeeded)
                 {
                     var userToReturn = _db.ApplicationUsers
-                .FirstOrDefault(u => u.UserName == registrationDTO.Email);
+                .FirstOrDefault(u => u.UserName == user.Email);
 
                     if (userToReturn != null)
                     {
                         string token = await _tokenService.GenerateToken(user, DateTime.UtcNow.AddHours(5), TokenTypes.SignUp);
 
-                        await GenerateMail(userToReturn, TokenTypes.SignUp, true, clientSideBaseUrl, token);
+                        await GenerateMail(userToReturn, TokenTypes.SignUp, true, clientBaseUrl, token);
 
                         UserDTO returnedUser = _mapper.Map<UserDTO>(userToReturn);
                         return new RegisterUserResponse()
@@ -160,7 +184,6 @@ namespace RzumeAPI.Repository
                 {
                     foreach (var error in result.Errors)
                     {
-                        // Log or handle each error as needed
                         Console.WriteLine($"Error: {error.Description}");
                     }
 
@@ -170,7 +193,71 @@ namespace RzumeAPI.Repository
             catch (Exception ex)
             {
                 Console.WriteLine($"Error: {ex.Message}");
-                //   throw new Exception("An error occurred during registration.");
+
+                return new RegisterUserResponse()
+                {
+                    User = null,
+                    Message = ex.Message
+
+                };
+            }
+        }
+
+        private async Task<RegisterUserResponse> HandleGoogleSignup(GoogleSigninRequest googleRequest)
+        {
+            User user = new()
+            {
+                Email = googleRequest.Email,
+                Name = string.Empty,
+                NormalizedEmail = googleRequest.Email.ToUpper(),
+                UserName = googleRequest.Email,
+                TwoFactorEnabled = true,
+                GoogleId = googleRequest.GoogleId,
+                EmailConfirmed = true
+            };
+
+            IdentityResult result = await _userManager.CreateAsync(user);
+
+            try
+            {
+
+                if (result.Succeeded)
+                {
+                    var userToReturn = _db.ApplicationUsers
+                .FirstOrDefault(u => u.UserName == user.Email);
+
+                    if (userToReturn != null)
+                    {
+
+
+                        UserDTO returnedUser = _mapper.Map<UserDTO>(userToReturn);
+                        return new RegisterUserResponse()
+                        {
+                            User = returnedUser,
+                        };
+                    }
+                    else
+                    {
+                        throw new Exception(ErrorMsgs.UserRetrievalError);
+
+                    }
+
+
+
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        Console.WriteLine($"Error: {error.Description}");
+                    }
+
+                    throw new Exception(ErrorMsgs.RegistrationFailed);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
 
                 return new RegisterUserResponse()
                 {
@@ -178,6 +265,9 @@ namespace RzumeAPI.Repository
                     Message = ex.Message
                 };
             }
+
+
+
 
         }
 
@@ -305,16 +395,39 @@ namespace RzumeAPI.Repository
 
 
 
-        public async Task<LoginResponse> Login(LoginRequest loginRequest)
+        public async Task<LoginResponse> Login(object loginRequest)
         {
 
-            // The async version of this method is FirstOrDefaultAsync
-            var user = _db.ApplicationUsers.Where(u => u.Email != null).FirstOrDefault(u => u.Email!.ToLower() == loginRequest.Email.ToLower());
+       
+
+            if (loginRequest is LoginRequest emailRequest)
+            {
+                return await HandleEmailLogin(emailRequest);
+
+
+
+
+            }
+            else if (loginRequest is GoogleSigninRequest googleRequest)
+            {
+                return await HandleGoogleLogin(googleRequest);
+            }
+            else
+            {
+                throw new Exception(ErrorMsgs.InvalidRegReq);
+            }
+
+
+        }
+
+        private async Task<LoginResponse> HandleEmailLogin(LoginRequest emailRequest)
+        {
+            var user = _db.ApplicationUsers.Where(u => u.Email != null).FirstOrDefault(u => u.Email!.ToLower() == emailRequest.Email.ToLower());
             bool isValid = false;
 
             if (user != null)
             {
-                isValid = await _userManager.CheckPasswordAsync(user, loginRequest!.Password);
+                isValid = await _userManager.CheckPasswordAsync(user, emailRequest!.Password!);
 
             }
 
@@ -354,13 +467,50 @@ namespace RzumeAPI.Repository
 
 
             return loginResponseDTO;
-
         }
+
+
+
+        private async Task<LoginResponse> HandleGoogleLogin(GoogleSigninRequest googleRequest)
+        {
+            var user = _db.ApplicationUsers.Where(u => u.Email != null).FirstOrDefault(u => u.Email!.ToLower() == googleRequest.Email.ToLower());
+
+
+
+            if (user == null)
+            {
+                return new LoginResponse()
+                {
+                    Token = "",
+                    User = null,
+                    Message = UserStatMsg.InvalidDetails
+                };
+            }
+
+
+            string token = await _tokenService.GenerateToken(user, DateTime.UtcNow.AddHours(5), TokenTypes.Login);
+
+
+
+            LoginResponse loginResponseDTO = new()
+            {
+                Token = token,
+                User = _mapper.Map<UserDTO>(user),
+                EmailConfirmed = true,
+
+
+            };
+
+
+            return loginResponseDTO;
+        }
+
+
+
 
 
         public async Task<bool> Logout(LogoutRequest logoutRequestDTO)
         {
-            // var user = _db.ApplicationUsers.FirstOrDefault(u =>  u.Email?.ToLower() ?? u.Email?.ToLower() == logoutRequestDTO.Email.ToLower());
 
             var user = _db.ApplicationUsers
     .Where(u => u.Email != null)

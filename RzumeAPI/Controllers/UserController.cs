@@ -13,6 +13,8 @@ using RzumeAPI.Options;
 using RzumeAPI.Models.Responses;
 using RzumeAPI.Models.Utilities;
 using RzumeAPI.Models.Requests;
+using System.Security.Claims;
+using AutoMapper;
 
 
 namespace RzumeAPI.Controllers
@@ -21,7 +23,7 @@ namespace RzumeAPI.Controllers
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [ApiVersionNeutral]
-    public class UserController(IUserRepository userRepo, IEmailRepository emailRepository, OtpService otpService, IOtpRepository otpRepo, UserService userService, ILogger<UserController> logger) : Controller
+    public class UserController(IUserRepository userRepo, IEmailRepository emailRepository, OtpService otpService, IOtpRepository otpRepo, UserService userService, ILogger<UserController> logger, TokenService tokenService, IMapper mapper) : Controller
     {
 
         private readonly IUserRepository _userRepo = userRepo;
@@ -34,6 +36,12 @@ namespace RzumeAPI.Controllers
 
 
         private readonly ILogger<UserController> _logger = logger;
+
+        private readonly TokenService _tokenService = tokenService;
+
+        private readonly IMapper _mapper = mapper;
+
+
 
         protected APIResponse _response = new();
 
@@ -510,14 +518,17 @@ namespace RzumeAPI.Controllers
         }
 
 
-        [HttpGet("google-response")] // Specify the route for the action
-        public IActionResult GoogleResponse()
+        [HttpGet("google-response")]
+        public async Task<IActionResult> GoogleResponse([FromServices] IOptionsSnapshot<BaseUrlOptions> baseUrls)
         {
-            var authenticationResult = HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme).Result;
+            _logger.LogInformation("Google Signup method called");
+
+            var _baseUrls = baseUrls.Value;
+            string clientSideBaseUrl = _baseUrls.ClientBaseUrl;
+            var authenticationResult = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
             if (!authenticationResult.Succeeded)
             {
-                // Handle failed authentication
                 return BadRequest("Failed to authenticate with Google.");
             }
 
@@ -530,7 +541,70 @@ namespace RzumeAPI.Controllers
                     claim.Value
                 });
 
-            return Json(claims);
+            var userEmail = claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            var userName = claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+            var userId = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+
+
+            if (userEmail == null || userName == null || userId == null)
+            {
+                _logger.LogWarning("Failed to retrieve user infomation from google claim");
+
+                return BadRequest("Failed to retrieve user information.");
+            }
+
+            _logger.LogInformation("User mail obtained from claim with value: {@Request}", userEmail);
+
+            GoogleSigninRequest requestModel = new()
+            {
+                Email = userEmail,
+                GoogleId = userId
+            };
+
+            var loginResponse = await _userRepo.Login(requestModel);
+
+            if (loginResponse.User == null)
+            {
+                RegisterUserResponse response = await _userRepo.Register(requestModel, clientSideBaseUrl)!;
+                if (response.User == null)
+                {
+                    string responseMsg = response.Message ?? "Error while registering";
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add(responseMsg);
+                    _logger.LogError("Error while registering user. Response: {@Response}", _response);
+                    return BadRequest(_response);
+                }
+                User userModel = _mapper.Map<User>(response.User);
+                string token = await _tokenService.GenerateToken(userModel, DateTime.UtcNow.AddHours(5), TokenTypes.Login);
+                loginResponse = new()
+                {
+                    Token = token,
+                    User = _mapper.Map<UserDTO>(response.User),
+                    EmailConfirmed = true,
+                };
+                _logger.LogInformation("User registered successfully. Response: {@Response}", _response);
+
+
+            }
+
+           
+                _response.StatusCode = HttpStatusCode.OK;
+                _response.IsSuccess = true;
+
+                _response.Result = new ResultObject
+                {
+                    Message = "Login Successful",
+                    Content = loginResponse
+                };
+
+                _logger.LogInformation("User logged in successfully. Response: {@Response}", _response);
+
+                return Ok(_response);
+            
+
+
         }
 
 

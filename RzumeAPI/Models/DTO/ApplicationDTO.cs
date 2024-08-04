@@ -25,7 +25,6 @@ namespace RzumeAPI.Models.DTO
 
 
 
-        public int FavoritesID { get; set; }
     }
 }
 

@@ -20,6 +20,9 @@ namespace RzumeAPI.Models.DTO
         public bool EmailConfirmed { get; set; }
 
 
+        public string? GoogleId { get; set; }
+
+
 
     }
 

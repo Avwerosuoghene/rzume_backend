@@ -23,10 +23,6 @@ namespace RzumeAPI.Models
 
         public Status Status { get; set; }
 
-        public Favorites? Favorites { get; set; }
-
-        public string? FavoritesID { get; set; }
-
 
         public User? User { get; set; }
     }
