@@ -43,15 +43,16 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+appsettings.json
+appsettings.Development.json
+appsettings.Production.json
 
 # content below from: https://github.com/github/gitignore/blob/main/Global/Windows.gitignore
 # Windows thumbnail cache files
 Thumbs.db
 ehthumbs.db
 ehthumbs_vista.db
-appsettings.json
-appsettings.Development.json
-appsettings.Production.json
+
 
 # Dump file
 *.stackdump
