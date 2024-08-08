@@ -210,8 +210,8 @@ namespace RzumeAPI.Repository
             {
                 Email = googleRequest.Email,
                 Name = googleRequest.Name,
-                // FirstName = googleRequest.GivenName,
-                // LastName = googleRequest.FamilyName,
+                FirstName = googleRequest.GivenName,
+                LastName = googleRequest.FamilyName,
                 NormalizedEmail = googleRequest.Email.ToUpper(),
                 UserName = googleRequest.GivenName,
                 TwoFactorEnabled = true,
