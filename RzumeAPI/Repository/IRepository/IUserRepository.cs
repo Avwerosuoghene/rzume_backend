@@ -10,7 +10,7 @@ namespace RzumeAPI.Repository.IRepository
     public interface IUserRepository
     {
 
-        Task<RegisterUserResponse> Register(object registrationRequestDTO, string clientSideBaseUrl);
+        Task<RegisterUserResponse> Register(object registrationRequestDTO, string? clientSideBaseUrl);
 
         Task<LoginResponse> Login(object loginRequestDTO);
         Task<bool> Logout(LogoutRequest logoutRequestDTO);

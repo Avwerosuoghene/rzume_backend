@@ -61,9 +61,7 @@ namespace RzumeAPI.Services
             }
         }
 
-        // public string? GetTokenByUserId(string userId) {
-
-        // }
+   
 
 
         public async Task<string> GenerateToken(User user, DateTime expiration, string tokenName)
@@ -84,10 +82,8 @@ namespace RzumeAPI.Services
                     new Claim(ClaimTypes.Email,user.Email!)
                 }),
 
-                //Describes Token Expiration
                 Expires = expiration,
 
-                //Describes signin creddentials
                 SigningCredentials = new(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);

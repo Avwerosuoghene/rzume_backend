@@ -10,20 +10,11 @@ using RzumeAPI.Repository.IRepository;
 
 namespace RzumeAPI.Repository
 {
-    public class EmailRepository : IEmailRepository
+    public class EmailRepository(IOptions<SMTPConfigModel> smtConfig, IConfiguration configuration) : IEmailRepository
     {
         private const string templatePath = @"EmailTemplate/{0}.html";
 
-        private readonly SMTPConfigModel _smtConfig;
-
-
-
-
-
-        public EmailRepository(IOptions<SMTPConfigModel> smtConfig, IConfiguration configuration)
-        {
-            _smtConfig = smtConfig.Value;
-        }
+        private readonly SMTPConfigModel _smtConfig = smtConfig.Value;
 
         private async Task SendEmail(UserEmailOptions userEmailOptions)
         {

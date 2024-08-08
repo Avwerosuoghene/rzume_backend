@@ -15,6 +15,7 @@ using RzumeAPI.Models.Utilities;
 using RzumeAPI.Models.Requests;
 using System.Security.Claims;
 using AutoMapper;
+using Google.Apis.Auth;
 
 
 namespace RzumeAPI.Controllers
@@ -23,16 +24,20 @@ namespace RzumeAPI.Controllers
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [ApiVersionNeutral]
-    public class UserController(IUserRepository userRepo, IEmailRepository emailRepository, OtpService otpService, IOtpRepository otpRepo, UserService userService, ILogger<UserController> logger, TokenService tokenService, IMapper mapper) : Controller
+    public class UserController(IUserRepository userRepo, IEmailRepository emailRepository, OtpService otpService, IOtpRepository otpRepo, UserService userService, ILogger<UserController> logger, TokenService tokenService, IMapper mapper, IConfiguration configuration) : Controller
     {
 
         private readonly IUserRepository _userRepo = userRepo;
+
         private readonly OtpService _otpService = otpService;
 
         private readonly IEmailRepository _emailRepo = emailRepository;
 
         private readonly IOtpRepository _otpRepo = otpRepo;
         private readonly UserService _userService = userService;
+
+        private readonly string _clientId = configuration["Authentication:Google:ClientId"];
+
 
 
         private readonly ILogger<UserController> _logger = logger;
@@ -257,140 +262,8 @@ namespace RzumeAPI.Controllers
             return BadRequest(_response);
         }
 
-        [HttpPost("otp-reset-pass")]
-        public async Task<IActionResult> InitiateOtpResetPassword([FromBody] OtpPasswordResetRequestDTO model)
-        {
-            _logger.LogInformation("OtpResetPassword method called with model: {@Request}", model);
 
-            try
-            {
-                OtpPasswordResetRequestResponseDTO otpPasswordResetResponse = await _userRepo.InitiateOtpResetPassword(model);
-                if (!otpPasswordResetResponse.IsSuccess)
-                {
-
-                    _response.StatusCode = HttpStatusCode.BadRequest;
-                    _response.IsSuccess = false;
-                    _response.ErrorMessages.Add(otpPasswordResetResponse.Message);
-                    _logger.LogWarning("OTP reset password initiation failed. Response: {@Response}", _response);
-                    return BadRequest(_response);
-
-
-
-
-                }
-
-                _response.StatusCode = HttpStatusCode.OK;
-                _response.IsSuccess = true;
-                _response.Result = new ResultObject
-                {
-                    Message = otpPasswordResetResponse.Message!,
-                    Content = otpPasswordResetResponse
-                };
-                _logger.LogInformation("Password reset successful. Response: {@Response}", _response);
-
-                return Ok(_response);
-
-
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Exception occurred while reseting password");
-
-            }
-
-            _response.StatusCode = HttpStatusCode.InternalServerError;
-            _response.IsSuccess = false;
-            return BadRequest(_response);
-
-        }
-
-
-
-
-        [HttpPost("generate-token")]
-        public async Task<IActionResult> GenerateToken(GenerateOtpPayload otpPayload, [FromServices] IOptionsSnapshot<BaseUrlOptions> baseUrls)
-        {
-            var _baseUrls = baseUrls.Value;
-            string clientSideBaseUrl = _baseUrls.ClientBaseUrl;
-            try
-            {
-                var user = await _userRepo.GetUserByEmailAsync(otpPayload.Email);
-                if (user == null)
-                {
-                    _response.StatusCode = HttpStatusCode.BadRequest;
-                    _response.IsSuccess = false;
-                    _response.ErrorMessages.Add(UserStatMsg.NotFound);
-                    return BadRequest(_response);
-                }
-
-
-                var otpModel = await _otpRepo.GetAsync(u => u.UserId == user.Id);
-
-                Console.WriteLine(otpModel);
-                var token = _otpService.GenerateOtp();
-                DateTime currentDate = DateTime.Now;
-                DateTime expirationDate = currentDate.AddMinutes(5);
-
-                otpModel.OtpValue = token;
-                otpModel.ExpirationDate = expirationDate;
-                otpModel.IsConfirmed = false;
-
-                Otp otpResponse = await _otpRepo.UpdateAsync(otpModel);
-
-                if (otpResponse == null)
-                {
-                    _response.StatusCode = HttpStatusCode.InternalServerError;
-                    _response.IsSuccess = false;
-                    _response.ErrorMessages.Add("Error occured updating the db");
-                    return BadRequest(_response);
-                }
-
-                string linkPath = $"{clientSideBaseUrl}auth/reset-password?token={token}";
-                string templatePath = @"ResetPassConfirm/{0}.html";
-                string mailSubject = "Kindly click the link to reset your password.";
-                string templateName = "EmailConfirm";
-
-
-
-                SendConfirmEmailProps confirmMailProps = new()
-                {
-                    User = user,
-                    Token = token,
-                    MailPurpose = TokenTypes.ResetPass,
-                    IsSigin = false,
-                    LinkPath = linkPath,
-                    TemplatePath = templatePath,
-                    TemplateName = templateName,
-                    Subject = mailSubject,
-                };
-
-
-                await _emailRepo.SendConfrirmationMail(confirmMailProps);
-
-                GenerateOtpResponseDTO otpGenerateResponse = new GenerateOtpResponseDTO
-                {
-                    IsSuccess = true
-                };
-                _response.StatusCode = HttpStatusCode.OK;
-                _response.IsSuccess = true;
-                _response.Result = new ResultObject
-                {
-                    Message = "otp sent succesfully",
-                    Content = otpGenerateResponse
-                };
-
-                return Ok(_response);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-
-            _response.StatusCode = HttpStatusCode.InternalServerError;
-            _response.IsSuccess = false;
-            return BadRequest(_response);
-        }
-
+        
         [HttpGet("generate-email-token")]
         public async Task<IActionResult> GenerateEmailToken([FromQuery] string Email, [FromServices] IOptionsSnapshot<BaseUrlOptions> baseUrls)
         {
@@ -505,68 +378,51 @@ namespace RzumeAPI.Controllers
 
 
 
-
-        [HttpGet("google-login")]
-        public IActionResult GoogleLogin()
+        [HttpPost("google-signin")]
+        public async Task<IActionResult> GoogleResponse([FromServices] IOptionsSnapshot<BaseUrlOptions> baseUrls, [FromBody] GoogleLoginRequest model)
         {
-            var authenticationProperties = new AuthenticationProperties
+            var clientId = _clientId;
+            _logger.LogInformation("Google Signin method called with token: {@Request}", model);
+            var payload = await GoogleJsonWebSignature.ValidateAsync(model.UserToken, new GoogleJsonWebSignature.ValidationSettings
             {
-                RedirectUri = Url.Action("GoogleResponse")
+                Audience = [_clientId]
+            });
+
+            var userInfo = new UserInfo
+            {
+                Email = payload.Email,
+                Name = payload.Name,
+                GivenName = payload.GivenName,
+                FamilyName = payload.FamilyName,
+                PictureUrl = payload.Picture,
+                Locale = payload.Locale
             };
 
-            return Challenge(authenticationProperties, GoogleDefaults.AuthenticationScheme);
-        }
 
 
-        [HttpGet("google-response")]
-        public async Task<IActionResult> GoogleResponse([FromServices] IOptionsSnapshot<BaseUrlOptions> baseUrls)
-        {
-            _logger.LogInformation("Google Signup method called");
 
-            var _baseUrls = baseUrls.Value;
-            string clientSideBaseUrl = _baseUrls.ClientBaseUrl;
-            var authenticationResult = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
-            if (!authenticationResult.Succeeded)
+            if (userInfo.Email == null || userInfo.Name == null)
             {
-                return BadRequest("Failed to authenticate with Google.");
-            }
-
-            var claims = authenticationResult.Principal.Identities
-                .FirstOrDefault()?.Claims.Select(claim => new
-                {
-                    claim.Issuer,
-                    claim.OriginalIssuer,
-                    claim.Type,
-                    claim.Value
-                });
-
-            var userEmail = claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-            var userName = claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
-            var userId = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
-
-
-            if (userEmail == null || userName == null || userId == null)
-            {
-                _logger.LogWarning("Failed to retrieve user infomation from google claim");
+                _logger.LogWarning("Failed to retrieve user infomation from userToken");
 
                 return BadRequest("Failed to retrieve user information.");
             }
 
-            _logger.LogInformation("User mail obtained from claim with value: {@Request}", userEmail);
+            _logger.LogInformation("User mail obtained from claim with value: {@Request}", userInfo.Email);
 
             GoogleSigninRequest requestModel = new()
             {
-                Email = userEmail,
-                GoogleId = userId
+                Email = userInfo.Email,
+                Name = userInfo.Name,
+                GivenName = userInfo.GivenName,
+                FamilyName = userInfo.FamilyName
             };
 
             var loginResponse = await _userRepo.Login(requestModel);
 
             if (loginResponse.User == null)
             {
-                RegisterUserResponse response = await _userRepo.Register(requestModel, clientSideBaseUrl)!;
+                RegisterUserResponse response = await _userRepo.Register(requestModel, string.Empty);
                 if (response.User == null)
                 {
                     string responseMsg = response.Message ?? "Error while registering";
@@ -576,8 +432,7 @@ namespace RzumeAPI.Controllers
                     _logger.LogError("Error while registering user. Response: {@Response}", _response);
                     return BadRequest(_response);
                 }
-                User userModel = _mapper.Map<User>(response.User);
-                string token = await _tokenService.GenerateToken(userModel, DateTime.UtcNow.AddHours(5), TokenTypes.Login);
+                string token = await _tokenService.GenerateToken(response.User, DateTime.UtcNow.AddHours(5), TokenTypes.Login);
                 loginResponse = new()
                 {
                     Token = token,
@@ -589,30 +444,23 @@ namespace RzumeAPI.Controllers
 
             }
 
-           
-                _response.StatusCode = HttpStatusCode.OK;
-                _response.IsSuccess = true;
 
-                _response.Result = new ResultObject
-                {
-                    Message = "Login Successful",
-                    Content = loginResponse
-                };
+            _response.StatusCode = HttpStatusCode.OK;
+            _response.IsSuccess = true;
 
-                _logger.LogInformation("User logged in successfully. Response: {@Response}", _response);
+            _response.Result = new ResultObject
+            {
+                Message = "Login Successful",
+                Content = loginResponse
+            };
 
-                return Ok(_response);
-            
+            _logger.LogInformation("User logged in successfully. Response: {@Response}", _response);
+
+            return Ok(_response);
+
 
 
         }
-
-
-        [HttpPost("user-onboarding")]
-
-
-
-
 
 
 

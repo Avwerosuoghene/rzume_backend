@@ -1,0 +1,486 @@
+2024-08-05 13:56:24.810 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/google-signin - null null
+2024-08-05 13:56:24.852 +01:00 [INF] CORS policy execution successful.
+2024-08-05 13:56:24.857 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/google-signin - 204 null null 71.732ms
+2024-08-05 13:56:24.883 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7159/api/v1/user/google-signin - application/json null
+2024-08-05 13:56:24.899 +01:00 [INF] CORS policy execution successful.
+2024-08-05 13:56:24.947 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.GoogleLogin (RzumeAPI)'
+2024-08-05 13:56:25.000 +01:00 [INF] Route matched with {action = "GoogleLogin", controller = "User"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GoogleLogin() on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-05 13:56:25.104 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-05 13:56:25.142 +01:00 [INF] Executing ChallengeResult with authentication schemes (["Google"]).
+2024-08-05 13:56:25.153 +01:00 [INF] AuthenticationScheme: Google was challenged.
+2024-08-05 13:56:25.154 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.GoogleLogin (RzumeAPI) in 152.7188ms
+2024-08-05 13:56:25.155 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.GoogleLogin (RzumeAPI)'
+2024-08-05 13:56:25.156 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7159/api/v1/user/google-signin - 302 0 null 272.632ms
+2024-08-05 14:10:17.325 +01:00 [INF] User profile is available. Using '/Users/avwerosuoghenedarhare-igben/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2024-08-05 14:10:17.805 +01:00 [INF] Now listening on: https://localhost:7159
+2024-08-05 14:10:17.806 +01:00 [INF] Now listening on: http://localhost:5252
+2024-08-05 14:10:17.807 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-08-05 14:10:17.808 +01:00 [INF] Hosting environment: Development
+2024-08-05 14:10:17.808 +01:00 [INF] Content root path: /Users/avwerosuoghenedarhare-igben/Documents/DotNet/RzumeAPI/RzumeAPI
+2024-08-05 14:45:26.960 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/google-signin - null null
+2024-08-05 14:45:27.103 +01:00 [INF] CORS policy execution successful.
+2024-08-05 14:45:27.121 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/google-signin - 204 null null 163.6783ms
+2024-08-05 14:45:27.141 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7159/api/v1/user/google-signin - application/json null
+2024-08-05 14:45:27.144 +01:00 [INF] CORS policy execution successful.
+2024-08-05 14:45:27.192 +01:00 [INF] Executing endpoint '405 HTTP Method Not Supported'
+2024-08-05 14:45:27.193 +01:00 [INF] Executed endpoint '405 HTTP Method Not Supported'
+2024-08-05 14:45:27.193 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7159/api/v1/user/google-signin - 405 0 null 51.8514ms
+2024-08-05 14:46:00.744 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/google-signin - null null
+2024-08-05 14:46:00.748 +01:00 [INF] CORS policy execution successful.
+2024-08-05 14:46:00.748 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/google-signin - 204 null null 29.2101ms
+2024-08-05 14:46:00.753 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7159/api/v1/user/google-signin - application/json null
+2024-08-05 14:46:00.777 +01:00 [INF] CORS policy execution successful.
+2024-08-05 14:46:00.780 +01:00 [INF] Executing endpoint '405 HTTP Method Not Supported'
+2024-08-05 14:46:00.781 +01:00 [INF] Executed endpoint '405 HTTP Method Not Supported'
+2024-08-05 14:46:00.781 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7159/api/v1/user/google-signin - 405 0 null 28.2401ms
+2024-08-05 14:52:50.101 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/register - null null
+2024-08-05 14:52:50.110 +01:00 [INF] CORS policy execution successful.
+2024-08-05 14:52:50.111 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/register - 204 null null 15.0344ms
+2024-08-05 14:52:50.119 +01:00 [INF] Request starting HTTP/2 POST https://localhost:7159/api/v1/user/register - application/json 56
+2024-08-05 14:52:50.167 +01:00 [INF] CORS policy execution successful.
+2024-08-05 14:52:50.176 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.Register (RzumeAPI)'
+2024-08-05 14:52:50.247 +01:00 [INF] Route matched with {action = "Register", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Register(RzumeAPI.Models.Requests.RegistrationRequest, Microsoft.Extensions.Options.IOptionsSnapshot`1[RzumeAPI.Options.BaseUrlOptions]) on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-05 14:52:50.909 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-05 14:52:51.063 +01:00 [INF] Register method called with model: {"Email":"kesuion1@gmail.com","Password":"VGVzdEAxMjM0","$type":"RegistrationRequest"}
+2024-08-05 14:52:51.517 +01:00 [INF] Executed DbCommand (44ms) [Parameters=[@__email_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[GoogleId], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[Email] = @__email_0
+2024-08-05 14:52:51.576 +01:00 [WRN] User already exists and email is confirmed. Response: {"StatusCode":"Conflict","IsSuccess":false,"ErrorMessages":["User already exists"],"Result":null,"$type":"APIResponse"}
+2024-08-05 14:52:51.580 +01:00 [INF] Executing BadRequestObjectResult, writing value of type 'RzumeAPI.Models.APIResponse'.
+2024-08-05 14:52:51.605 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.Register (RzumeAPI) in 1355.2603ms
+2024-08-05 14:52:51.605 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.Register (RzumeAPI)'
+2024-08-05 14:52:51.608 +01:00 [INF] Request finished HTTP/2 POST https://localhost:7159/api/v1/user/register - 400 90 application/json; charset=utf-8 1489.0879ms
+2024-08-05 14:54:24.651 +01:00 [INF] Request starting HTTP/2 POST https://localhost:7159/api/v1/user/google-signin - application/x-www-form-urlencoded 1236
+2024-08-05 14:54:24.665 +01:00 [INF] CORS policy execution successful.
+2024-08-05 14:54:24.674 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.GoogleLogin (RzumeAPI)'
+2024-08-05 14:54:24.682 +01:00 [INF] Route matched with {action = "GoogleLogin", controller = "User"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GoogleLogin(System.Object) on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-05 14:54:24.712 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-05 14:54:24.732 +01:00 [INF] Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.
+2024-08-05 14:54:24.746 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.GoogleLogin (RzumeAPI) in 63.2012ms
+2024-08-05 14:54:24.746 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.GoogleLogin (RzumeAPI)'
+2024-08-05 14:54:24.746 +01:00 [INF] Request finished HTTP/2 POST https://localhost:7159/api/v1/user/google-signin - 415 176 application/problem+json; charset=utf-8 96.7485ms
+2024-08-05 14:54:24.810 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7159/api/v1/user/signup.component.css.map - null null
+2024-08-05 14:54:24.825 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7159/api/v1/user/signup.component.css.map - 404 0 null 15.6202ms
+2024-08-05 14:54:24.854 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7159/api/v1/user/password-strength-checker.component.css.map - null null
+2024-08-05 14:54:24.854 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7159/api/v1/user/authentication.component.css.map - null null
+2024-08-05 14:54:24.855 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7159/api/v1/user/password-strength-checker.component.css.map - 404 0 null 1.6674ms
+2024-08-05 14:54:24.857 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7159/api/v1/user/authentication.component.css.map - 404 0 null 5.7385ms
+2024-08-05 14:54:24.861 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/api/v1/user/authentication.component.css.map, Response status code: 404
+2024-08-05 14:54:24.862 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/api/v1/user/password-strength-checker.component.css.map, Response status code: 404
+2024-08-05 14:54:24.862 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/api/v1/user/signup.component.css.map, Response status code: 404
+2024-08-05 14:54:25.714 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7159/favicon.ico - null null
+2024-08-05 14:54:25.762 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7159/favicon.ico - 404 0 null 47.5979ms
+2024-08-05 14:54:25.762 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7159/favicon.ico, Response status code: 404
+2024-08-05 21:13:00.688 +01:00 [INF] User profile is available. Using '/Users/avwerosuoghenedarhare-igben/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2024-08-05 21:13:02.557 +01:00 [INF] Now listening on: https://localhost:7159
+2024-08-05 21:13:02.578 +01:00 [INF] Now listening on: http://localhost:5252
+2024-08-05 21:13:02.580 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-08-05 21:13:02.581 +01:00 [INF] Hosting environment: Development
+2024-08-05 21:13:02.581 +01:00 [INF] Content root path: /Users/avwerosuoghenedarhare-igben/Documents/DotNet/RzumeAPI/RzumeAPI
+2024-08-05 21:16:44.609 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/google-signin - null null
+2024-08-05 21:16:44.644 +01:00 [INF] CORS policy execution successful.
+2024-08-05 21:16:44.651 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/google-signin - 204 null null 43.2181ms
+2024-08-05 21:16:44.658 +01:00 [INF] Request starting HTTP/2 POST https://localhost:7159/api/v1/user/google-signin - application/json 1404
+2024-08-05 21:16:44.667 +01:00 [INF] CORS policy execution successful.
+2024-08-05 21:16:44.692 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.GoogleResponse (RzumeAPI)'
+2024-08-05 21:16:44.716 +01:00 [INF] Route matched with {action = "GoogleResponse", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GoogleResponse(Microsoft.Extensions.Options.IOptionsSnapshot`1[RzumeAPI.Options.BaseUrlOptions], RzumeAPI.Models.Requests.GoogleLoginRequest) on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-05 21:16:45.358 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-05 21:16:45.412 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.GoogleResponse (RzumeAPI) in 693.1249ms
+2024-08-05 21:16:45.413 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.GoogleResponse (RzumeAPI)'
+2024-08-05 21:16:45.413 +01:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Unable to resolve service for type 'System.String' while attempting to activate 'RzumeAPI.Controllers.UserController'.
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.ThrowHelperUnableToResolveService(Type type, Type requiredBy)
+   at lambda_method10(Closure, IServiceProvider, Object[])
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass6_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2024-08-05 21:16:45.431 +01:00 [INF] Request finished HTTP/2 POST https://localhost:7159/api/v1/user/google-signin - 500 null text/plain; charset=utf-8 772.2968ms
+2024-08-05 21:16:58.050 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/google-signin - null null
+2024-08-05 21:16:58.052 +01:00 [INF] CORS policy execution successful.
+2024-08-05 21:16:58.053 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/google-signin - 204 null null 3.229ms
+2024-08-05 21:16:58.102 +01:00 [INF] Request starting HTTP/2 POST https://localhost:7159/api/v1/user/google-signin - application/json 1404
+2024-08-05 21:16:58.109 +01:00 [INF] CORS policy execution successful.
+2024-08-05 21:16:58.129 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.GoogleResponse (RzumeAPI)'
+2024-08-05 21:16:58.134 +01:00 [INF] Route matched with {action = "GoogleResponse", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GoogleResponse(Microsoft.Extensions.Options.IOptionsSnapshot`1[RzumeAPI.Options.BaseUrlOptions], RzumeAPI.Models.Requests.GoogleLoginRequest) on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-05 21:16:58.177 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-05 21:16:58.182 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.GoogleResponse (RzumeAPI) in 47.0423ms
+2024-08-05 21:16:58.183 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.GoogleResponse (RzumeAPI)'
+2024-08-05 21:16:58.183 +01:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Unable to resolve service for type 'System.String' while attempting to activate 'RzumeAPI.Controllers.UserController'.
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.ThrowHelperUnableToResolveService(Type type, Type requiredBy)
+   at lambda_method10(Closure, IServiceProvider, Object[])
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass6_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2024-08-05 21:16:58.186 +01:00 [INF] Request finished HTTP/2 POST https://localhost:7159/api/v1/user/google-signin - 500 null text/plain; charset=utf-8 84.0769ms
+2024-08-05 21:17:14.655 +01:00 [INF] User profile is available. Using '/Users/avwerosuoghenedarhare-igben/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2024-08-05 21:17:15.146 +01:00 [INF] Now listening on: https://localhost:7159
+2024-08-05 21:17:15.172 +01:00 [INF] Now listening on: http://localhost:5252
+2024-08-05 21:17:15.174 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-08-05 21:17:15.174 +01:00 [INF] Hosting environment: Development
+2024-08-05 21:17:15.174 +01:00 [INF] Content root path: /Users/avwerosuoghenedarhare-igben/Documents/DotNet/RzumeAPI/RzumeAPI
+2024-08-05 21:18:49.434 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/google-signin - null null
+2024-08-05 21:18:49.463 +01:00 [INF] CORS policy execution successful.
+2024-08-05 21:18:49.466 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/google-signin - 204 null null 34.1411ms
+2024-08-05 21:18:49.479 +01:00 [INF] Request starting HTTP/2 POST https://localhost:7159/api/v1/user/google-signin - application/json 1212
+2024-08-05 21:18:49.489 +01:00 [INF] CORS policy execution successful.
+2024-08-05 21:18:49.519 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.GoogleResponse (RzumeAPI)'
+2024-08-05 21:18:49.535 +01:00 [INF] Route matched with {action = "GoogleResponse", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GoogleResponse(Microsoft.Extensions.Options.IOptionsSnapshot`1[RzumeAPI.Options.BaseUrlOptions], RzumeAPI.Models.Requests.GoogleLoginRequest) on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-05 21:18:50.182 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-05 21:18:50.237 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.GoogleResponse (RzumeAPI) in 700.1236ms
+2024-08-05 21:18:50.238 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.GoogleResponse (RzumeAPI)'
+2024-08-05 21:18:50.238 +01:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Unable to resolve service for type 'System.String' while attempting to activate 'RzumeAPI.Controllers.UserController'.
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.ThrowHelperUnableToResolveService(Type type, Type requiredBy)
+   at lambda_method10(Closure, IServiceProvider, Object[])
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass6_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2024-08-05 21:18:50.253 +01:00 [INF] Request finished HTTP/2 POST https://localhost:7159/api/v1/user/google-signin - 500 null text/plain; charset=utf-8 773.9889ms
+2024-08-05 21:21:03.040 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/google-signin - null null
+2024-08-05 21:21:03.045 +01:00 [INF] CORS policy execution successful.
+2024-08-05 21:21:03.046 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/google-signin - 204 null null 6.2577ms
+2024-08-05 21:21:03.084 +01:00 [INF] Request starting HTTP/2 POST https://localhost:7159/api/v1/user/google-signin - application/json 1212
+2024-08-05 21:21:03.098 +01:00 [INF] CORS policy execution successful.
+2024-08-05 21:21:03.148 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.GoogleResponse (RzumeAPI)'
+2024-08-05 21:21:03.153 +01:00 [INF] Route matched with {action = "GoogleResponse", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GoogleResponse(Microsoft.Extensions.Options.IOptionsSnapshot`1[RzumeAPI.Options.BaseUrlOptions], RzumeAPI.Models.Requests.GoogleLoginRequest) on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-05 21:21:03.329 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-05 21:21:03.333 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.GoogleResponse (RzumeAPI) in 179.6975ms
+2024-08-05 21:21:03.334 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.GoogleResponse (RzumeAPI)'
+2024-08-05 21:21:03.335 +01:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Unable to resolve service for type 'System.String' while attempting to activate 'RzumeAPI.Controllers.UserController'.
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.ThrowHelperUnableToResolveService(Type type, Type requiredBy)
+   at lambda_method10(Closure, IServiceProvider, Object[])
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass6_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2024-08-05 21:21:03.339 +01:00 [INF] Request finished HTTP/2 POST https://localhost:7159/api/v1/user/google-signin - 500 null text/plain; charset=utf-8 255.5877ms
+2024-08-05 21:21:36.533 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/login - null null
+2024-08-05 21:21:36.540 +01:00 [INF] CORS policy execution successful.
+2024-08-05 21:21:36.540 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/login - 204 null null 7.5402ms
+2024-08-05 21:21:36.543 +01:00 [INF] Request starting HTTP/2 POST https://localhost:7159/api/v1/user/login - application/json 56
+2024-08-05 21:21:36.571 +01:00 [INF] CORS policy execution successful.
+2024-08-05 21:21:36.576 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.Login (RzumeAPI)'
+2024-08-05 21:21:36.593 +01:00 [INF] Route matched with {action = "Login", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(RzumeAPI.Models.Requests.LoginRequest, Microsoft.Extensions.Options.IOptionsSnapshot`1[RzumeAPI.Options.BaseUrlOptions]) on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-05 21:21:36.604 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-05 21:21:36.608 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.Login (RzumeAPI) in 14.8524ms
+2024-08-05 21:21:36.609 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.Login (RzumeAPI)'
+2024-08-05 21:21:36.609 +01:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Unable to resolve service for type 'System.String' while attempting to activate 'RzumeAPI.Controllers.UserController'.
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.ThrowHelperUnableToResolveService(Type type, Type requiredBy)
+   at lambda_method34(Closure, IServiceProvider, Object[])
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass6_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2024-08-05 21:21:36.610 +01:00 [INF] Request finished HTTP/2 POST https://localhost:7159/api/v1/user/login - 500 null text/plain; charset=utf-8 66.7236ms
+2024-08-05 21:21:58.073 +01:00 [INF] User profile is available. Using '/Users/avwerosuoghenedarhare-igben/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2024-08-05 21:21:58.582 +01:00 [INF] Now listening on: https://localhost:7159
+2024-08-05 21:21:58.582 +01:00 [INF] Now listening on: http://localhost:5252
+2024-08-05 21:21:58.609 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-08-05 21:21:58.635 +01:00 [INF] Hosting environment: Development
+2024-08-05 21:21:58.635 +01:00 [INF] Content root path: /Users/avwerosuoghenedarhare-igben/Documents/DotNet/RzumeAPI/RzumeAPI
+2024-08-05 21:22:00.172 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/login - null null
+2024-08-05 21:22:00.190 +01:00 [INF] CORS policy execution successful.
+2024-08-05 21:22:00.193 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/login - 204 null null 21.6178ms
+2024-08-05 21:22:00.201 +01:00 [INF] Request starting HTTP/2 POST https://localhost:7159/api/v1/user/login - application/json 56
+2024-08-05 21:22:00.209 +01:00 [INF] CORS policy execution successful.
+2024-08-05 21:22:00.224 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.Login (RzumeAPI)'
+2024-08-05 21:22:00.237 +01:00 [INF] Route matched with {action = "Login", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(RzumeAPI.Models.Requests.LoginRequest, Microsoft.Extensions.Options.IOptionsSnapshot`1[RzumeAPI.Options.BaseUrlOptions]) on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-05 21:22:00.728 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-05 21:22:00.779 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.Login (RzumeAPI) in 539.5331ms
+2024-08-05 21:22:00.780 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.Login (RzumeAPI)'
+2024-08-05 21:22:00.780 +01:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Unable to resolve service for type 'System.String' while attempting to activate 'RzumeAPI.Controllers.UserController'.
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.ThrowHelperUnableToResolveService(Type type, Type requiredBy)
+   at lambda_method10(Closure, IServiceProvider, Object[])
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass6_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2024-08-05 21:22:00.798 +01:00 [INF] Request finished HTTP/2 POST https://localhost:7159/api/v1/user/login - 500 null text/plain; charset=utf-8 597.0375ms
+2024-08-05 21:22:13.967 +01:00 [INF] User profile is available. Using '/Users/avwerosuoghenedarhare-igben/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2024-08-05 21:22:14.450 +01:00 [INF] Now listening on: https://localhost:7159
+2024-08-05 21:22:14.450 +01:00 [INF] Now listening on: http://localhost:5252
+2024-08-05 21:22:14.452 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-08-05 21:22:14.453 +01:00 [INF] Hosting environment: Development
+2024-08-05 21:22:14.453 +01:00 [INF] Content root path: /Users/avwerosuoghenedarhare-igben/Documents/DotNet/RzumeAPI/RzumeAPI
+2024-08-05 21:22:16.817 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/login - null null
+2024-08-05 21:22:16.836 +01:00 [INF] CORS policy execution successful.
+2024-08-05 21:22:16.838 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/login - 204 null null 21.966ms
+2024-08-05 21:22:16.846 +01:00 [INF] Request starting HTTP/2 POST https://localhost:7159/api/v1/user/login - application/json 56
+2024-08-05 21:22:16.853 +01:00 [INF] CORS policy execution successful.
+2024-08-05 21:22:16.868 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.Login (RzumeAPI)'
+2024-08-05 21:22:16.883 +01:00 [INF] Route matched with {action = "Login", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(RzumeAPI.Models.Requests.LoginRequest, Microsoft.Extensions.Options.IOptionsSnapshot`1[RzumeAPI.Options.BaseUrlOptions]) on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-05 21:22:17.396 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-05 21:22:17.448 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.Login (RzumeAPI) in 562.8911ms
+2024-08-05 21:22:17.448 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.Login (RzumeAPI)'
+2024-08-05 21:22:17.449 +01:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Unable to resolve service for type 'System.String' while attempting to activate 'RzumeAPI.Controllers.UserController'.
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.ThrowHelperUnableToResolveService(Type type, Type requiredBy)
+   at lambda_method10(Closure, IServiceProvider, Object[])
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass6_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2024-08-05 21:22:17.461 +01:00 [INF] Request finished HTTP/2 POST https://localhost:7159/api/v1/user/login - 500 null text/plain; charset=utf-8 615.3057ms
+2024-08-05 21:22:50.721 +01:00 [INF] User profile is available. Using '/Users/avwerosuoghenedarhare-igben/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2024-08-05 21:22:51.181 +01:00 [INF] Now listening on: https://localhost:7159
+2024-08-05 21:22:51.182 +01:00 [INF] Now listening on: http://localhost:5252
+2024-08-05 21:22:51.192 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-08-05 21:22:51.193 +01:00 [INF] Hosting environment: Development
+2024-08-05 21:22:51.194 +01:00 [INF] Content root path: /Users/avwerosuoghenedarhare-igben/Documents/DotNet/RzumeAPI/RzumeAPI
+2024-08-05 21:22:55.380 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/login - null null
+2024-08-05 21:22:55.399 +01:00 [INF] CORS policy execution successful.
+2024-08-05 21:22:55.401 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/login - 204 null null 21.838ms
+2024-08-05 21:22:55.409 +01:00 [INF] Request starting HTTP/2 POST https://localhost:7159/api/v1/user/login - application/json 56
+2024-08-05 21:22:55.417 +01:00 [INF] CORS policy execution successful.
+2024-08-05 21:22:55.433 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.Login (RzumeAPI)'
+2024-08-05 21:22:55.451 +01:00 [INF] Route matched with {action = "Login", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(RzumeAPI.Models.Requests.LoginRequest, Microsoft.Extensions.Options.IOptionsSnapshot`1[RzumeAPI.Options.BaseUrlOptions]) on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-05 21:22:55.917 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-05 21:22:56.046 +01:00 [INF] Login method called with model: {"Email":"kesuion1@gmail.com","Password":"VGVzdEAxMjM0","$type":"LoginRequest"}
+2024-08-05 21:22:56.469 +01:00 [INF] Executed DbCommand (42ms) [Parameters=[@__ToLower_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[GoogleId], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE ([a].[Email] IS NOT NULL) AND (LOWER([a].[Email]) = @__ToLower_0)
+2024-08-05 21:22:56.714 +01:00 [INF] Executed DbCommand (35ms) [Parameters=[@__p_0='?' (Size = 450), @__p_1='?' (Size = 450), @__p_2='?' (Size = 450)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[UserId], [a].[LoginProvider], [a].[Name], [a].[Value]
+FROM [AspNetUserTokens] AS [a]
+WHERE (([a].[UserId] = @__p_0) AND ([a].[LoginProvider] = @__p_1)) AND ([a].[Name] = @__p_2)
+2024-08-05 21:22:56.746 +01:00 [INF] Executed DbCommand (12ms) [Parameters=[@__normalizedUserName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[GoogleId], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0
+2024-08-05 21:22:56.838 +01:00 [INF] Executed DbCommand (32ms) [Parameters=[@p1='?' (Size = 450), @p2='?' (Size = 450), @p3='?' (Size = 450), @p0='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SET NOCOUNT ON;
+UPDATE [AspNetUserTokens] SET [Value] = @p0
+WHERE [LoginProvider] = @p1 AND [Name] = @p2 AND [UserId] = @p3;
+SELECT @@ROWCOUNT;
+2024-08-05 21:22:56.858 +01:00 [INF] Executed DbCommand (13ms) [Parameters=[@p21='?' (Size = 450), @p0='?' (DbType = Int32), @p1='?' (Size = 4000), @p2='?' (Size = 4000), @p22='?' (Size = 4000), @p3='?' (Size = 256), @p4='?' (DbType = Boolean), @p5='?' (Size = 4000), @p6='?' (Size = 4000), @p7='?' (DbType = Boolean), @p8='?' (DbType = DateTimeOffset), @p9='?' (Size = 4000), @p10='?' (Size = 256), @p11='?' (Size = 256), @p12='?' (DbType = Boolean), @p13='?' (Size = 1) (DbType = Byte), @p14='?' (Size = 4000), @p15='?' (Size = 4000), @p16='?' (DbType = Boolean), @p17='?' (Size = 8000) (DbType = Binary), @p18='?' (Size = 4000), @p19='?' (DbType = Boolean), @p20='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SET NOCOUNT ON;
+UPDATE [AspNetUsers] SET [AccessFailedCount] = @p0, [Bio] = @p1, [ConcurrencyStamp] = @p2, [Email] = @p3, [EmailConfirmed] = @p4, [GoogleId] = @p5, [Location] = @p6, [LockoutEnabled] = @p7, [LockoutEnd] = @p8, [Name] = @p9, [NormalizedEmail] = @p10, [NormalizedUserName] = @p11, [OnBoarded] = @p12, [OnBoardingStage] = @p13, [PasswordHash] = @p14, [PhoneNumber] = @p15, [PhoneNumberConfirmed] = @p16, [ProfilePicture] = @p17, [SecurityStamp] = @p18, [TwoFactorEnabled] = @p19, [UserName] = @p20
+WHERE [Id] = @p21 AND [ConcurrencyStamp] = @p22;
+SELECT @@ROWCOUNT;
+2024-08-05 21:22:56.891 +01:00 [INF] User logged in successfully. Response: {"StatusCode":"OK","IsSuccess":true,"ErrorMessages":[],"Result":{"Message":"Login Successful","Content":{"User":{"FirstName":null,"LastName":null,"UserName":"Kesuion","Email":"kesuion1@gmail.com","OnBoarded":false,"OnBoardingStage":1,"EmailConfirmed":true,"GoogleId":"","$type":"UserDTO"},"Token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiNzZiNGU2NmYtNmIzNS00NGZmLThmNDMtMGFmYTdlMWRjMWRhIiwiZW1haWwiOiJrZXN1aW9uMUBnbWFpbC5jb20iLCJuYmYiOjE3MjI4ODkzNzYsImV4cCI6MTcyMjkwNzM3NiwiaWF0IjoxNzIyODg5Mzc2fQ.CRAPcLkUTHEZDgdpNKYUHlUJGozo5U9zbuMr9X1Q3QQ","Message":"","EmailConfirmed":true,"$type":"LoginResponse"},"$type":"ResultObject"},"$type":"APIResponse"}
+2024-08-05 21:22:56.896 +01:00 [INF] Executing OkObjectResult, writing value of type 'RzumeAPI.Models.APIResponse'.
+2024-08-05 21:22:56.921 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.Login (RzumeAPI) in 1468.2767ms
+2024-08-05 21:22:56.921 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.Login (RzumeAPI)'
+2024-08-05 21:22:56.925 +01:00 [INF] Request finished HTTP/2 POST https://localhost:7159/api/v1/user/login - 200 569 application/json; charset=utf-8 1515.1612ms
+2024-08-05 21:27:32.699 +01:00 [INF] User profile is available. Using '/Users/avwerosuoghenedarhare-igben/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2024-08-05 21:27:33.481 +01:00 [INF] Now listening on: https://localhost:7159
+2024-08-05 21:27:33.505 +01:00 [INF] Now listening on: http://localhost:5252
+2024-08-05 21:27:33.508 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-08-05 21:27:33.509 +01:00 [INF] Hosting environment: Development
+2024-08-05 21:27:33.509 +01:00 [INF] Content root path: /Users/avwerosuoghenedarhare-igben/Documents/DotNet/RzumeAPI/RzumeAPI
+2024-08-05 21:27:39.223 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/login - null null
+2024-08-05 21:27:39.244 +01:00 [INF] CORS policy execution successful.
+2024-08-05 21:27:39.247 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/login - 204 null null 24.4786ms
+2024-08-05 21:27:39.257 +01:00 [INF] Request starting HTTP/2 POST https://localhost:7159/api/v1/user/login - application/json 60
+2024-08-05 21:27:39.264 +01:00 [INF] CORS policy execution successful.
+2024-08-05 21:27:39.282 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.Login (RzumeAPI)'
+2024-08-05 21:27:39.300 +01:00 [INF] Route matched with {action = "Login", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(RzumeAPI.Models.Requests.LoginRequest, Microsoft.Extensions.Options.IOptionsSnapshot`1[RzumeAPI.Options.BaseUrlOptions]) on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-05 21:27:39.777 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-05 21:27:39.901 +01:00 [INF] Login method called with model: {"Email":"kesuion1@gmail.com","Password":"VGVzdEAxMjM0Mw==","$type":"LoginRequest"}
+2024-08-05 21:27:40.309 +01:00 [INF] Executed DbCommand (34ms) [Parameters=[@__ToLower_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[GoogleId], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE ([a].[Email] IS NOT NULL) AND (LOWER([a].[Email]) = @__ToLower_0)
+2024-08-05 21:27:40.429 +01:00 [WRN] Login failed due to incorrect username or password. Response: {"StatusCode":"BadRequest","IsSuccess":false,"ErrorMessages":["Username or password is incorrect"],"Result":null,"$type":"APIResponse"}
+2024-08-05 21:27:40.434 +01:00 [INF] Executing BadRequestObjectResult, writing value of type 'RzumeAPI.Models.APIResponse'.
+2024-08-05 21:27:40.458 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.Login (RzumeAPI) in 1155.5767ms
+2024-08-05 21:27:40.458 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.Login (RzumeAPI)'
+2024-08-05 21:27:40.461 +01:00 [INF] Request finished HTTP/2 POST https://localhost:7159/api/v1/user/login - 400 104 application/json; charset=utf-8 1204.0087ms
+2024-08-05 21:27:46.760 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/google-signin - null null
+2024-08-05 21:27:46.764 +01:00 [INF] CORS policy execution successful.
+2024-08-05 21:27:46.764 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/google-signin - 204 null null 4.2085ms
+2024-08-05 21:27:46.769 +01:00 [INF] Request starting HTTP/2 POST https://localhost:7159/api/v1/user/google-signin - application/json 1212
+2024-08-05 21:27:46.770 +01:00 [INF] CORS policy execution successful.
+2024-08-05 21:27:46.773 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.GoogleResponse (RzumeAPI)'
+2024-08-05 21:27:46.780 +01:00 [INF] Route matched with {action = "GoogleResponse", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GoogleResponse(Microsoft.Extensions.Options.IOptionsSnapshot`1[RzumeAPI.Options.BaseUrlOptions], RzumeAPI.Models.Requests.GoogleLoginRequest) on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-05 21:27:46.807 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-05 21:27:53.449 +01:00 [INF] Google Signin method called with token: {"UserToken":"eyJhbGciOiJSUzI1NiIsImtpZCI6ImUyNmQ5MTdiMWZlOGRlMTMzODJhYTdjYzlhMWQ2ZTkzMjYyZjMzZTIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI0NDMwMTM3OTk3OTAtOWk4azJjcWgwZDE2dGY2cXY0czJrNWNmbDJyZGZnb3UuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI0NDMwMTM3OTk3OTAtOWk4azJjcWgwZDE2dGY2cXY0czJrNWNmbDJyZGZnb3UuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDQyOTk4MjY1MjQzOTYwODkyNjQiLCJlbWFpbCI6Imtlc3Vpb24xQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYmYiOjE3MjI4ODkzNjYsIm5hbWUiOiJBdndlcm9zdW8gSWdiZW4iLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jSjhpLUNUUG43cGl3RXl4ejdBVU51Z2hDZjNuMERkNEYtcDdEbll5NHBhX0ZfendNdz1zOTYtYyIsImdpdmVuX25hbWUiOiJBdndlcm9zdW8iLCJmYW1pbHlfbmFtZSI6IklnYmVuIiwiaWF0IjoxNzIyODg5NjY2LCJleHAiOjE3MjI4OTMyNjYsImp0aSI6ImZmM2E3YzFmMjQwYjAyYWExZDY0NmMzMzZiYTZhNWRmMDVjMTA3YmYifQ.Xkn2qOIpWETaImZFlrd0Y8S8wygi9_niiztDGA-UmGweyy6zB8aIfje-3aKxL4HH_GXd02iTxefevkKH3kW7Sd3d8YiTWiX-yeEs2s7Wk_t4UBN1ZKR9Ehr358wEYHSMi1COIUeURFyNvf9mH3QGzwio6Ujs21AeOctjwJNFhqdK9rJfP44D2cS9H2_m_UY1qYU3xWt2lvAJwvKDSJ_aw4p4iOZNELhIPyeBt8eCuCYwW5BjaCJA0zEuiJjkX1YG3zTPObuwUUid2NMxpEPk2FXSMG0fbtQgXrbdgwX08ZomUeTFiynvThwF1rfdjd7A7NcwctiEpARm5v3QHae20Q","$type":"GoogleLoginRequest"}
+2024-08-05 21:27:57.978 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.GoogleResponse (RzumeAPI) in 11198.041ms
+2024-08-05 21:27:57.979 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.GoogleResponse (RzumeAPI)'
+2024-08-05 21:27:57.980 +01:00 [ERR] An unhandled exception has occurred while executing the request.
+Google.Apis.Auth.InvalidJwtException: JWT contains untrusted 'aud' claim.
+   at Google.Apis.Auth.SignedTokenVerification.VerifySignedTokenAsync[TJswHeader,TJswPayload](SignedToken`2 signedToken, SignedTokenVerificationOptions options, CancellationToken cancellationToken)
+   at Google.Apis.Auth.GoogleJsonWebSignature.ValidateInternalAsync(String jwt, ValidationSettings validationSettings)
+   at RzumeAPI.Controllers.UserController.GoogleResponse(IOptionsSnapshot`1 baseUrls, GoogleLoginRequest model) in /Users/avwerosuoghenedarhare-igben/Documents/DotNet/RzumeAPI/RzumeAPI/Controllers/UserController.cs:line 521
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2024-08-05 21:27:57.993 +01:00 [INF] Request finished HTTP/2 POST https://localhost:7159/api/v1/user/google-signin - 500 null text/plain; charset=utf-8 11224.024ms
+2024-08-05 21:29:48.797 +01:00 [INF] User profile is available. Using '/Users/avwerosuoghenedarhare-igben/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2024-08-05 21:29:49.316 +01:00 [INF] Now listening on: https://localhost:7159
+2024-08-05 21:29:49.342 +01:00 [INF] Now listening on: http://localhost:5252
+2024-08-05 21:29:49.344 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-08-05 21:29:49.344 +01:00 [INF] Hosting environment: Development
+2024-08-05 21:29:49.344 +01:00 [INF] Content root path: /Users/avwerosuoghenedarhare-igben/Documents/DotNet/RzumeAPI/RzumeAPI
+2024-08-05 21:29:54.384 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/google-signin - null null
+2024-08-05 21:29:54.403 +01:00 [INF] CORS policy execution successful.
+2024-08-05 21:29:54.406 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/google-signin - 204 null null 23.0474ms
+2024-08-05 21:29:54.414 +01:00 [INF] Request starting HTTP/2 POST https://localhost:7159/api/v1/user/google-signin - application/json 1212
+2024-08-05 21:29:54.420 +01:00 [INF] CORS policy execution successful.
+2024-08-05 21:29:54.439 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.GoogleResponse (RzumeAPI)'
+2024-08-05 21:29:54.453 +01:00 [INF] Route matched with {action = "GoogleResponse", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GoogleResponse(Microsoft.Extensions.Options.IOptionsSnapshot`1[RzumeAPI.Options.BaseUrlOptions], RzumeAPI.Models.Requests.GoogleLoginRequest) on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-05 21:29:54.941 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-05 21:31:37.811 +01:00 [INF] User profile is available. Using '/Users/avwerosuoghenedarhare-igben/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2024-08-05 21:31:38.374 +01:00 [INF] Now listening on: https://localhost:7159
+2024-08-05 21:31:38.375 +01:00 [INF] Now listening on: http://localhost:5252
+2024-08-05 21:31:38.376 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-08-05 21:31:38.376 +01:00 [INF] Hosting environment: Development
+2024-08-05 21:31:38.377 +01:00 [INF] Content root path: /Users/avwerosuoghenedarhare-igben/Documents/DotNet/RzumeAPI/RzumeAPI
+2024-08-05 21:31:44.187 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/google-signin - null null
+2024-08-05 21:31:44.212 +01:00 [INF] CORS policy execution successful.
+2024-08-05 21:31:44.214 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/google-signin - 204 null null 29.8532ms
+2024-08-05 21:31:44.223 +01:00 [INF] Request starting HTTP/2 POST https://localhost:7159/api/v1/user/google-signin - application/json 1212
+2024-08-05 21:31:44.231 +01:00 [INF] CORS policy execution successful.
+2024-08-05 21:31:44.248 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.GoogleResponse (RzumeAPI)'
+2024-08-05 21:31:44.265 +01:00 [INF] Route matched with {action = "GoogleResponse", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GoogleResponse(Microsoft.Extensions.Options.IOptionsSnapshot`1[RzumeAPI.Options.BaseUrlOptions], RzumeAPI.Models.Requests.GoogleLoginRequest) on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-05 21:31:44.732 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-05 21:31:49.532 +01:00 [INF] Google Signin method called with token: {"UserToken":"eyJhbGciOiJSUzI1NiIsImtpZCI6ImUyNmQ5MTdiMWZlOGRlMTMzODJhYTdjYzlhMWQ2ZTkzMjYyZjMzZTIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI0NDMwMTM3OTk3OTAtOWk4azJjcWgwZDE2dGY2cXY0czJrNWNmbDJyZGZnb3UuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI0NDMwMTM3OTk3OTAtOWk4azJjcWgwZDE2dGY2cXY0czJrNWNmbDJyZGZnb3UuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDQyOTk4MjY1MjQzOTYwODkyNjQiLCJlbWFpbCI6Imtlc3Vpb24xQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYmYiOjE3MjI4ODk2MDQsIm5hbWUiOiJBdndlcm9zdW8gSWdiZW4iLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jSjhpLUNUUG43cGl3RXl4ejdBVU51Z2hDZjNuMERkNEYtcDdEbll5NHBhX0ZfendNdz1zOTYtYyIsImdpdmVuX25hbWUiOiJBdndlcm9zdW8iLCJmYW1pbHlfbmFtZSI6IklnYmVuIiwiaWF0IjoxNzIyODg5OTA0LCJleHAiOjE3MjI4OTM1MDQsImp0aSI6IjJiYmMyNDJhNjQ3MmRjMTg3YTZlODZmY2JiMWFlMmI0MGJmMjllZGUifQ.x55ropxeFiugh7cgPSpns0AGfrugK-E3GttL8kT5qsTiAe8QtlwKB-Kl1a_jvMj90NB8a2rJi4mGeiUXBEt0ammap7SLn6KR1CAeJOXujk9__p_1Rqle3OD5BnsiyOFVyOqtBuM3oGyUz6Xs-ie61pXxH3Cd-yeJqjMmxl3lBFFXYcVbU0RUcEj5Ij9CUhNNsQqADhHmW4-psIlFJNcVj9JDidVi4xwJ5586nrO7MM_xBNAQdCXcQS04yLCVg8XrSA05AjHjbyZ_ysWfYHGESCadY08gO8fsUN19CmBkEJNEQHWYxtRc7K88qLVOXtcGfI1JaRIQDLX6tDNklZCs9g","$type":"GoogleLoginRequest"}
+2024-08-05 21:32:20.580 +01:00 [INF] User profile is available. Using '/Users/avwerosuoghenedarhare-igben/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2024-08-05 21:32:21.095 +01:00 [INF] Now listening on: https://localhost:7159
+2024-08-05 21:32:21.095 +01:00 [INF] Now listening on: http://localhost:5252
+2024-08-05 21:32:21.097 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-08-05 21:32:21.098 +01:00 [INF] Hosting environment: Development
+2024-08-05 21:32:21.098 +01:00 [INF] Content root path: /Users/avwerosuoghenedarhare-igben/Documents/DotNet/RzumeAPI/RzumeAPI
+2024-08-05 21:33:54.372 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/google-signin - null null
+2024-08-05 21:33:54.399 +01:00 [INF] CORS policy execution successful.
+2024-08-05 21:33:54.406 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/google-signin - 204 null null 35.6455ms
+2024-08-05 21:33:54.416 +01:00 [INF] Request starting HTTP/2 POST https://localhost:7159/api/v1/user/google-signin - application/json 1212
+2024-08-05 21:33:54.425 +01:00 [INF] CORS policy execution successful.
+2024-08-05 21:33:54.441 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.GoogleResponse (RzumeAPI)'
+2024-08-05 21:33:54.458 +01:00 [INF] Route matched with {action = "GoogleResponse", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GoogleResponse(Microsoft.Extensions.Options.IOptionsSnapshot`1[RzumeAPI.Options.BaseUrlOptions], RzumeAPI.Models.Requests.GoogleLoginRequest) on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-05 21:33:55.195 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-05 21:33:58.530 +01:00 [INF] Google Signin method called with token: {"UserToken":"eyJhbGciOiJSUzI1NiIsImtpZCI6ImUyNmQ5MTdiMWZlOGRlMTMzODJhYTdjYzlhMWQ2ZTkzMjYyZjMzZTIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI0NDMwMTM3OTk3OTAtOWk4azJjcWgwZDE2dGY2cXY0czJrNWNmbDJyZGZnb3UuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI0NDMwMTM3OTk3OTAtOWk4azJjcWgwZDE2dGY2cXY0czJrNWNmbDJyZGZnb3UuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDQyOTk4MjY1MjQzOTYwODkyNjQiLCJlbWFpbCI6Imtlc3Vpb24xQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYmYiOjE3MjI4ODk3MzQsIm5hbWUiOiJBdndlcm9zdW8gSWdiZW4iLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jSjhpLUNUUG43cGl3RXl4ejdBVU51Z2hDZjNuMERkNEYtcDdEbll5NHBhX0ZfendNdz1zOTYtYyIsImdpdmVuX25hbWUiOiJBdndlcm9zdW8iLCJmYW1pbHlfbmFtZSI6IklnYmVuIiwiaWF0IjoxNzIyODkwMDM0LCJleHAiOjE3MjI4OTM2MzQsImp0aSI6ImEzYzkwYjI0OWJlMWYyM2QyNjJhZDI3ZmNhYmU5Njg1MmNjMjBhMGQifQ.NiHeJY5B0aNw7zniLoe_Ax1PaHlFPHSn963D80ZdZ-_OVzXtxFXAJnZikngWi08uRMkJC2reobGNZVheI9AswsmUxFUX3jmOpzP2uCG6T1aFvQ_wtd1nlTgckWU1qzRbk9p6sXppaKjiBAcQxujavQ020u6AyGBk3aVNBgcQw1GDEi2ZvlF5QPGFuJ4sJVBN3w7ew5o61WzF30vyAr8HTl2rhmxlNwqCjU9POoOQ_V1z1igKi3GkMtunGjC8qzWMiNoTh3MtQpSSAvrFMheQ3mJz5Mx5mrLtzZdCqwKn4qZSEsxEn2G6_4SLYbuNIKC1Za2IytvR15alu_aCZaY4QQ","$type":"GoogleLoginRequest"}
+2024-08-05 21:34:33.992 +01:00 [INF] User profile is available. Using '/Users/avwerosuoghenedarhare-igben/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2024-08-05 21:34:34.463 +01:00 [INF] Now listening on: https://localhost:7159
+2024-08-05 21:34:34.464 +01:00 [INF] Now listening on: http://localhost:5252
+2024-08-05 21:34:34.465 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-08-05 21:34:34.466 +01:00 [INF] Hosting environment: Development
+2024-08-05 21:34:34.466 +01:00 [INF] Content root path: /Users/avwerosuoghenedarhare-igben/Documents/DotNet/RzumeAPI/RzumeAPI
+2024-08-05 21:38:00.045 +01:00 [INF] User profile is available. Using '/Users/avwerosuoghenedarhare-igben/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2024-08-05 21:38:00.652 +01:00 [INF] Now listening on: https://localhost:7159
+2024-08-05 21:38:00.652 +01:00 [INF] Now listening on: http://localhost:5252
+2024-08-05 21:38:00.654 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-08-05 21:38:00.654 +01:00 [INF] Hosting environment: Development
+2024-08-05 21:38:00.654 +01:00 [INF] Content root path: /Users/avwerosuoghenedarhare-igben/Documents/DotNet/RzumeAPI/RzumeAPI
+2024-08-05 21:38:05.586 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/google-signin - null null
+2024-08-05 21:38:05.613 +01:00 [INF] CORS policy execution successful.
+2024-08-05 21:38:05.616 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/google-signin - 204 null null 31.9876ms
+2024-08-05 21:38:05.630 +01:00 [INF] Request starting HTTP/2 POST https://localhost:7159/api/v1/user/google-signin - application/json 1212
+2024-08-05 21:38:05.641 +01:00 [INF] CORS policy execution successful.
+2024-08-05 21:38:05.659 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.GoogleResponse (RzumeAPI)'
+2024-08-05 21:38:05.679 +01:00 [INF] Route matched with {action = "GoogleResponse", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GoogleResponse(Microsoft.Extensions.Options.IOptionsSnapshot`1[RzumeAPI.Options.BaseUrlOptions], RzumeAPI.Models.Requests.GoogleLoginRequest) on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-05 21:38:06.353 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-05 21:38:13.989 +01:00 [INF] Google Signin method called with token: {"UserToken":"eyJhbGciOiJSUzI1NiIsImtpZCI6ImUyNmQ5MTdiMWZlOGRlMTMzODJhYTdjYzlhMWQ2ZTkzMjYyZjMzZTIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI0NDMwMTM3OTk3OTAtOWk4azJjcWgwZDE2dGY2cXY0czJrNWNmbDJyZGZnb3UuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI0NDMwMTM3OTk3OTAtOWk4azJjcWgwZDE2dGY2cXY0czJrNWNmbDJyZGZnb3UuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDQyOTk4MjY1MjQzOTYwODkyNjQiLCJlbWFpbCI6Imtlc3Vpb24xQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYmYiOjE3MjI4ODk5ODQsIm5hbWUiOiJBdndlcm9zdW8gSWdiZW4iLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jSjhpLUNUUG43cGl3RXl4ejdBVU51Z2hDZjNuMERkNEYtcDdEbll5NHBhX0ZfendNdz1zOTYtYyIsImdpdmVuX25hbWUiOiJBdndlcm9zdW8iLCJmYW1pbHlfbmFtZSI6IklnYmVuIiwiaWF0IjoxNzIyODkwMjg0LCJleHAiOjE3MjI4OTM4ODQsImp0aSI6IjI3MzUxOTFmMzAyNWIyNDYxYmI4MzUwZGI0ZWJhNTYzNmM4NmQ4MjYifQ.jJryNH4azesMqWXvATeU6VTt_bUEZfzahtKkVUv09rNHoUleRuZ8f1w_ykfyL2AOTTZXLO0bu_NlwjsbWvH-jZMe92wDxSjqh8fosgPeQaymCmLm1hpd-yrON_2fzxpzpLfYZN5aKcJ6xC9zUiLwHVjRlZezPLcma9B1wD3RI_IjnAsejzNdFxtq25mlsORwajtT2KAw6SDESXBxMotPYFoHtn6H1R-3tbTdkVMRKHGwwaYdPn0vWIWnN7wgXQSXoStmszXFmBumOgQw68vQYSJFhnZ5lvEFCyW1BUATRpoYBGmDThVSZB7T6uJ8BF-SmnvkXuv3IStNPbRO9kzSNA","$type":"GoogleLoginRequest"}
+2024-08-05 21:38:23.969 +01:00 [INF] User mail obtained from claim with value: kesuion1@gmail.com
+2024-08-05 21:38:24.429 +01:00 [INF] Executed DbCommand (40ms) [Parameters=[@__ToLower_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[GoogleId], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE ([a].[Email] IS NOT NULL) AND (LOWER([a].[Email]) = @__ToLower_0)
+2024-08-05 21:38:24.641 +01:00 [INF] Executed DbCommand (40ms) [Parameters=[@__p_0='?' (Size = 450), @__p_1='?' (Size = 450), @__p_2='?' (Size = 450)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[UserId], [a].[LoginProvider], [a].[Name], [a].[Value]
+FROM [AspNetUserTokens] AS [a]
+WHERE (([a].[UserId] = @__p_0) AND ([a].[LoginProvider] = @__p_1)) AND ([a].[Name] = @__p_2)
+2024-08-05 21:38:24.711 +01:00 [INF] Executed DbCommand (48ms) [Parameters=[@__normalizedUserName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[GoogleId], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0
+2024-08-05 21:38:24.806 +01:00 [INF] Executed DbCommand (31ms) [Parameters=[@p1='?' (Size = 450), @p2='?' (Size = 450), @p3='?' (Size = 450), @p0='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SET NOCOUNT ON;
+UPDATE [AspNetUserTokens] SET [Value] = @p0
+WHERE [LoginProvider] = @p1 AND [Name] = @p2 AND [UserId] = @p3;
+SELECT @@ROWCOUNT;
+2024-08-05 21:38:24.824 +01:00 [INF] Executed DbCommand (11ms) [Parameters=[@p21='?' (Size = 450), @p0='?' (DbType = Int32), @p1='?' (Size = 4000), @p2='?' (Size = 4000), @p22='?' (Size = 4000), @p3='?' (Size = 256), @p4='?' (DbType = Boolean), @p5='?' (Size = 4000), @p6='?' (Size = 4000), @p7='?' (DbType = Boolean), @p8='?' (DbType = DateTimeOffset), @p9='?' (Size = 4000), @p10='?' (Size = 256), @p11='?' (Size = 256), @p12='?' (DbType = Boolean), @p13='?' (Size = 1) (DbType = Byte), @p14='?' (Size = 4000), @p15='?' (Size = 4000), @p16='?' (DbType = Boolean), @p17='?' (Size = 8000) (DbType = Binary), @p18='?' (Size = 4000), @p19='?' (DbType = Boolean), @p20='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SET NOCOUNT ON;
+UPDATE [AspNetUsers] SET [AccessFailedCount] = @p0, [Bio] = @p1, [ConcurrencyStamp] = @p2, [Email] = @p3, [EmailConfirmed] = @p4, [GoogleId] = @p5, [Location] = @p6, [LockoutEnabled] = @p7, [LockoutEnd] = @p8, [Name] = @p9, [NormalizedEmail] = @p10, [NormalizedUserName] = @p11, [OnBoarded] = @p12, [OnBoardingStage] = @p13, [PasswordHash] = @p14, [PhoneNumber] = @p15, [PhoneNumberConfirmed] = @p16, [ProfilePicture] = @p17, [SecurityStamp] = @p18, [TwoFactorEnabled] = @p19, [UserName] = @p20
+WHERE [Id] = @p21 AND [ConcurrencyStamp] = @p22;
+SELECT @@ROWCOUNT;
+2024-08-05 21:38:24.855 +01:00 [INF] User logged in successfully. Response: {"StatusCode":"OK","IsSuccess":true,"ErrorMessages":[],"Result":{"Message":"Login Successful","Content":{"User":{"FirstName":null,"LastName":null,"UserName":"Kesuion","Email":"kesuion1@gmail.com","OnBoarded":false,"OnBoardingStage":1,"EmailConfirmed":true,"GoogleId":"","$type":"UserDTO"},"Token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiNzZiNGU2NmYtNmIzNS00NGZmLThmNDMtMGFmYTdlMWRjMWRhIiwiZW1haWwiOiJrZXN1aW9uMUBnbWFpbC5jb20iLCJuYmYiOjE3MjI4OTAzMDQsImV4cCI6MTcyMjkwODMwNCwiaWF0IjoxNzIyODkwMzA0fQ.d0nlqfCA2zGRxiSJtKbYmYXuDLjk7Hw1xXCyqFxsaPg","Message":"","EmailConfirmed":true,"$type":"LoginResponse"},"$type":"ResultObject"},"$type":"APIResponse"}
+2024-08-05 21:38:24.862 +01:00 [INF] Executing OkObjectResult, writing value of type 'RzumeAPI.Models.APIResponse'.
+2024-08-05 21:38:24.888 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.GoogleResponse (RzumeAPI) in 18986.997ms
+2024-08-05 21:38:24.889 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.GoogleResponse (RzumeAPI)'
+2024-08-05 21:38:24.898 +01:00 [INF] Request finished HTTP/2 POST https://localhost:7159/api/v1/user/google-signin - 200 569 application/json; charset=utf-8 19047.9603ms

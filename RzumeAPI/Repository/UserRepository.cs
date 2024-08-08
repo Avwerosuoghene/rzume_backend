@@ -14,12 +14,14 @@ using RzumeAPI.Services;
 namespace RzumeAPI.Repository
 {
     public class UserRepository(ApplicationDbContext db, OtpService otpService,
-        UserManager<User> userManager, IMapper mapper, IEmailRepository emailService, IOtpRepository dbOtp, TokenService tokenService) : IUserRepository
+        UserManager<User> userManager, IMapper mapper, IEmailRepository emailService, IOtpRepository dbOtp, TokenService tokenService, UserService userService) : IUserRepository
     {
         private ApplicationDbContext _db = db;
         private readonly UserManager<User> _userManager = userManager;
         private readonly IEmailRepository _emailService = emailService;
         private readonly IMapper _mapper = mapper;
+
+        private readonly UserService _userService = userService;
 
 
         private readonly IOtpRepository _dbOtp = dbOtp;
@@ -114,13 +116,13 @@ namespace RzumeAPI.Repository
 
 
 
-        public async Task<RegisterUserResponse> Register(object registrationDTO, string clientSideBaseUrl)
+        public async Task<RegisterUserResponse> Register(object registrationDTO, string? clientSideBaseUrl)
         {
 
 
             if (registrationDTO is RegistrationRequest emailRequest)
             {
-                return await HandleEmailSignup(emailRequest, clientSideBaseUrl);
+                return await HandleEmailSignup(emailRequest, clientSideBaseUrl!);
 
 
             }
@@ -141,7 +143,7 @@ namespace RzumeAPI.Repository
         private async Task<RegisterUserResponse> HandleEmailSignup(RegistrationRequest emailRequest, string clientBaseUrl)
         {
 
-            User user = new User
+            User user = new()
             {
                 Email = emailRequest.Email,
                 Name = string.Empty,
@@ -157,7 +159,7 @@ namespace RzumeAPI.Repository
                 if (result.Succeeded)
                 {
                     var userToReturn = _db.ApplicationUsers
-                .FirstOrDefault(u => u.UserName == user.Email);
+                .FirstOrDefault(u => u.Email == user.Email);
 
                     if (userToReturn != null)
                     {
@@ -165,10 +167,9 @@ namespace RzumeAPI.Repository
 
                         await GenerateMail(userToReturn, TokenTypes.SignUp, true, clientBaseUrl, token);
 
-                        UserDTO returnedUser = _mapper.Map<UserDTO>(userToReturn);
                         return new RegisterUserResponse()
                         {
-                            User = returnedUser,
+                            User = userToReturn,
                         };
                     }
                     else
@@ -208,15 +209,18 @@ namespace RzumeAPI.Repository
             User user = new()
             {
                 Email = googleRequest.Email,
-                Name = string.Empty,
+                Name = googleRequest.Name,
+                // FirstName = googleRequest.GivenName,
+                // LastName = googleRequest.FamilyName,
                 NormalizedEmail = googleRequest.Email.ToUpper(),
-                UserName = googleRequest.Email,
+                UserName = googleRequest.GivenName,
                 TwoFactorEnabled = true,
-                GoogleId = googleRequest.GoogleId,
                 EmailConfirmed = true
             };
 
-            IdentityResult result = await _userManager.CreateAsync(user);
+            string defaultPassword = _userService.GenerateDefaultPassword();
+
+            IdentityResult result = await _userManager.CreateAsync(user, defaultPassword);
 
             try
             {
@@ -224,16 +228,15 @@ namespace RzumeAPI.Repository
                 if (result.Succeeded)
                 {
                     var userToReturn = _db.ApplicationUsers
-                .FirstOrDefault(u => u.UserName == user.Email);
+                .FirstOrDefault(u => u.Email == user.Email);
 
                     if (userToReturn != null)
                     {
 
 
-                        UserDTO returnedUser = _mapper.Map<UserDTO>(userToReturn);
                         return new RegisterUserResponse()
                         {
-                            User = returnedUser,
+                            User = userToReturn,
                         };
                     }
                     else
