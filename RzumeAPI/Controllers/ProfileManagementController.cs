@@ -88,7 +88,7 @@ namespace RzumeAPI.Controllers
                         }
 
                         OnboardUserFirstStageRequest onboardUserFirstStagePayload = JsonConvert.DeserializeObject<OnboardUserFirstStageRequest>(onboardUserPayload.OnboardUserPayload.ToString());
-                        response = await _profileRepo.OnboardingFirstStage(onboardUserFirstStagePayload, onboardUserPayload.UserMail);
+                        response = await _profileRepo.OnboardingFirstStage(onboardUserFirstStagePayload, onboardUserPayload.Token);
                         break;
 
                     case 1:
@@ -100,7 +100,7 @@ namespace RzumeAPI.Controllers
                         }
 
                         OnboardUserSecondStageRequest onboardUserSecondStagePayload = JsonConvert.DeserializeObject<OnboardUserSecondStageRequest>(onboardUserPayload.OnboardUserPayload.ToString());
-                        response = await _profileRepo.OnboardingSecondStage(onboardUserSecondStagePayload, onboardUserPayload.UserMail);
+                        response = await _profileRepo.OnboardingSecondStage(onboardUserSecondStagePayload, onboardUserPayload.Token);
                         break;
 
                     case 2:
@@ -112,7 +112,7 @@ namespace RzumeAPI.Controllers
                         }
 
                         OnboardUserThirdStageRequest onboardUserThirdStagePayload = JsonConvert.DeserializeObject<OnboardUserThirdStageRequest>(onboardUserPayload.OnboardUserPayload.ToString());
-                        response = await _profileRepo.OnboardingThirdStage(onboardUserThirdStagePayload, onboardUserPayload.UserMail);
+                        response = await _profileRepo.OnboardingThirdStage(onboardUserThirdStagePayload, onboardUserPayload.Token);
                         break;
 
                     case 3:
@@ -124,7 +124,7 @@ namespace RzumeAPI.Controllers
                         }
 
                         OnboardUserFourthStageRequest onboardUserFourthStagePayload = JsonConvert.DeserializeObject<OnboardUserFourthStageRequest>(onboardUserPayload.OnboardUserPayload.ToString());
-                        response = await _profileRepo.OnboardingFourthStage(onboardUserFourthStagePayload, onboardUserPayload.UserMail);
+                        response = await _profileRepo.OnboardingFourthStage(onboardUserFourthStagePayload, onboardUserPayload.Token);
                         break;
 
                     default:

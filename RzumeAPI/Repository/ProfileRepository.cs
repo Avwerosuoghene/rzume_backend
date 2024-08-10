@@ -16,7 +16,7 @@ using System.Net;
 namespace RzumeAPI.Repository
 {
     public class ProfileRepository(ApplicationDbContext db,
-  IMapper mapper, IUserFileRepository dbUserFile, IEducationRepository dbEducation, IExperienceRepository dbExperience, TokenService tokenService, IEmailRepository emailService, IUserRepository userRepo, UserManager<User> userManager) : IProfileRepository
+  IMapper mapper, IUserFileRepository dbUserFile, IEducationRepository dbEducation, IExperienceRepository dbExperience, TokenService tokenService, IEmailRepository emailService, IUserRepository userRepo, UserManager<User> userManager, UserService userService) : IProfileRepository
     {
         private readonly ApplicationDbContext _db = db;
         private readonly IEducationRepository _dbEducation = dbEducation;
@@ -30,6 +30,9 @@ namespace RzumeAPI.Repository
 
         private readonly UserManager<User> _userManager = userManager;
 
+        private readonly UserService _userService = userService;
+
+
 
 
 
@@ -38,11 +41,15 @@ namespace RzumeAPI.Repository
 
         private readonly IUserFileRepository _dbUserFile = dbUserFile;
 
-        public async Task<GenericResponse> OnboardingFirstStage(OnboardUserFirstStageRequest onboardRequestPayload, string userMail)
+        public async Task<GenericResponse> OnboardingFirstStage(OnboardUserFirstStageRequest onboardRequestPayload, string token)
         {
 
 
-            var user = _db.ApplicationUsers.Where(u => u.Email != null).FirstOrDefault(u => u.Email.ToLower() == userMail.ToLower());
+
+            GetUserFromTokenResponse response = await _userService.GetUserFromToken(token);
+
+            User? user = response.User;
+
             if (user == null)
             {
                 return GenerateErrorResponse(UserStatMsg.NotFound);
@@ -54,13 +61,14 @@ namespace RzumeAPI.Repository
             return GenerateSuccessResponse(SuccessMsg.Updated);
         }
 
-        public async Task<GenericResponse> OnboardingSecondStage(OnboardUserSecondStageRequest onboardRequestPayload, string userMail)
+        public async Task<GenericResponse> OnboardingSecondStage(OnboardUserSecondStageRequest onboardRequestPayload, string token)
         {
 
 
 
-            var user = _db.ApplicationUsers.Where(u => u.Email != null).FirstOrDefault(u => u.Email.ToLower() == userMail.ToLower());
-            if (user == null)
+            GetUserFromTokenResponse response = await _userService.GetUserFromToken(token);
+
+            User? user = response.User; if (user == null)
             {
                 return GenerateErrorResponse(UserStatMsg.NotFound);
             }
@@ -85,10 +93,11 @@ namespace RzumeAPI.Repository
         }
 
 
-        public async Task<GenericResponse> OnboardingThirdStage(OnboardUserThirdStageRequest onboardRequestPayload, string userMail)
+        public async Task<GenericResponse> OnboardingThirdStage(OnboardUserThirdStageRequest onboardRequestPayload, string token)
         {
-            var user = _db.ApplicationUsers.Where(u => u.Email != null).FirstOrDefault(u => u.Email.ToLower() == userMail.ToLower());
-            if (user == null)
+            GetUserFromTokenResponse response = await _userService.GetUserFromToken(token);
+
+            User? user = response.User; if (user == null)
             {
                 return GenerateErrorResponse(UserStatMsg.NotFound);
             }
@@ -118,10 +127,11 @@ namespace RzumeAPI.Repository
         }
 
 
-        public async Task<GenericResponse> OnboardingFourthStage(OnboardUserFourthStageRequest onboardRequestPayload, string userMail)
+        public async Task<GenericResponse> OnboardingFourthStage(OnboardUserFourthStageRequest onboardRequestPayload, string token)
         {
-            var user = _db.ApplicationUsers.Where(u => u.Email != null).FirstOrDefault(u => u.Email.ToLower() == userMail.ToLower());
-            if (user == null)
+    GetUserFromTokenResponse response = await _userService.GetUserFromToken(token);
+
+            User? user = response.User;            if (user == null)
             {
                 return GenerateErrorResponse(UserStatMsg.NotFound);
             }

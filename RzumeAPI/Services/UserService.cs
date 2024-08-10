@@ -1,18 +1,18 @@
+using Microsoft.EntityFrameworkCore;
 using RzumeAPI.Data;
 using RzumeAPI.Models;
+using RzumeAPI.Models.Responses;
+using RzumeAPI.Models.Utilities;
 
 namespace RzumeAPI.Services
 {
-    public class UserService
+    public class UserService(ApplicationDbContext db, TokenService tokenService)
     {
 
-        private ApplicationDbContext _db;
+        private ApplicationDbContext _db = db;
 
+        private readonly TokenService _tokenService = tokenService;
 
-        public UserService(ApplicationDbContext db)
-        {
-            _db = db;
-        }
 
         public User? userExists(string email)
         {
@@ -38,6 +38,48 @@ namespace RzumeAPI.Services
             }
             return new string(passwordChars);
         }
+
+        public async Task<GetUserFromTokenResponse> GetUserFromToken(string token)
+        {
+            TokenServiceResponse tokenServiceResponse = _tokenService.ValidateToken(token);
+            string? userMail = tokenServiceResponse.UserMail;
+            if (userMail == null)
+            {
+                return new GetUserFromTokenResponse()
+                {
+                    User = null,
+                    Message = tokenServiceResponse.Message
+                };
+            }
+
+            if (tokenServiceResponse.Message == TokenStatMsg.TokenExpired)
+            {
+
+
+                return new GetUserFromTokenResponse()
+                {
+                    User = null,
+                    Message = TokenStatMsg.ActivationTokenActive
+                };
+            }
+
+            var user = await _db.ApplicationUsers.FirstOrDefaultAsync(u => u.Email.ToLower() == userMail.ToLower());
+            if (user == null)
+            {
+                return new GetUserFromTokenResponse()
+                {
+                    User = null,
+                    Message = UserStatMsg.NotFound
+                };
+            }
+
+            return new GetUserFromTokenResponse()
+            {
+                User = user,
+                Message = UserStatMsg.Found
+            };
+        }
+
 
     }
 }

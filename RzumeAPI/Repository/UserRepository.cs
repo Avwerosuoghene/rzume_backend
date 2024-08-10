@@ -34,7 +34,7 @@ namespace RzumeAPI.Repository
         {
 
 
-            var activeToken = await _userManager.GetAuthenticationTokenAsync(user, TokenTypes.SignUp, $"{TokenTypes.SignUp}Token");
+            var activeToken = await _userManager.GetAuthenticationTokenAsync(user, TokenTypes.SignUp, $"{TokenTypes.SignUp}");
             if (activeToken != null)
             {
                 TokenServiceResponse tokenServiceResponse = _tokenService.ValidateToken(activeToken);
@@ -60,7 +60,7 @@ namespace RzumeAPI.Repository
 
             try
             {
-                GetUserFromTokenResponse response = await GetUserFromToken(token);
+                GetUserFromTokenResponse response = await _userService.GetUserFromToken(token);
 
                 User? user = response.User;
 
@@ -86,6 +86,8 @@ namespace RzumeAPI.Repository
 
                     };
                 }
+                await _userManager.RemoveAuthenticationTokenAsync(user, TokenTypes.SignUp, $"{TokenTypes.SignUp}");
+
 
                 string loginToken = await _tokenService.GenerateToken(user, DateTime.UtcNow.AddHours(5), TokenTypes.Login);
 
@@ -279,7 +281,7 @@ namespace RzumeAPI.Repository
             try
             {
 
-                GetUserFromTokenResponse response = await GetUserFromToken(token);
+                GetUserFromTokenResponse response = await _userService.GetUserFromToken(token);
 
                 if (response.User == null)
                 {
@@ -320,46 +322,46 @@ namespace RzumeAPI.Repository
 
         }
 
-        private async Task<GetUserFromTokenResponse> GetUserFromToken(string token)
-        {
-            TokenServiceResponse tokenServiceResponse = _tokenService.ValidateToken(token);
-            string? userMail = tokenServiceResponse.UserMail;
-            if (userMail == null)
-            {
-                return new GetUserFromTokenResponse()
-                {
-                    User = null,
-                    Message = tokenServiceResponse.Message
-                };
-            }
+        // private async Task<GetUserFromTokenResponse> GetUserFromToken(string token)
+        // {
+        //     TokenServiceResponse tokenServiceResponse = _tokenService.ValidateToken(token);
+        //     string? userMail = tokenServiceResponse.UserMail;
+        //     if (userMail == null)
+        //     {
+        //         return new GetUserFromTokenResponse()
+        //         {
+        //             User = null,
+        //             Message = tokenServiceResponse.Message
+        //         };
+        //     }
 
-            if (tokenServiceResponse.Message == TokenStatMsg.TokenExpired)
-            {
+        //     if (tokenServiceResponse.Message == TokenStatMsg.TokenExpired)
+        //     {
 
 
-                return new GetUserFromTokenResponse()
-                {
-                    User = null,
-                    Message = TokenStatMsg.ActivationTokenActive
-                };
-            }
+        //         return new GetUserFromTokenResponse()
+        //         {
+        //             User = null,
+        //             Message = TokenStatMsg.ActivationTokenActive
+        //         };
+        //     }
 
-            var user = await _db.ApplicationUsers.FirstOrDefaultAsync(u => u.Email.ToLower() == userMail.ToLower());
-            if (user == null)
-            {
-                return new GetUserFromTokenResponse()
-                {
-                    User = null,
-                    Message = UserStatMsg.NotFound
-                };
-            }
+        //     var user = await _db.ApplicationUsers.FirstOrDefaultAsync(u => u.Email.ToLower() == userMail.ToLower());
+        //     if (user == null)
+        //     {
+        //         return new GetUserFromTokenResponse()
+        //         {
+        //             User = null,
+        //             Message = UserStatMsg.NotFound
+        //         };
+        //     }
 
-            return new GetUserFromTokenResponse()
-            {
-                User = user,
-                Message = UserStatMsg.Found
-            };
-        }
+        //     return new GetUserFromTokenResponse()
+        //     {
+        //         User = user,
+        //         Message = UserStatMsg.Found
+        //     };
+        // }
 
 
         public async Task<User?> GetUserByEmailAsync(string email)
@@ -401,7 +403,7 @@ namespace RzumeAPI.Repository
         public async Task<LoginResponse> Login(object loginRequest)
         {
 
-       
+
 
             if (loginRequest is LoginRequest emailRequest)
             {
@@ -523,7 +525,7 @@ namespace RzumeAPI.Repository
             {
                 return false;
             }
-            await _userManager.RemoveAuthenticationTokenAsync(user, TokenTypes.Login, $"{TokenTypes.Login}Token");
+            await _userManager.RemoveAuthenticationTokenAsync(user, TokenTypes.Login, $"{TokenTypes.Login}");
             return true;
 
         }
