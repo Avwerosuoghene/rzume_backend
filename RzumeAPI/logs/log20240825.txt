@@ -1,0 +1,445 @@
+2024-08-25 17:05:58.850 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/google-signin - null null
+2024-08-25 17:05:58.930 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:05:58.934 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/google-signin - 204 null null 158.4931ms
+2024-08-25 17:05:58.964 +01:00 [INF] Request starting HTTP/2 POST https://localhost:7159/api/v1/user/google-signin - application/json 1212
+2024-08-25 17:05:59.036 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:05:59.048 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.GoogleResponse (RzumeAPI)'
+2024-08-25 17:05:59.053 +01:00 [INF] Route matched with {action = "GoogleResponse", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GoogleResponse(Microsoft.Extensions.Options.IOptionsSnapshot`1[RzumeAPI.Options.BaseUrlOptions], RzumeAPI.Models.Requests.GoogleLoginRequest) on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-25 17:05:59.090 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-25 17:05:59.167 +01:00 [INF] Google Signin method called with token: {"UserToken":"eyJhbGciOiJSUzI1NiIsImtpZCI6ImE0OTM5MWJmNTJiNThjMWQ1NjAyNTVjMmYyYTA0ZTU5ZTIyYTdiNjUiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI0NDMwMTM3OTk3OTAtOWk4azJjcWgwZDE2dGY2cXY0czJrNWNmbDJyZGZnb3UuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI0NDMwMTM3OTk3OTAtOWk4azJjcWgwZDE2dGY2cXY0czJrNWNmbDJyZGZnb3UuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDQyOTk4MjY1MjQzOTYwODkyNjQiLCJlbWFpbCI6Imtlc3Vpb24xQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYmYiOjE3MjQ2MDE2NTgsIm5hbWUiOiJBdndlcm9zdW8gSWdiZW4iLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jSjhpLUNUUG43cGl3RXl4ejdBVU51Z2hDZjNuMERkNEYtcDdEbll5NHBhX0ZfendNdz1zOTYtYyIsImdpdmVuX25hbWUiOiJBdndlcm9zdW8iLCJmYW1pbHlfbmFtZSI6IklnYmVuIiwiaWF0IjoxNzI0NjAxOTU4LCJleHAiOjE3MjQ2MDU1NTgsImp0aSI6ImYxYTgzODk5NGNjZWJlZjRhZWM2Mjg2ZDllNDg0MzVjOWFiNmZlMGEifQ.D31rwsO8yKUfe265e9O6eNIkrDutvAndPhL8wMqifRglcGHgQYm8XSFHtQCcpE7laiudglx3u_e-sVY7jXOOKvBdWRyVusyxFBOcMvpv_tSOMDaVVwNm2ncbJSAdrHRiJQfCFpAWClW0WKXzaoLM4uXd6KCIBdqCe1Eo5dVAGmx-iv-fukj0422mrtwLMDdHcfVDzSCdVRU68NUZhlv3-dL3IMYRBNA8H069IpQZDSKxKdHkFO6TiMaJa5IpriTk5rSrpzGmIGvd2KP57lNbIMtY5r0wuAviC1OmaCrr7GE_VqyGEx_JmAbABWak2qLv6vYtwXOt3nHMRiiWZcAfDA","$type":"GoogleLoginRequest"}
+2024-08-25 17:06:00.261 +01:00 [INF] User mail obtained from claim with value: kesuion1@gmail.com
+2024-08-25 17:06:00.438 +01:00 [INF] Executed DbCommand (50ms) [Parameters=[@__ToLower_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[GoogleId], [a].[LastName], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE ([a].[Email] IS NOT NULL) AND (LOWER([a].[Email]) = @__ToLower_0)
+2024-08-25 17:06:00.544 +01:00 [INF] Executed DbCommand (49ms) [Parameters=[@__p_0='?' (Size = 450), @__p_1='?' (Size = 450), @__p_2='?' (Size = 450)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[UserId], [a].[LoginProvider], [a].[Name], [a].[Value]
+FROM [AspNetUserTokens] AS [a]
+WHERE (([a].[UserId] = @__p_0) AND ([a].[LoginProvider] = @__p_1)) AND ([a].[Name] = @__p_2)
+2024-08-25 17:06:00.575 +01:00 [INF] Executed DbCommand (6ms) [Parameters=[@__normalizedUserName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[GoogleId], [a].[LastName], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0
+2024-08-25 17:06:00.657 +01:00 [INF] Executed DbCommand (47ms) [Parameters=[@p1='?' (Size = 450), @p2='?' (Size = 450), @p3='?' (Size = 450), @p0='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SET NOCOUNT ON;
+UPDATE [AspNetUserTokens] SET [Value] = @p0
+WHERE [LoginProvider] = @p1 AND [Name] = @p2 AND [UserId] = @p3;
+SELECT @@ROWCOUNT;
+2024-08-25 17:06:00.752 +01:00 [INF] Executed DbCommand (26ms) [Parameters=[@p23='?' (Size = 450), @p0='?' (DbType = Int32), @p1='?' (Size = 4000), @p2='?' (Size = 4000), @p24='?' (Size = 4000), @p3='?' (Size = 256), @p4='?' (DbType = Boolean), @p5='?' (Size = 4000), @p6='?' (Size = 4000), @p7='?' (Size = 4000), @p8='?' (Size = 4000), @p9='?' (DbType = Boolean), @p10='?' (DbType = DateTimeOffset), @p11='?' (Size = 4000), @p12='?' (Size = 256), @p13='?' (Size = 256), @p14='?' (DbType = Boolean), @p15='?' (Size = 1) (DbType = Byte), @p16='?' (Size = 4000), @p17='?' (Size = 4000), @p18='?' (DbType = Boolean), @p19='?' (Size = 8000) (DbType = Binary), @p20='?' (Size = 4000), @p21='?' (DbType = Boolean), @p22='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SET NOCOUNT ON;
+UPDATE [AspNetUsers] SET [AccessFailedCount] = @p0, [Bio] = @p1, [ConcurrencyStamp] = @p2, [Email] = @p3, [EmailConfirmed] = @p4, [FirstName] = @p5, [GoogleId] = @p6, [LastName] = @p7, [Location] = @p8, [LockoutEnabled] = @p9, [LockoutEnd] = @p10, [Name] = @p11, [NormalizedEmail] = @p12, [NormalizedUserName] = @p13, [OnBoarded] = @p14, [OnBoardingStage] = @p15, [PasswordHash] = @p16, [PhoneNumber] = @p17, [PhoneNumberConfirmed] = @p18, [ProfilePicture] = @p19, [SecurityStamp] = @p20, [TwoFactorEnabled] = @p21, [UserName] = @p22
+WHERE [Id] = @p23 AND [ConcurrencyStamp] = @p24;
+SELECT @@ROWCOUNT;
+2024-08-25 17:06:00.798 +01:00 [INF] User logged in successfully. Response: {"StatusCode":"OK","IsSuccess":true,"ErrorMessages":[],"Result":{"Message":"Login Successful","Content":{"User":{"UserName":"Kesuion","FirstName":"","LastName":"","Email":"kesuion1@gmail.com","OnBoarded":false,"OnBoardingStage":1,"EmailConfirmed":true,"GoogleId":"","$type":"UserDTO"},"Token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiOWJhOGI5MWUtMzBmYy00OTZiLThlNTItM2NlYzFjOGJlYTI5IiwiZW1haWwiOiJrZXN1aW9uMUBnbWFpbC5jb20iLCJuYmYiOjE3MjQ2MDE5NjAsImV4cCI6MTcyNDYxOTk2MCwiaWF0IjoxNzI0NjAxOTYwfQ.YnT9HHQGx2B01xOjB8rf76yR5TFwLd4ifyrvhzAlz8o","Message":"","EmailConfirmed":true,"$type":"LoginResponse"},"$type":"ResultObject"},"$type":"APIResponse"}
+2024-08-25 17:06:00.803 +01:00 [INF] Executing OkObjectResult, writing value of type 'RzumeAPI.Models.APIResponse'.
+2024-08-25 17:06:00.809 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.GoogleResponse (RzumeAPI) in 1755.1044ms
+2024-08-25 17:06:00.809 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.GoogleResponse (RzumeAPI)'
+2024-08-25 17:06:00.809 +01:00 [INF] Request finished HTTP/2 POST https://localhost:7159/api/v1/user/google-signin - 200 565 application/json; charset=utf-8 1870.7725ms
+2024-08-25 17:06:00.820 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - null null
+2024-08-25 17:06:00.895 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:06:00.895 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - 204 null null 74.7016ms
+2024-08-25 17:06:00.902 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7159/api/v1/user/active-user - application/json null
+2024-08-25 17:06:00.903 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:06:00.903 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:06:00.903 +01:00 [INF] Route matched with {action = "GetActiveUser", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetActiveUser() on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-25 17:06:00.907 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-25 17:06:00.908 +01:00 [INF] GetActiveUser method called
+2024-08-25 17:06:00.929 +01:00 [INF] Executed DbCommand (11ms) [Parameters=[@__ToLower_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[GoogleId], [a].[LastName], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE LOWER([a].[Email]) = @__ToLower_0
+2024-08-25 17:06:00.930 +01:00 [INF] Active user retrieved successfully. Response: {"StatusCode":"OK","IsSuccess":true,"ErrorMessages":[],"Result":{"Message":"User Retrieved Succesfully","Content":{"User":{"UserName":"Kesuion","FirstName":"","LastName":"","Email":"kesuion1@gmail.com","OnBoarded":false,"OnBoardingStage":1,"EmailConfirmed":true,"GoogleId":"","$type":"UserDTO"},"Message":"Success","$type":"GetActiveUserResponse"},"$type":"ResultObject"},"$type":"APIResponse"}
+2024-08-25 17:06:00.930 +01:00 [INF] Executing OkObjectResult, writing value of type 'RzumeAPI.Models.APIResponse'.
+2024-08-25 17:06:00.931 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI) in 27.6028ms
+2024-08-25 17:06:00.931 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:06:00.932 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7159/api/v1/user/active-user - 200 298 application/json; charset=utf-8 30.297ms
+2024-08-25 17:11:46.187 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - null null
+2024-08-25 17:11:46.259 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:11:46.260 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - 204 null null 123.812ms
+2024-08-25 17:11:46.297 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7159/api/v1/user/active-user - application/json null
+2024-08-25 17:11:46.298 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:11:46.298 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:11:46.300 +01:00 [INF] Route matched with {action = "GetActiveUser", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetActiveUser() on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-25 17:11:46.308 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-25 17:11:46.309 +01:00 [INF] GetActiveUser method called
+2024-08-25 17:11:46.357 +01:00 [INF] Executed DbCommand (42ms) [Parameters=[@__ToLower_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[GoogleId], [a].[LastName], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE LOWER([a].[Email]) = @__ToLower_0
+2024-08-25 17:11:46.358 +01:00 [INF] Active user retrieved successfully. Response: {"StatusCode":"OK","IsSuccess":true,"ErrorMessages":[],"Result":{"Message":"User Retrieved Succesfully","Content":{"User":{"UserName":"Kesuion","FirstName":"","LastName":"","Email":"kesuion1@gmail.com","OnBoarded":false,"OnBoardingStage":1,"EmailConfirmed":true,"GoogleId":"","$type":"UserDTO"},"Message":"Success","$type":"GetActiveUserResponse"},"$type":"ResultObject"},"$type":"APIResponse"}
+2024-08-25 17:11:46.359 +01:00 [INF] Executing OkObjectResult, writing value of type 'RzumeAPI.Models.APIResponse'.
+2024-08-25 17:11:46.360 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI) in 59.0022ms
+2024-08-25 17:11:46.360 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:11:46.360 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7159/api/v1/user/active-user - 200 298 application/json; charset=utf-8 87.2269ms
+2024-08-25 17:11:56.589 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - null null
+2024-08-25 17:11:56.636 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:11:56.637 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - 204 null null 123.9572ms
+2024-08-25 17:11:56.665 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7159/api/v1/user/active-user - application/json null
+2024-08-25 17:11:56.690 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:11:56.691 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:11:56.691 +01:00 [INF] Route matched with {action = "GetActiveUser", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetActiveUser() on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-25 17:11:56.700 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-25 17:11:56.703 +01:00 [INF] GetActiveUser method called
+2024-08-25 17:11:56.750 +01:00 [INF] Executed DbCommand (33ms) [Parameters=[@__ToLower_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[GoogleId], [a].[LastName], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE LOWER([a].[Email]) = @__ToLower_0
+2024-08-25 17:11:56.754 +01:00 [INF] Active user retrieved successfully. Response: {"StatusCode":"OK","IsSuccess":true,"ErrorMessages":[],"Result":{"Message":"User Retrieved Succesfully","Content":{"User":{"UserName":"Kesuion","FirstName":"","LastName":"","Email":"kesuion1@gmail.com","OnBoarded":false,"OnBoardingStage":1,"EmailConfirmed":true,"GoogleId":"","$type":"UserDTO"},"Message":"Success","$type":"GetActiveUserResponse"},"$type":"ResultObject"},"$type":"APIResponse"}
+2024-08-25 17:11:56.754 +01:00 [INF] Executing OkObjectResult, writing value of type 'RzumeAPI.Models.APIResponse'.
+2024-08-25 17:11:56.755 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI) in 64.1346ms
+2024-08-25 17:11:56.756 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:11:56.756 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7159/api/v1/user/active-user - 200 298 application/json; charset=utf-8 91.0201ms
+2024-08-25 17:12:01.770 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - null null
+2024-08-25 17:12:01.820 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:12:01.820 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - 204 null null 49.5889ms
+2024-08-25 17:12:01.848 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7159/api/v1/user/active-user - application/json null
+2024-08-25 17:12:01.917 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:12:01.917 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:12:01.918 +01:00 [INF] Route matched with {action = "GetActiveUser", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetActiveUser() on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-25 17:12:01.920 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-25 17:12:01.920 +01:00 [INF] GetActiveUser method called
+2024-08-25 17:12:01.972 +01:00 [INF] Executed DbCommand (50ms) [Parameters=[@__ToLower_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[GoogleId], [a].[LastName], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE LOWER([a].[Email]) = @__ToLower_0
+2024-08-25 17:12:02.021 +01:00 [INF] Active user retrieved successfully. Response: {"StatusCode":"OK","IsSuccess":true,"ErrorMessages":[],"Result":{"Message":"User Retrieved Succesfully","Content":{"User":{"UserName":"Kesuion","FirstName":"","LastName":"","Email":"kesuion1@gmail.com","OnBoarded":false,"OnBoardingStage":1,"EmailConfirmed":true,"GoogleId":"","$type":"UserDTO"},"Message":"Success","$type":"GetActiveUserResponse"},"$type":"ResultObject"},"$type":"APIResponse"}
+2024-08-25 17:12:02.105 +01:00 [INF] Executing OkObjectResult, writing value of type 'RzumeAPI.Models.APIResponse'.
+2024-08-25 17:12:02.131 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI) in 212.6876ms
+2024-08-25 17:12:02.179 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:12:02.181 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7159/api/v1/user/active-user - 200 298 application/json; charset=utf-8 332.9295ms
+2024-08-25 17:12:02.773 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7159/api/v1/user/active-user - application/json null
+2024-08-25 17:12:02.774 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:12:02.774 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:12:02.774 +01:00 [INF] Route matched with {action = "GetActiveUser", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetActiveUser() on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-25 17:12:02.775 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-25 17:12:02.776 +01:00 [INF] GetActiveUser method called
+2024-08-25 17:12:02.781 +01:00 [INF] Executed DbCommand (4ms) [Parameters=[@__ToLower_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[GoogleId], [a].[LastName], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE LOWER([a].[Email]) = @__ToLower_0
+2024-08-25 17:12:02.781 +01:00 [INF] Active user retrieved successfully. Response: {"StatusCode":"OK","IsSuccess":true,"ErrorMessages":[],"Result":{"Message":"User Retrieved Succesfully","Content":{"User":{"UserName":"Kesuion","FirstName":"","LastName":"","Email":"kesuion1@gmail.com","OnBoarded":false,"OnBoardingStage":1,"EmailConfirmed":true,"GoogleId":"","$type":"UserDTO"},"Message":"Success","$type":"GetActiveUserResponse"},"$type":"ResultObject"},"$type":"APIResponse"}
+2024-08-25 17:12:02.781 +01:00 [INF] Executing OkObjectResult, writing value of type 'RzumeAPI.Models.APIResponse'.
+2024-08-25 17:12:02.782 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI) in 8.5394ms
+2024-08-25 17:12:02.782 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:12:02.782 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7159/api/v1/user/active-user - 200 298 application/json; charset=utf-8 30.2916ms
+2024-08-25 17:12:05.791 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7159/api/v1/user/active-user - application/json null
+2024-08-25 17:12:05.816 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:12:05.817 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:12:05.817 +01:00 [INF] Route matched with {action = "GetActiveUser", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetActiveUser() on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-25 17:12:05.820 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-25 17:12:05.821 +01:00 [INF] GetActiveUser method called
+2024-08-25 17:12:05.944 +01:00 [INF] Executed DbCommand (94ms) [Parameters=[@__ToLower_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[GoogleId], [a].[LastName], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE LOWER([a].[Email]) = @__ToLower_0
+2024-08-25 17:12:06.070 +01:00 [INF] Active user retrieved successfully. Response: {"StatusCode":"OK","IsSuccess":true,"ErrorMessages":[],"Result":{"Message":"User Retrieved Succesfully","Content":{"User":{"UserName":"Kesuion","FirstName":"","LastName":"","Email":"kesuion1@gmail.com","OnBoarded":false,"OnBoardingStage":1,"EmailConfirmed":true,"GoogleId":"","$type":"UserDTO"},"Message":"Success","$type":"GetActiveUserResponse"},"$type":"ResultObject"},"$type":"APIResponse"}
+2024-08-25 17:12:06.121 +01:00 [INF] Executing OkObjectResult, writing value of type 'RzumeAPI.Models.APIResponse'.
+2024-08-25 17:12:06.149 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI) in 332.0274ms
+2024-08-25 17:12:06.149 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:12:06.149 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7159/api/v1/user/active-user - 200 298 application/json; charset=utf-8 412.3028ms
+2024-08-25 17:12:19.101 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - null null
+2024-08-25 17:12:19.102 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:12:19.103 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - 204 null null 27.3417ms
+2024-08-25 17:12:19.104 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7159/api/v1/user/active-user - application/json null
+2024-08-25 17:12:19.128 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:12:19.129 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:12:19.129 +01:00 [INF] Route matched with {action = "GetActiveUser", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetActiveUser() on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-25 17:12:19.132 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-25 17:12:19.133 +01:00 [INF] GetActiveUser method called
+2024-08-25 17:12:19.213 +01:00 [INF] Executed DbCommand (52ms) [Parameters=[@__ToLower_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[GoogleId], [a].[LastName], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE LOWER([a].[Email]) = @__ToLower_0
+2024-08-25 17:12:19.308 +01:00 [INF] Active user retrieved successfully. Response: {"StatusCode":"OK","IsSuccess":true,"ErrorMessages":[],"Result":{"Message":"User Retrieved Succesfully","Content":{"User":{"UserName":"Kesuion","FirstName":"","LastName":"","Email":"kesuion1@gmail.com","OnBoarded":false,"OnBoardingStage":1,"EmailConfirmed":true,"GoogleId":"","$type":"UserDTO"},"Message":"Success","$type":"GetActiveUserResponse"},"$type":"ResultObject"},"$type":"APIResponse"}
+2024-08-25 17:12:19.431 +01:00 [INF] Executing OkObjectResult, writing value of type 'RzumeAPI.Models.APIResponse'.
+2024-08-25 17:12:19.528 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI) in 397.915ms
+2024-08-25 17:12:19.528 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:12:19.528 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7159/api/v1/user/active-user - 200 298 application/json; charset=utf-8 423.6883ms
+2024-08-25 17:13:05.176 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - null null
+2024-08-25 17:13:05.201 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:13:05.201 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - 204 null null 100.9352ms
+2024-08-25 17:13:05.225 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7159/api/v1/user/active-user - application/json null
+2024-08-25 17:13:05.256 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:13:05.257 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:13:05.257 +01:00 [INF] Route matched with {action = "GetActiveUser", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetActiveUser() on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-25 17:13:05.261 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-25 17:13:05.261 +01:00 [INF] GetActiveUser method called
+2024-08-25 17:13:05.394 +01:00 [INF] Executed DbCommand (102ms) [Parameters=[@__ToLower_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[GoogleId], [a].[LastName], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE LOWER([a].[Email]) = @__ToLower_0
+2024-08-25 17:13:05.541 +01:00 [INF] Active user retrieved successfully. Response: {"StatusCode":"OK","IsSuccess":true,"ErrorMessages":[],"Result":{"Message":"User Retrieved Succesfully","Content":{"User":{"UserName":"Kesuion","FirstName":"","LastName":"","Email":"kesuion1@gmail.com","OnBoarded":false,"OnBoardingStage":1,"EmailConfirmed":true,"GoogleId":"","$type":"UserDTO"},"Message":"Success","$type":"GetActiveUserResponse"},"$type":"ResultObject"},"$type":"APIResponse"}
+2024-08-25 17:13:05.652 +01:00 [INF] Executing OkObjectResult, writing value of type 'RzumeAPI.Models.APIResponse'.
+2024-08-25 17:13:05.653 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI) in 395.3702ms
+2024-08-25 17:13:05.653 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:13:05.653 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7159/api/v1/user/active-user - 200 298 application/json; charset=utf-8 428.0577ms
+2024-08-25 17:13:31.814 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - null null
+2024-08-25 17:13:31.823 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:13:31.823 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - 204 null null 57.3481ms
+2024-08-25 17:13:31.854 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7159/api/v1/user/active-user - application/json null
+2024-08-25 17:13:31.855 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:13:31.855 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:13:31.857 +01:00 [INF] Route matched with {action = "GetActiveUser", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetActiveUser() on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-25 17:13:31.865 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-25 17:13:31.867 +01:00 [INF] GetActiveUser method called
+2024-08-25 17:13:31.930 +01:00 [INF] Executed DbCommand (51ms) [Parameters=[@__ToLower_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[GoogleId], [a].[LastName], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE LOWER([a].[Email]) = @__ToLower_0
+2024-08-25 17:13:31.936 +01:00 [INF] Active user retrieved successfully. Response: {"StatusCode":"OK","IsSuccess":true,"ErrorMessages":[],"Result":{"Message":"User Retrieved Succesfully","Content":{"User":{"UserName":"Kesuion","FirstName":"","LastName":"","Email":"kesuion1@gmail.com","OnBoarded":false,"OnBoardingStage":1,"EmailConfirmed":true,"GoogleId":"","$type":"UserDTO"},"Message":"Success","$type":"GetActiveUserResponse"},"$type":"ResultObject"},"$type":"APIResponse"}
+2024-08-25 17:13:31.937 +01:00 [INF] Executing OkObjectResult, writing value of type 'RzumeAPI.Models.APIResponse'.
+2024-08-25 17:13:31.939 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI) in 81.844ms
+2024-08-25 17:13:31.939 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:13:31.939 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7159/api/v1/user/active-user - 200 298 application/json; charset=utf-8 85.0492ms
+2024-08-25 17:13:43.040 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - null null
+2024-08-25 17:13:43.072 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:13:43.073 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - 204 null null 83.5731ms
+2024-08-25 17:13:43.079 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7159/api/v1/user/active-user - application/json null
+2024-08-25 17:13:43.102 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:13:43.103 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:13:43.103 +01:00 [INF] Route matched with {action = "GetActiveUser", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetActiveUser() on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-25 17:13:43.107 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-25 17:13:43.109 +01:00 [INF] GetActiveUser method called
+2024-08-25 17:13:43.157 +01:00 [INF] Executed DbCommand (32ms) [Parameters=[@__ToLower_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[GoogleId], [a].[LastName], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE LOWER([a].[Email]) = @__ToLower_0
+2024-08-25 17:13:43.170 +01:00 [INF] Active user retrieved successfully. Response: {"StatusCode":"OK","IsSuccess":true,"ErrorMessages":[],"Result":{"Message":"User Retrieved Succesfully","Content":{"User":{"UserName":"Kesuion","FirstName":"","LastName":"","Email":"kesuion1@gmail.com","OnBoarded":false,"OnBoardingStage":1,"EmailConfirmed":true,"GoogleId":"","$type":"UserDTO"},"Message":"Success","$type":"GetActiveUserResponse"},"$type":"ResultObject"},"$type":"APIResponse"}
+2024-08-25 17:13:43.171 +01:00 [INF] Executing OkObjectResult, writing value of type 'RzumeAPI.Models.APIResponse'.
+2024-08-25 17:13:43.184 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI) in 80.454ms
+2024-08-25 17:13:43.187 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:13:43.187 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7159/api/v1/user/active-user - 200 298 application/json; charset=utf-8 107.8661ms
+2024-08-25 17:14:31.263 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - null null
+2024-08-25 17:14:31.334 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:14:31.335 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - 204 null null 120.2993ms
+2024-08-25 17:14:31.359 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7159/api/v1/user/active-user - application/json null
+2024-08-25 17:14:31.384 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:14:31.385 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:14:31.385 +01:00 [INF] Route matched with {action = "GetActiveUser", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetActiveUser() on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-25 17:14:31.389 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-25 17:14:31.389 +01:00 [INF] GetActiveUser method called
+2024-08-25 17:14:31.468 +01:00 [INF] Executed DbCommand (51ms) [Parameters=[@__ToLower_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[GoogleId], [a].[LastName], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE LOWER([a].[Email]) = @__ToLower_0
+2024-08-25 17:14:31.570 +01:00 [INF] Active user retrieved successfully. Response: {"StatusCode":"OK","IsSuccess":true,"ErrorMessages":[],"Result":{"Message":"User Retrieved Succesfully","Content":{"User":{"UserName":"Kesuion","FirstName":"","LastName":"","Email":"kesuion1@gmail.com","OnBoarded":false,"OnBoardingStage":1,"EmailConfirmed":true,"GoogleId":"","$type":"UserDTO"},"Message":"Success","$type":"GetActiveUserResponse"},"$type":"ResultObject"},"$type":"APIResponse"}
+2024-08-25 17:14:31.684 +01:00 [INF] Executing OkObjectResult, writing value of type 'RzumeAPI.Models.APIResponse'.
+2024-08-25 17:14:31.712 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI) in 326.7222ms
+2024-08-25 17:14:31.713 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:14:31.764 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7159/api/v1/user/active-user - 200 298 application/json; charset=utf-8 405.2529ms
+2024-08-25 17:15:11.477 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - null null
+2024-08-25 17:15:11.479 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:15:11.481 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - 204 null null 50.5542ms
+2024-08-25 17:15:11.516 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7159/api/v1/user/active-user - application/json null
+2024-08-25 17:15:11.567 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:15:11.568 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:15:11.568 +01:00 [INF] Route matched with {action = "GetActiveUser", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetActiveUser() on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-25 17:15:11.571 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-25 17:15:11.571 +01:00 [INF] GetActiveUser method called
+2024-08-25 17:15:11.627 +01:00 [INF] Executed DbCommand (52ms) [Parameters=[@__ToLower_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[GoogleId], [a].[LastName], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE LOWER([a].[Email]) = @__ToLower_0
+2024-08-25 17:15:11.789 +01:00 [INF] Active user retrieved successfully. Response: {"StatusCode":"OK","IsSuccess":true,"ErrorMessages":[],"Result":{"Message":"User Retrieved Succesfully","Content":{"User":{"UserName":"Kesuion","FirstName":"","LastName":"","Email":"kesuion1@gmail.com","OnBoarded":false,"OnBoardingStage":1,"EmailConfirmed":true,"GoogleId":"","$type":"UserDTO"},"Message":"Success","$type":"GetActiveUserResponse"},"$type":"ResultObject"},"$type":"APIResponse"}
+2024-08-25 17:15:11.815 +01:00 [INF] Executing OkObjectResult, writing value of type 'RzumeAPI.Models.APIResponse'.
+2024-08-25 17:15:11.816 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI) in 248.0757ms
+2024-08-25 17:15:11.816 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:15:11.817 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7159/api/v1/user/active-user - 200 298 application/json; charset=utf-8 325.6192ms
+2024-08-25 17:15:22.082 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - null null
+2024-08-25 17:15:22.083 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:15:22.083 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - 204 null null 75.4546ms
+2024-08-25 17:15:22.085 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7159/api/v1/user/active-user - application/json null
+2024-08-25 17:15:22.086 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:15:22.086 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:15:22.087 +01:00 [INF] Route matched with {action = "GetActiveUser", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetActiveUser() on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-25 17:15:22.090 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-25 17:15:22.091 +01:00 [INF] GetActiveUser method called
+2024-08-25 17:15:22.218 +01:00 [INF] Executed DbCommand (99ms) [Parameters=[@__ToLower_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[GoogleId], [a].[LastName], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE LOWER([a].[Email]) = @__ToLower_0
+2024-08-25 17:15:22.366 +01:00 [INF] Active user retrieved successfully. Response: {"StatusCode":"OK","IsSuccess":true,"ErrorMessages":[],"Result":{"Message":"User Retrieved Succesfully","Content":{"User":{"UserName":"Kesuion","FirstName":"","LastName":"","Email":"kesuion1@gmail.com","OnBoarded":false,"OnBoardingStage":1,"EmailConfirmed":true,"GoogleId":"","$type":"UserDTO"},"Message":"Success","$type":"GetActiveUserResponse"},"$type":"ResultObject"},"$type":"APIResponse"}
+2024-08-25 17:15:22.366 +01:00 [INF] Executing OkObjectResult, writing value of type 'RzumeAPI.Models.APIResponse'.
+2024-08-25 17:15:22.366 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI) in 278.9325ms
+2024-08-25 17:15:22.366 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:15:22.366 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7159/api/v1/user/active-user - 200 298 application/json; charset=utf-8 281.1789ms
+2024-08-25 17:15:36.850 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - null null
+2024-08-25 17:15:36.924 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:15:36.947 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - 204 null null 96.4545ms
+2024-08-25 17:15:36.949 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7159/api/v1/user/active-user - application/json null
+2024-08-25 17:15:36.950 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:15:36.951 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:15:36.951 +01:00 [INF] Route matched with {action = "GetActiveUser", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetActiveUser() on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-25 17:15:36.954 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-25 17:15:36.955 +01:00 [INF] GetActiveUser method called
+2024-08-25 17:15:37.061 +01:00 [INF] Executed DbCommand (80ms) [Parameters=[@__ToLower_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[GoogleId], [a].[LastName], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE LOWER([a].[Email]) = @__ToLower_0
+2024-08-25 17:15:37.267 +01:00 [INF] Active user retrieved successfully. Response: {"StatusCode":"OK","IsSuccess":true,"ErrorMessages":[],"Result":{"Message":"User Retrieved Succesfully","Content":{"User":{"UserName":"Kesuion","FirstName":"","LastName":"","Email":"kesuion1@gmail.com","OnBoarded":false,"OnBoardingStage":1,"EmailConfirmed":true,"GoogleId":"","$type":"UserDTO"},"Message":"Success","$type":"GetActiveUserResponse"},"$type":"ResultObject"},"$type":"APIResponse"}
+2024-08-25 17:15:37.319 +01:00 [INF] Executing OkObjectResult, writing value of type 'RzumeAPI.Models.APIResponse'.
+2024-08-25 17:15:37.320 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI) in 368.0512ms
+2024-08-25 17:15:37.320 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:15:37.320 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7159/api/v1/user/active-user - 200 298 application/json; charset=utf-8 370.9035ms
+2024-08-25 17:16:07.461 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - null null
+2024-08-25 17:16:07.463 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:16:07.463 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - 204 null null 52.4838ms
+2024-08-25 17:16:07.466 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7159/api/v1/user/active-user - application/json null
+2024-08-25 17:16:07.466 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:16:07.467 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:16:07.467 +01:00 [INF] Route matched with {action = "GetActiveUser", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetActiveUser() on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-25 17:16:07.470 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-25 17:16:07.471 +01:00 [INF] GetActiveUser method called
+2024-08-25 17:16:07.508 +01:00 [INF] Executed DbCommand (33ms) [Parameters=[@__ToLower_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[GoogleId], [a].[LastName], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE LOWER([a].[Email]) = @__ToLower_0
+2024-08-25 17:16:07.509 +01:00 [INF] Active user retrieved successfully. Response: {"StatusCode":"OK","IsSuccess":true,"ErrorMessages":[],"Result":{"Message":"User Retrieved Succesfully","Content":{"User":{"UserName":"Kesuion","FirstName":"","LastName":"","Email":"kesuion1@gmail.com","OnBoarded":false,"OnBoardingStage":1,"EmailConfirmed":true,"GoogleId":"","$type":"UserDTO"},"Message":"Success","$type":"GetActiveUserResponse"},"$type":"ResultObject"},"$type":"APIResponse"}
+2024-08-25 17:16:07.509 +01:00 [INF] Executing OkObjectResult, writing value of type 'RzumeAPI.Models.APIResponse'.
+2024-08-25 17:16:07.510 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI) in 42.7025ms
+2024-08-25 17:16:07.510 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:16:07.510 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7159/api/v1/user/active-user - 200 298 application/json; charset=utf-8 44.7845ms
+2024-08-25 17:16:20.979 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - null null
+2024-08-25 17:16:20.981 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:16:20.981 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - 204 null null 52.6542ms
+2024-08-25 17:16:21.004 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7159/api/v1/user/active-user - application/json null
+2024-08-25 17:16:21.072 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:16:21.073 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:16:21.074 +01:00 [INF] Route matched with {action = "GetActiveUser", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetActiveUser() on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-25 17:16:21.077 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-25 17:16:21.078 +01:00 [INF] GetActiveUser method called
+2024-08-25 17:16:21.112 +01:00 [INF] Executed DbCommand (29ms) [Parameters=[@__ToLower_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[GoogleId], [a].[LastName], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE LOWER([a].[Email]) = @__ToLower_0
+2024-08-25 17:16:21.113 +01:00 [INF] Active user retrieved successfully. Response: {"StatusCode":"OK","IsSuccess":true,"ErrorMessages":[],"Result":{"Message":"User Retrieved Succesfully","Content":{"User":{"UserName":"Kesuion","FirstName":"","LastName":"","Email":"kesuion1@gmail.com","OnBoarded":false,"OnBoardingStage":1,"EmailConfirmed":true,"GoogleId":"","$type":"UserDTO"},"Message":"Success","$type":"GetActiveUserResponse"},"$type":"ResultObject"},"$type":"APIResponse"}
+2024-08-25 17:16:21.113 +01:00 [INF] Executing OkObjectResult, writing value of type 'RzumeAPI.Models.APIResponse'.
+2024-08-25 17:16:21.114 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI) in 40.1142ms
+2024-08-25 17:16:21.114 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:16:21.115 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7159/api/v1/user/active-user - 200 298 application/json; charset=utf-8 110.4554ms
+2024-08-25 17:17:11.418 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - null null
+2024-08-25 17:17:11.452 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:17:11.452 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - 204 null null 84.1318ms
+2024-08-25 17:17:11.455 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7159/api/v1/user/active-user - application/json null
+2024-08-25 17:17:11.480 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:17:11.481 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:17:11.482 +01:00 [INF] Route matched with {action = "GetActiveUser", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetActiveUser() on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-25 17:17:11.485 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-25 17:17:11.486 +01:00 [INF] GetActiveUser method called
+2024-08-25 17:17:11.602 +01:00 [INF] Executed DbCommand (89ms) [Parameters=[@__ToLower_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[GoogleId], [a].[LastName], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE LOWER([a].[Email]) = @__ToLower_0
+2024-08-25 17:17:11.708 +01:00 [INF] Active user retrieved successfully. Response: {"StatusCode":"OK","IsSuccess":true,"ErrorMessages":[],"Result":{"Message":"User Retrieved Succesfully","Content":{"User":{"UserName":"Kesuion","FirstName":"","LastName":"","Email":"kesuion1@gmail.com","OnBoarded":false,"OnBoardingStage":1,"EmailConfirmed":true,"GoogleId":"","$type":"UserDTO"},"Message":"Success","$type":"GetActiveUserResponse"},"$type":"ResultObject"},"$type":"APIResponse"}
+2024-08-25 17:17:11.923 +01:00 [INF] Executing OkObjectResult, writing value of type 'RzumeAPI.Models.APIResponse'.
+2024-08-25 17:17:11.973 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI) in 490.4361ms
+2024-08-25 17:17:11.973 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:17:11.973 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7159/api/v1/user/active-user - 200 298 application/json; charset=utf-8 518.4461ms
+2024-08-25 17:18:09.980 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - null null
+2024-08-25 17:18:09.987 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:18:09.988 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - 204 null null 59.9502ms
+2024-08-25 17:18:09.991 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7159/api/v1/user/active-user - application/json null
+2024-08-25 17:18:10.015 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:18:10.016 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:18:10.016 +01:00 [INF] Route matched with {action = "GetActiveUser", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetActiveUser() on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-25 17:18:10.020 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-25 17:18:10.023 +01:00 [INF] GetActiveUser method called
+2024-08-25 17:18:10.099 +01:00 [INF] Executed DbCommand (69ms) [Parameters=[@__ToLower_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[GoogleId], [a].[LastName], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE LOWER([a].[Email]) = @__ToLower_0
+2024-08-25 17:18:10.100 +01:00 [INF] Active user retrieved successfully. Response: {"StatusCode":"OK","IsSuccess":true,"ErrorMessages":[],"Result":{"Message":"User Retrieved Succesfully","Content":{"User":{"UserName":"Kesuion","FirstName":"","LastName":"","Email":"kesuion1@gmail.com","OnBoarded":false,"OnBoardingStage":1,"EmailConfirmed":true,"GoogleId":"","$type":"UserDTO"},"Message":"Success","$type":"GetActiveUserResponse"},"$type":"ResultObject"},"$type":"APIResponse"}
+2024-08-25 17:18:10.100 +01:00 [INF] Executing OkObjectResult, writing value of type 'RzumeAPI.Models.APIResponse'.
+2024-08-25 17:18:10.102 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI) in 85.0262ms
+2024-08-25 17:18:10.102 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:18:10.102 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7159/api/v1/user/active-user - 200 298 application/json; charset=utf-8 110.5835ms
+2024-08-25 17:18:23.846 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - null null
+2024-08-25 17:18:23.846 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:18:23.847 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - 204 null null 1.4015ms
+2024-08-25 17:18:23.850 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7159/api/v1/user/active-user - application/json null
+2024-08-25 17:18:23.877 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:18:23.911 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:18:23.916 +01:00 [INF] Route matched with {action = "GetActiveUser", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetActiveUser() on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-25 17:18:23.930 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-25 17:18:23.931 +01:00 [INF] GetActiveUser method called
+2024-08-25 17:18:23.954 +01:00 [INF] Executed DbCommand (19ms) [Parameters=[@__ToLower_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[GoogleId], [a].[LastName], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE LOWER([a].[Email]) = @__ToLower_0
+2024-08-25 17:18:23.955 +01:00 [INF] Active user retrieved successfully. Response: {"StatusCode":"OK","IsSuccess":true,"ErrorMessages":[],"Result":{"Message":"User Retrieved Succesfully","Content":{"User":{"UserName":"Kesuion","FirstName":"","LastName":"","Email":"kesuion1@gmail.com","OnBoarded":false,"OnBoardingStage":1,"EmailConfirmed":true,"GoogleId":"","$type":"UserDTO"},"Message":"Success","$type":"GetActiveUserResponse"},"$type":"ResultObject"},"$type":"APIResponse"}
+2024-08-25 17:18:23.956 +01:00 [INF] Executing OkObjectResult, writing value of type 'RzumeAPI.Models.APIResponse'.
+2024-08-25 17:18:23.956 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI) in 40.197ms
+2024-08-25 17:18:23.956 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:18:23.956 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7159/api/v1/user/active-user - 200 298 application/json; charset=utf-8 106.7394ms
+2024-08-25 17:18:44.349 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - null null
+2024-08-25 17:18:44.420 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:18:44.421 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - 204 null null 93.3457ms
+2024-08-25 17:18:44.424 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7159/api/v1/user/active-user - application/json null
+2024-08-25 17:18:44.425 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:18:44.425 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:18:44.426 +01:00 [INF] Route matched with {action = "GetActiveUser", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetActiveUser() on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-25 17:18:44.430 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-25 17:18:44.430 +01:00 [INF] GetActiveUser method called
+2024-08-25 17:18:44.531 +01:00 [INF] Executed DbCommand (98ms) [Parameters=[@__ToLower_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[GoogleId], [a].[LastName], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE LOWER([a].[Email]) = @__ToLower_0
+2024-08-25 17:18:44.656 +01:00 [INF] Active user retrieved successfully. Response: {"StatusCode":"OK","IsSuccess":true,"ErrorMessages":[],"Result":{"Message":"User Retrieved Succesfully","Content":{"User":{"UserName":"Kesuion","FirstName":"","LastName":"","Email":"kesuion1@gmail.com","OnBoarded":false,"OnBoardingStage":1,"EmailConfirmed":true,"GoogleId":"","$type":"UserDTO"},"Message":"Success","$type":"GetActiveUserResponse"},"$type":"ResultObject"},"$type":"APIResponse"}
+2024-08-25 17:18:44.741 +01:00 [INF] Executing OkObjectResult, writing value of type 'RzumeAPI.Models.APIResponse'.
+2024-08-25 17:18:44.834 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI) in 385.4383ms
+2024-08-25 17:18:44.862 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:18:44.863 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7159/api/v1/user/active-user - 200 298 application/json; charset=utf-8 438.9368ms
+2024-08-25 17:19:14.004 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - null null
+2024-08-25 17:19:14.006 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:19:14.006 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - 204 null null 48.4972ms
+2024-08-25 17:19:14.009 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7159/api/v1/user/active-user - application/json null
+2024-08-25 17:19:14.010 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:19:14.013 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:19:14.019 +01:00 [INF] Route matched with {action = "GetActiveUser", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetActiveUser() on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-25 17:19:14.030 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-25 17:19:14.030 +01:00 [INF] GetActiveUser method called
+2024-08-25 17:19:14.106 +01:00 [INF] Executed DbCommand (47ms) [Parameters=[@__ToLower_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[GoogleId], [a].[LastName], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE LOWER([a].[Email]) = @__ToLower_0
+2024-08-25 17:19:14.255 +01:00 [INF] Active user retrieved successfully. Response: {"StatusCode":"OK","IsSuccess":true,"ErrorMessages":[],"Result":{"Message":"User Retrieved Succesfully","Content":{"User":{"UserName":"Kesuion","FirstName":"","LastName":"","Email":"kesuion1@gmail.com","OnBoarded":false,"OnBoardingStage":1,"EmailConfirmed":true,"GoogleId":"","$type":"UserDTO"},"Message":"Success","$type":"GetActiveUserResponse"},"$type":"ResultObject"},"$type":"APIResponse"}
+2024-08-25 17:19:14.305 +01:00 [INF] Executing OkObjectResult, writing value of type 'RzumeAPI.Models.APIResponse'.
+2024-08-25 17:19:14.329 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI) in 310.3352ms
+2024-08-25 17:19:14.330 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:19:14.330 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7159/api/v1/user/active-user - 200 298 application/json; charset=utf-8 321.2917ms
+2024-08-25 17:19:21.017 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - null null
+2024-08-25 17:19:21.137 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:19:21.146 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - 204 null null 179.6764ms
+2024-08-25 17:19:21.150 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7159/api/v1/user/active-user - application/json null
+2024-08-25 17:19:21.150 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:19:21.151 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:19:21.151 +01:00 [INF] Route matched with {action = "GetActiveUser", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetActiveUser() on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-25 17:19:21.154 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-25 17:19:21.155 +01:00 [INF] GetActiveUser method called
+2024-08-25 17:19:21.255 +01:00 [INF] Executed DbCommand (97ms) [Parameters=[@__ToLower_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[GoogleId], [a].[LastName], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE LOWER([a].[Email]) = @__ToLower_0
+2024-08-25 17:19:21.330 +01:00 [INF] Active user retrieved successfully. Response: {"StatusCode":"OK","IsSuccess":true,"ErrorMessages":[],"Result":{"Message":"User Retrieved Succesfully","Content":{"User":{"UserName":"Kesuion","FirstName":"","LastName":"","Email":"kesuion1@gmail.com","OnBoarded":false,"OnBoardingStage":1,"EmailConfirmed":true,"GoogleId":"","$type":"UserDTO"},"Message":"Success","$type":"GetActiveUserResponse"},"$type":"ResultObject"},"$type":"APIResponse"}
+2024-08-25 17:19:21.430 +01:00 [INF] Executing OkObjectResult, writing value of type 'RzumeAPI.Models.APIResponse'.
+2024-08-25 17:19:21.504 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI) in 352.2825ms
+2024-08-25 17:19:21.504 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:19:21.504 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7159/api/v1/user/active-user - 200 298 application/json; charset=utf-8 354.6201ms
+2024-08-25 17:19:39.143 +01:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - null null
+2024-08-25 17:19:39.147 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:19:39.148 +01:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7159/api/v1/user/active-user - 204 null null 55.8651ms
+2024-08-25 17:19:39.155 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7159/api/v1/user/active-user - application/json null
+2024-08-25 17:19:39.181 +01:00 [INF] CORS policy execution successful.
+2024-08-25 17:19:39.182 +01:00 [INF] Executing endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:19:39.183 +01:00 [INF] Route matched with {action = "GetActiveUser", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetActiveUser() on controller RzumeAPI.Controllers.UserController (RzumeAPI).
+2024-08-25 17:19:39.187 +01:00 [INF] Entity Framework Core 6.0.23 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.23' with options: None
+2024-08-25 17:19:39.188 +01:00 [INF] GetActiveUser method called
+2024-08-25 17:19:39.332 +01:00 [INF] Executed DbCommand (116ms) [Parameters=[@__ToLower_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[Bio], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[GoogleId], [a].[LastName], [a].[Location], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[OnBoarded], [a].[OnBoardingStage], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE LOWER([a].[Email]) = @__ToLower_0
+2024-08-25 17:19:39.503 +01:00 [INF] Active user retrieved successfully. Response: {"StatusCode":"OK","IsSuccess":true,"ErrorMessages":[],"Result":{"Message":"User Retrieved Succesfully","Content":{"User":{"UserName":"Kesuion","FirstName":"","LastName":"","Email":"kesuion1@gmail.com","OnBoarded":false,"OnBoardingStage":1,"EmailConfirmed":true,"GoogleId":"","$type":"UserDTO"},"Message":"Success","$type":"GetActiveUserResponse"},"$type":"ResultObject"},"$type":"APIResponse"}
+2024-08-25 17:19:39.504 +01:00 [INF] Executing OkObjectResult, writing value of type 'RzumeAPI.Models.APIResponse'.
+2024-08-25 17:19:39.504 +01:00 [INF] Executed action RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI) in 321.314ms
+2024-08-25 17:19:39.504 +01:00 [INF] Executed endpoint 'RzumeAPI.Controllers.UserController.GetActiveUser (RzumeAPI)'
+2024-08-25 17:19:39.505 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7159/api/v1/user/active-user - 200 298 application/json; charset=utf-8 350.1836ms

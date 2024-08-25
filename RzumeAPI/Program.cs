@@ -59,6 +59,8 @@ builder.Services.AddVersionedApiExplorer(options =>
 
 builder.Services.AddCustomIdentity();
 
+builder.Services.ConfigureJWT(builder.Configuration);
+
 builder.Services.Configure<SMTPConfigModel>(configuration.GetSection("SMTPConfig"));
 
 builder.Services.Configure<IdentityOptions>(options =>

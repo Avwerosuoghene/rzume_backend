@@ -17,7 +17,7 @@ namespace RzumeAPI.Services
 
         public TokenServiceResponse ValidateToken(string token)
         {
-            var secretKey = _configuration["ApiSettings:Secret"];
+            var secretKey = _configuration["JwtConfig:Secret"];
             try
             {
                 var key = Encoding.ASCII.GetBytes(secretKey!);
@@ -66,7 +66,7 @@ namespace RzumeAPI.Services
 
         public async Task<string> GenerateToken(User user, DateTime expiration, string tokenName)
         {
-            var secretKey = _configuration["ApiSettings:Secret"];
+            var secretKey = _configuration["JwtConfig:Secret"];
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(secretKey!);

@@ -256,8 +256,9 @@ namespace RzumeAPI.Repository
                     {
                         Console.WriteLine($"Error: {error.Description}");
                     }
+                    var errorMessages = string.Join("; ", result.Errors.Select(e => e.Description));
+                    throw new Exception($"{ErrorMsgs.RegistrationFailed}: {errorMessages}");
 
-                    throw new Exception(ErrorMsgs.RegistrationFailed);
                 }
             }
             catch (Exception ex)
