@@ -14,7 +14,7 @@ namespace RzumeAPI.Services
         private readonly TokenService _tokenService = tokenService;
 
 
-        public User? userExists(string email)
+        public User? UserExists(string email)
         {
             var user = _db.ApplicationUsers.FirstOrDefault(x => x.Email == email);
 

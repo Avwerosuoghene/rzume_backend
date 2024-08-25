@@ -19,8 +19,6 @@ namespace RzumeAPI.Models.DTO
 
         public string Industry { get; set; }  = string.Empty;
 
-
-
     }
 }
 

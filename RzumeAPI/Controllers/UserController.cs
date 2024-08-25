@@ -57,7 +57,7 @@ namespace RzumeAPI.Controllers
 
             _logger.LogInformation("Register method called with model: {@Request}", model);
 
-            User? user = _userService.userExists(model.Email);
+            User? user = _userService.UserExists(model.Email);
             var _baseUrls = baseUrls.Value;
             string clientSideBaseUrl = _baseUrls.ClientBaseUrl;
 
