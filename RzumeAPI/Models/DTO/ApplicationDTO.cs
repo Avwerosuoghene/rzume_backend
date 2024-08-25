@@ -12,14 +12,17 @@ namespace RzumeAPI.Models.DTO
         [Required]
         public required string ApplicationID { get; set; } 
 
-        public string? UserId { get; set; } 
+        public required string UserId { get; set; } 
 
 
         public required string Position { get; set; } 
 
         public required string ApplicationDate { get; set; } 
 
-        public List<string>? AdditionalDocuments { get; set; }
+        public string JobLink { get; set; } = string.Empty;
+
+        public string ResumeLink { get; set; } = string.Empty;
+
 
         public Status Status { get; set; }
 

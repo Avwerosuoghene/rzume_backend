@@ -19,6 +19,12 @@ namespace RzumeAPI.Data.configuaration
             .HasPrincipalKey(x => x.Id)
             .IsRequired();
 
+            builder
+                .HasOne(x => x.Company)
+                .WithMany(x => x.Applications)
+                .HasForeignKey(x => x.CompanyID)
+                .HasPrincipalKey(x => x.CompanyID)
+                .IsRequired();
         }
     }
 }

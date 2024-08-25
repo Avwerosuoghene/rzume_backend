@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RzumeAPI.Data;
 
@@ -11,9 +12,10 @@ using RzumeAPI.Data;
 namespace RzumeAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240825170840_UpdateCompanyAndApplication")]
+    partial class UpdateCompanyAndApplication
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -165,10 +167,6 @@ namespace RzumeAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CompanyID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("JobLink")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -189,8 +187,6 @@ namespace RzumeAPI.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("ApplicationID");
-
-                    b.HasIndex("CompanyID");
 
                     b.HasIndex("UserId");
 
@@ -540,19 +536,11 @@ namespace RzumeAPI.Migrations
 
             modelBuilder.Entity("RzumeAPI.Models.Application", b =>
                 {
-                    b.HasOne("RzumeAPI.Models.Company", "Company")
-                        .WithMany("Applications")
-                        .HasForeignKey("CompanyID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("RzumeAPI.Models.User", "User")
                         .WithMany("Applications")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Company");
 
                     b.Navigation("User");
                 });
@@ -614,11 +602,6 @@ namespace RzumeAPI.Migrations
                         .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("RzumeAPI.Models.Company", b =>
-                {
-                    b.Navigation("Applications");
                 });
 
             modelBuilder.Entity("RzumeAPI.Models.User", b =>

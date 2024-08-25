@@ -11,15 +11,13 @@ namespace RzumeAPI.Models.DTO
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public required string CompanyID { get; set; } 
 
-
-
         public required string Name { get; set; } 
 
-        public string? Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
-        public string? Website { get; set; }
+        public string Website { get; set; } = string.Empty;
 
-        public string? Contact { get; set; }
+        public string Industry { get; set; }  = string.Empty;
 
 
 
