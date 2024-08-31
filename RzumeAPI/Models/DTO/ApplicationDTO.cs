@@ -17,7 +17,7 @@ namespace RzumeAPI.Models.DTO
 
         public required string Position { get; set; } 
 
-        public required string ApplicationDate { get; set; } 
+        public required DateTime ApplicationDate { get; set; } 
 
         public string JobLink { get; set; } = string.Empty;
 

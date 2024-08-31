@@ -4,16 +4,12 @@ using RzumeAPI.Models;
 using RzumeAPI.Models.DTO;
 using RzumeAPI.Repository.IRepository;
 using System.Net;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Google;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using RzumeAPI.Services;
 using Microsoft.Extensions.Options;
 using RzumeAPI.Options;
 using RzumeAPI.Models.Responses;
 using RzumeAPI.Models.Utilities;
 using RzumeAPI.Models.Requests;
-using System.Security.Claims;
 using AutoMapper;
 using Google.Apis.Auth;
 
@@ -115,14 +111,14 @@ namespace RzumeAPI.Controllers
 
             try
             {
-                var loginResponse = await _userRepo.Login(model);
+                LoginResponse loginResponse = await _userRepo.Login(model);
 
                 if (loginResponse.User == null)
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
-                    _response.ErrorMessages.Add("Username or password is incorrect");
-                    _logger.LogWarning("Login failed due to incorrect username or password. Response: {@Response}", _response);
+                    _response.ErrorMessages.Add(loginResponse.Message);
+                    _logger.LogWarning("Login failed due to {response}", loginResponse.Message);
                     return BadRequest(_response);
                 }
 
@@ -263,7 +259,7 @@ namespace RzumeAPI.Controllers
         }
 
 
-        
+
         [HttpGet("generate-email-token")]
         public async Task<IActionResult> GenerateEmailToken([FromQuery] string Email, [FromServices] IOptionsSnapshot<BaseUrlOptions> baseUrls)
         {

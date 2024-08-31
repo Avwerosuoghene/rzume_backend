@@ -11,6 +11,7 @@ public static class UserStatMsg
     public const string Found = "User found";
 
     public const string InvalidDetails = "Username or password is incorrect";
+    public const string LockedOut = "Too many login attempts, retry after 5 minutes";
     public const string AccountActivated = "Account activated";
 
 }

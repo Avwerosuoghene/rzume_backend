@@ -23,6 +23,8 @@ namespace RzumeAPI.RegistoryConfig {
         services.AddScoped<IUtilityRepository, UtilityRepository>();
 
         services.AddScoped<IJobRepository, JobRepository>();
+
+        services.AddScoped<ICompanyRepository, ComapanyRepository>();
     }
 }
 }
