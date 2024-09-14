@@ -29,6 +29,8 @@ namespace RzumeAPI.Controllers
 
         private readonly IEmailRepository _emailRepo = emailRepository;
 
+        
+
         private readonly IOtpRepository _otpRepo = otpRepo;
         private readonly UserService _userService = userService;
 
@@ -53,7 +55,7 @@ namespace RzumeAPI.Controllers
 
             _logger.LogInformation("Register method called with model: {@Request}", model);
 
-            User? user = _userService.UserExists(model.Email);
+            User? user = await  _userService.UserExists(model.Email);
             var _baseUrls = baseUrls.Value;
             string clientSideBaseUrl = _baseUrls.ClientBaseUrl;
 
@@ -76,7 +78,7 @@ namespace RzumeAPI.Controllers
                 return BadRequest(_response);
             }
 
-            RegisterUserResponse response = await _userRepo.Register(model, clientSideBaseUrl)!;
+            RegisterUserResponse response = await _userService.Register(model, clientSideBaseUrl)!;
             if (response.User == null)
             {
                 string responseMsg = response.Message ?? "Error while registering";
@@ -111,7 +113,7 @@ namespace RzumeAPI.Controllers
 
             try
             {
-                LoginResponse loginResponse = await _userRepo.Login(model);
+                LoginResponse loginResponse = await _userService.Login(model);
 
                 if (loginResponse.User == null)
                 {
@@ -182,7 +184,7 @@ namespace RzumeAPI.Controllers
 
                     return BadRequest(_response);
                 }
-                GetActiveUserResponse response = await _userRepo.GetActiveUser(token);
+                GetActiveUserResponse response = await _userService.GetActiveUser(token);
                 if (response.User == null)
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
@@ -223,7 +225,7 @@ namespace RzumeAPI.Controllers
 
             try
             {
-                var logoutSuccess = await _userRepo.Logout(model);
+                var logoutSuccess = await _userService.Logout(model);
 
                 if (logoutSuccess != true)
                 {
@@ -286,7 +288,7 @@ namespace RzumeAPI.Controllers
                     return BadRequest(_response);
                 }
 
-                string validateMessage = await _userRepo.SendTokenEmailValidation(user, clientSideBaseUrl);
+                string validateMessage = await _userService.SendTokenEmailValidation(user, clientSideBaseUrl);
                 if (validateMessage == TokenStatMsg.NotFound)
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
@@ -337,7 +339,7 @@ namespace RzumeAPI.Controllers
                 }
 
 
-                ActivateUserAccountResponse activateAccountReponse = await _userRepo.ActivateUserAccount(token);
+                ActivateUserAccountResponse activateAccountReponse = await _userService.ActivateUserAccount(token);
 
                 if (activateAccountReponse.User == null)
                 {
@@ -414,11 +416,11 @@ namespace RzumeAPI.Controllers
                 FamilyName = userInfo.FamilyName
             };
 
-            var loginResponse = await _userRepo.Login(requestModel);
+            var loginResponse = await _userService.Login(requestModel);
 
             if (loginResponse.User == null)
             {
-                RegisterUserResponse response = await _userRepo.Register(requestModel, string.Empty);
+                RegisterUserResponse response = await _userService.Register(requestModel, string.Empty);
                 if (response.User == null)
                 {
                     string responseMsg = response.Message ?? "Error while registering";

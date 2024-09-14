@@ -99,9 +99,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnection"));
 });
 
+RepositoryCollectionExtension.RegisterRepository(builder.Services);
+
+
 ServiceCollectionExtension.RegisterServices(builder.Services);
 
-RepositoryCollectionExtension.RegisterRepository(builder.Services);
 
 OptionsCollectionExtension.RegisterOptions(builder.Services, builder.Configuration);
 
