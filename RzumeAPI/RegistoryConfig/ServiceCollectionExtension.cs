@@ -1,18 +1,23 @@
 
+using RzumeAPI.Repository;
 using RzumeAPI.Services;
 using RzumeAPI.Services.IServices;
 
-namespace RzumeAPI.RegistoryConfig {
-public static class ServiceCollectionExtension
+namespace RzumeAPI.RegistoryConfig
 {
-    public static void RegisterServices(IServiceCollection services)
+    public static class ServiceCollectionExtension
     {
-        services.AddScoped<FileService>();
-        services.AddScoped<OtpService>();
-        services.AddScoped<TokenService>();
-        services.AddScoped<IUserService, UserService>();
+        public static void RegisterServices(IServiceCollection services)
+        {
+            services.AddScoped<FileService>();
+            services.AddScoped<IOtpService, OtpService>();
+            services.AddScoped<IUtilityService, UtilityService>();
+            services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IUserService, UserService>();
+
+            services.AddScoped<IProfileService, ProfileService>();
+        }
     }
-}
 
 }
 

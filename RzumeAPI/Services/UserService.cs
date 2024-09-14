@@ -1,7 +1,5 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using RzumeAPI.Data;
 using RzumeAPI.Models;
 using RzumeAPI.Models.DTO;
 using RzumeAPI.Models.Requests;
@@ -14,27 +12,28 @@ using RzumeAPI.Services.IServices;
 namespace RzumeAPI.Services
 {
     public class UserService(
-        ApplicationDbContext db,
         TokenService tokenService,
-        UserRepository userRepository,
+        IUserRepository userRepo,
         SignInManager<User> signInManager,
         ILogger<UserRepository> logger,
         UserManager<User> userManager,
         IEmailRepository emailService,
         IMapper mapper,
         OtpService otpService,
-        IOtpRepository otpRepository
+        IOtpRepository otpRepository,
+        IUtilityService utilityService
         ): IUserService
     {
 
 
-        private UserRepository _userRepository = userRepository;
+        private readonly IUserRepository _userRepo = userRepo;
 
         private readonly TokenService _tokenService = tokenService;
 
         private readonly ILogger<UserRepository> _logger = logger;
 
         private readonly OtpService _otpService = otpService;
+        private readonly IUtilityService _utilityService = utilityService;
 
 
         private readonly UserManager<User> _userManager = userManager;
@@ -56,7 +55,7 @@ namespace RzumeAPI.Services
 
         public async Task<User?> UserExists(string email)
         {
-            var user = await _userRepository.GetUserByEmailAsync(email);
+            var user = await _userRepo.GetUserByEmailAsync(email);
 
             if (user == null)
             {
@@ -66,59 +65,8 @@ namespace RzumeAPI.Services
             return user;
         }
 
-        public string GenerateDefaultPassword()
-        {
-            const int passwordLength = 16;
-            const string validChars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*?_-";
-            var random = new Random();
-            var passwordChars = new char[passwordLength];
-            for (int i = 0; i < passwordLength; i++)
-            {
-                passwordChars[i] = validChars[random.Next(validChars.Length)];
-            }
-            return new string(passwordChars);
-        }
+  
 
-        public async Task<GetUserFromTokenResponse> GetUserFromToken(string token)
-        {
-            TokenServiceResponse tokenServiceResponse = _tokenService.ValidateToken(token);
-            string? userMail = tokenServiceResponse.UserMail;
-            if (userMail == null)
-            {
-                return new GetUserFromTokenResponse()
-                {
-                    User = null,
-                    Message = tokenServiceResponse.Message
-                };
-            }
-
-            if (tokenServiceResponse.Message == TokenStatMsg.TokenExpired)
-            {
-
-
-                return new GetUserFromTokenResponse()
-                {
-                    User = null,
-                    Message = TokenStatMsg.ActivationTokenActive
-                };
-            }
-
-            var user = await _userRepository.GetUserByEmailAsync(userMail);
-            if (user == null)
-            {
-                return new GetUserFromTokenResponse()
-                {
-                    User = null,
-                    Message = UserStatMsg.NotFound
-                };
-            }
-
-            return new GetUserFromTokenResponse()
-            {
-                User = user,
-                Message = UserStatMsg.Found
-            };
-        }
 
 
 
@@ -180,7 +128,7 @@ namespace RzumeAPI.Services
 
             try
             {
-                GetUserFromTokenResponse response = await GetUserFromToken(token);
+                GetUserFromTokenResponse response = await _tokenService.GetUserFromToken(token);
                 User? user = response.User;
 
                 if (user == null)
@@ -208,7 +156,7 @@ namespace RzumeAPI.Services
                 string loginToken = await _tokenService.GenerateToken(user, DateTime.UtcNow.AddHours(5), TokenTypes.Login);
 
                 user.EmailConfirmed = true;
-                await _userRepository.UpdateAsync(user);
+                await _userRepo.UpdateAsync(user);
 
                 _logger.LogInformation("User {Email} account activated successfully", user.Email);
                 return new ActivateUserAccountResponse
@@ -272,7 +220,7 @@ namespace RzumeAPI.Services
                 {
                     _logger.LogInformation("User {Email} created successfully", user.Email);
 
-                    var userToReturn = await _userRepository.GetUserByEmailAsync(user.Email);
+                    var userToReturn = await _userRepo.GetUserByEmailAsync(user.Email);
                     if (userToReturn != null)
                     {
                         _logger.LogInformation("User {Email} retrieved from database", user.Email);
@@ -324,7 +272,7 @@ namespace RzumeAPI.Services
                 EmailConfirmed = true
             };
 
-            string defaultPassword = GenerateDefaultPassword();
+            string defaultPassword = _utilityService.GenerateDefaultPassword();
             IdentityResult result = await _userManager.CreateAsync(user, defaultPassword);
 
             try
@@ -333,7 +281,7 @@ namespace RzumeAPI.Services
                 {
                     _logger.LogInformation("Google user {Email} created successfully", user.Email);
 
-                    var userToReturn = await _userRepository.GetUserByEmailAsync(user.Email);
+                    var userToReturn = await _userRepo.GetUserByEmailAsync(user.Email);
                     if (userToReturn != null)
                     {
                         return new RegisterUserResponse
@@ -371,7 +319,7 @@ namespace RzumeAPI.Services
             try
             {
 
-                GetUserFromTokenResponse response = await GetUserFromToken(token);
+                GetUserFromTokenResponse response = await _tokenService.GetUserFromToken(token);
 
                 if (response.User == null)
                 {
@@ -447,7 +395,7 @@ namespace RzumeAPI.Services
         {
             _logger.LogInformation("Handling email login for {Email}", emailRequest.Email);
 
-            var user = await _userRepository.GetUserByEmailAsync(emailRequest.Email);
+            var user = await _userRepo.GetUserByEmailAsync(emailRequest.Email);
 
             if (user == null)
             {
@@ -515,7 +463,7 @@ namespace RzumeAPI.Services
 
         private async Task<LoginResponse> HandleGoogleLogin(GoogleSigninRequest googleRequest)
         {
-            var user = await _userRepository.GetUserByEmailAsync(googleRequest.Email);
+            var user = await _userRepo.GetUserByEmailAsync(googleRequest.Email);
 
 
 
@@ -554,7 +502,7 @@ namespace RzumeAPI.Services
         public async Task<bool> Logout(LogoutRequest logoutRequestDTO)
         {
 
-            var user = await _userRepository.GetUserByEmailAsync(logoutRequestDTO.Email);
+            var user = await _userRepo.GetUserByEmailAsync(logoutRequestDTO.Email);
 
             if (user == null)
             {
@@ -567,7 +515,7 @@ namespace RzumeAPI.Services
 
         public async Task<OtpPasswordResetRequestResponseDTO> InitiateOtpResetPassword(OtpPasswordResetRequestDTO passwordResetRequestModel)
         {
-            var user = await _userRepository.GetUserByEmailAsync(passwordResetRequestModel.Email);
+            var user = await _userRepo.GetUserByEmailAsync(passwordResetRequestModel.Email);
             OtpPasswordResetRequestResponseDTO passwordResetResponse = new OtpPasswordResetRequestResponseDTO();
             if (user == null)
             {

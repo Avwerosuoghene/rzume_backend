@@ -18,11 +18,8 @@ namespace RzumeAPI.RegistoryConfig {
 
         services.AddScoped<IExperienceRepository, ExperienceRepository>();
 
-        services.AddScoped<IProfileRepository, ProfileRepository>();
 
         services.AddScoped<IUtilityRepository, UtilityRepository>();
-
-        services.AddScoped<IJobRepository, JobRepository>();
 
         services.AddScoped<ICompanyRepository, ComapanyRepository>();
     }

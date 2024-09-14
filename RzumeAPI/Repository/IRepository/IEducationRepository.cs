@@ -10,5 +10,8 @@ namespace RzumeAPI.Repository.IRepository
         Task<bool> UpdateAsync(Education education);
 
         Task<bool> BulkUpdateAsync(List<EducationDTO> educationItems, string userId);
+
+        Task<List<Education>> GetEducationsByUserIdAsync(String userId);
+
     }
 }

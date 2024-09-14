@@ -1,10 +1,10 @@
-﻿
+
 using RzumeAPI.Models.Responses;
 using RzumeAPI.Models.Requests;
 
-namespace RzumeAPI.Repository.IRepository
+namespace RzumeAPI.Services.IServices
 {
-    public interface IProfileRepository
+    public interface IProfileService
     {
 
        
@@ -19,5 +19,3 @@ namespace RzumeAPI.Repository.IRepository
 
     };
 }
-
-

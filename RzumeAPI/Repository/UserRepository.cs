@@ -1,12 +1,9 @@
 ﻿
-using AutoMapper;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RzumeAPI.Data;
 using RzumeAPI.Models;
 
 using RzumeAPI.Repository.IRepository;
-using RzumeAPI.Services;
 
 namespace RzumeAPI.Repository
 {

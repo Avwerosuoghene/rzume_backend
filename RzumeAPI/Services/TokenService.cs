@@ -5,11 +5,17 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using RzumeAPI.Models;
 using RzumeAPI.Models.Responses;
+using RzumeAPI.Models.Utilities;
+using RzumeAPI.Repository.IRepository;
+using RzumeAPI.Services.IServices;
 
 namespace RzumeAPI.Services
 {
-    public class TokenService(IConfiguration configuration, UserManager<User> userManager)
+    public class TokenService(IConfiguration configuration, UserManager<User> userManager,         IUserRepository userRepo
+): ITokenService
     {
+
+        private readonly IUserRepository _userRepo = userRepo;
 
         private IConfiguration _configuration = configuration;
 
@@ -61,7 +67,47 @@ namespace RzumeAPI.Services
             }
         }
 
-   
+           public async Task<GetUserFromTokenResponse> GetUserFromToken(string token)
+        {
+            TokenServiceResponse tokenServiceResponse = ValidateToken(token);
+            string? userMail = tokenServiceResponse.UserMail;
+            if (userMail == null)
+            {
+                return new GetUserFromTokenResponse()
+                {
+                    User = null,
+                    Message = tokenServiceResponse.Message
+                };
+            }
+
+            if (tokenServiceResponse.Message == TokenStatMsg.TokenExpired)
+            {
+
+
+                return new GetUserFromTokenResponse()
+                {
+                    User = null,
+                    Message = TokenStatMsg.ActivationTokenActive
+                };
+            }
+
+            var user = await _userRepo.GetUserByEmailAsync(userMail);
+            if (user == null)
+            {
+                return new GetUserFromTokenResponse()
+                {
+                    User = null,
+                    Message = UserStatMsg.NotFound
+                };
+            }
+
+            return new GetUserFromTokenResponse()
+            {
+                User = user,
+                Message = UserStatMsg.Found
+            };
+        }
+
 
 
         public async Task<string> GenerateToken(User user, DateTime expiration, string tokenName)

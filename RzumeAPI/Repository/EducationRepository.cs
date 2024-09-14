@@ -1,5 +1,6 @@
 
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using RzumeAPI.Data;
 using RzumeAPI.Models;
 using RzumeAPI.Models.DTO;
@@ -62,6 +63,12 @@ namespace RzumeAPI.Repository
             await _db.SaveChangesAsync();
             return true;
         }
+
+
+    public async Task<List<Education>> GetEducationsByUserIdAsync(string userId)
+    {
+        return await _db.Education.Where(education => education.UserId == userId).ToListAsync();
+    }
 
 
 

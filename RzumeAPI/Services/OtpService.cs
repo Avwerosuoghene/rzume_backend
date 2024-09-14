@@ -1,17 +1,14 @@
 using RzumeAPI.Models;
 using RzumeAPI.Models.DTO;
 using RzumeAPI.Repository.IRepository;
+using RzumeAPI.Services.IServices;
 
 namespace RzumeAPI.Services
 {
-    public class OtpService
+    public class OtpService(IOtpRepository dbOtp): IOtpService
     {
-        private IOtpRepository _dbOtp;
+        private IOtpRepository _dbOtp = dbOtp;
 
-        public OtpService(IOtpRepository dbOtp)
-        {
-            _dbOtp = dbOtp;
-        }
         public string GenerateOtp()
         {
             Random generator = new Random();

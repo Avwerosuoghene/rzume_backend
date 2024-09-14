@@ -11,6 +11,7 @@ using RzumeAPI.Models.Requests;
 using RzumeAPI.Models.Responses;
 using Microsoft.Extensions.Options;
 using RzumeAPI.Options;
+using RzumeAPI.Services.IServices;
 
 namespace RzumeAPI.Controllers
 {
@@ -19,14 +20,14 @@ namespace RzumeAPI.Controllers
     [ApiVersionNeutral]
     public class ProfileManagementController : Controller
     {
-        private readonly IProfileRepository _profileRepo;
+        private readonly IProfileService _profileService;
         private readonly string _uploadDirectory;
         protected APIResponse _response;
         private readonly ILogger<ProfileManagementController> _logger;
 
-        public ProfileManagementController(IProfileRepository profileRepo, IOtpRepository otpRepo, ILogger<ProfileManagementController> logger)
+        public ProfileManagementController(IProfileService profileService, IOtpRepository otpRepo, ILogger<ProfileManagementController> logger)
         {
-            _profileRepo = profileRepo;
+            _profileService = profileService;
             _response = new();
             _logger = logger;
             _uploadDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
@@ -88,7 +89,7 @@ namespace RzumeAPI.Controllers
                         }
 
                         OnboardUserFirstStageRequest onboardUserFirstStagePayload = JsonConvert.DeserializeObject<OnboardUserFirstStageRequest>(onboardUserPayload.OnboardUserPayload.ToString());
-                        response = await _profileRepo.OnboardingFirstStage(onboardUserFirstStagePayload, onboardUserPayload.Token);
+                        response = await _profileService.OnboardingFirstStage(onboardUserFirstStagePayload, onboardUserPayload.Token);
                         break;
 
                     case 1:
@@ -100,7 +101,7 @@ namespace RzumeAPI.Controllers
                         }
 
                         OnboardUserSecondStageRequest onboardUserSecondStagePayload = JsonConvert.DeserializeObject<OnboardUserSecondStageRequest>(onboardUserPayload.OnboardUserPayload.ToString());
-                        response = await _profileRepo.OnboardingSecondStage(onboardUserSecondStagePayload, onboardUserPayload.Token);
+                        response = await _profileService.OnboardingSecondStage(onboardUserSecondStagePayload, onboardUserPayload.Token);
                         break;
 
                     case 2:
@@ -112,7 +113,7 @@ namespace RzumeAPI.Controllers
                         }
 
                         OnboardUserThirdStageRequest onboardUserThirdStagePayload = JsonConvert.DeserializeObject<OnboardUserThirdStageRequest>(onboardUserPayload.OnboardUserPayload.ToString());
-                        response = await _profileRepo.OnboardingThirdStage(onboardUserThirdStagePayload, onboardUserPayload.Token);
+                        response = await _profileService.OnboardingThirdStage(onboardUserThirdStagePayload, onboardUserPayload.Token);
                         break;
 
                     case 3:
@@ -124,7 +125,7 @@ namespace RzumeAPI.Controllers
                         }
 
                         OnboardUserFourthStageRequest onboardUserFourthStagePayload = JsonConvert.DeserializeObject<OnboardUserFourthStageRequest>(onboardUserPayload.OnboardUserPayload.ToString());
-                        response = await _profileRepo.OnboardingFourthStage(onboardUserFourthStagePayload, onboardUserPayload.Token);
+                        response = await _profileService.OnboardingFourthStage(onboardUserFourthStagePayload, onboardUserPayload.Token);
                         break;
 
                     default:
@@ -178,7 +179,7 @@ namespace RzumeAPI.Controllers
             try
             {
 
-                var response = await _profileRepo.RequestPasswordReset(requestPasswordReset, clientSideBaseUrl);
+                var response = await _profileService.RequestPasswordReset(requestPasswordReset, clientSideBaseUrl);
 
                 if (response.IsSuccess == false)
                 {
@@ -222,7 +223,7 @@ namespace RzumeAPI.Controllers
             try
             {
 
-                GenericResponse passwordResetResponse = await _profileRepo.ResetPassword(resetPassword);
+                GenericResponse passwordResetResponse = await _profileService.ResetPassword(resetPassword);
 
                 if (passwordResetResponse.IsSuccess == false)
                 {
