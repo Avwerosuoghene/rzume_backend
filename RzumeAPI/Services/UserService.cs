@@ -1,3 +1,4 @@
+using System.Net;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using RzumeAPI.Models;
@@ -22,7 +23,7 @@ namespace RzumeAPI.Services
         IOtpService otpService,
         IOtpRepository otpRepository,
         IUtilityService utilityService
-        ): IUserService
+        ) : IUserService
     {
 
 
@@ -53,6 +54,8 @@ namespace RzumeAPI.Services
 
 
 
+
+
         public async Task<User?> UserExists(string email)
         {
             var user = await _userRepo.GetUserByEmailAsync(email);
@@ -65,14 +68,14 @@ namespace RzumeAPI.Services
             return user;
         }
 
-  
 
 
 
 
-     
-  
-    
+
+
+
+
         public async Task<ActivateUserAccountResponse> ActivateUserAccount(string token)
         {
             _logger.LogInformation("Starting ActivateUserAccount with token: {Token}", token);
@@ -127,9 +130,80 @@ namespace RzumeAPI.Services
             }
         }
 
-        public async Task<RegisterUserResponse> Register(object registrationDTO, string? clientSideBaseUrl)
+        public async Task<RegisterUserResponse<ResultObject>> RegisterUser(RegistrationRequest model, string clientSideBaseUrl)
+        {
+            _logger.LogInformation("RegisterUser method called with model: {@Request}", model);
+
+            User? user = await UserExists(model.Email);
+
+            if (user != null)
+            {
+                if (user.EmailConfirmed)
+                {
+                    _logger.LogWarning("User already exists and email is confirmed.");
+
+
+                    return new RegisterUserResponse<ResultObject>
+                    {
+                        StatusCode = HttpStatusCode.Conflict,
+                        IsSuccess = false,
+                        ErrorMessages =
+                        [
+                            "User already exists and email is confirmed."
+                        ]
+                    };
+                }
+
+                _logger.LogWarning("User exists but email is not confirmed.");
+                return new RegisterUserResponse<ResultObject>
+                {
+                    StatusCode = HttpStatusCode.Conflict,
+                    IsSuccess = false,
+                    ErrorMessages =
+                    [
+                        "User exists but email is not confirmed."
+                    ]
+                };
+            }
+
+            ProcessUserResponse processUserResponse = await ProcessUserRegistration(model, clientSideBaseUrl);
+
+            if (processUserResponse.User == null)
+            {
+                string responseMsg = processUserResponse.Message ?? "Error while registering";
+                _logger.LogError("Error while registering user.");
+                return new RegisterUserResponse<ResultObject>
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    IsSuccess = false,
+                    ErrorMessages =
+    [
+       responseMsg
+    ]
+
+                };
+            }
+
+            _logger.LogInformation("User registered successfully.");
+            return new RegisterUserResponse<ResultObject>
+            {
+                StatusCode = HttpStatusCode.OK,
+                IsSuccess = true,
+                Result = new ResultObject
+                {
+                    Message = "Kindly check your mail for the confirmation token",
+                    Content = processUserResponse
+                }
+            };
+        }
+
+
+
+
+        public async Task<ProcessUserResponse> ProcessUserRegistration(object registrationDTO, string? clientSideBaseUrl)
         {
             _logger.LogInformation("Starting user registration process");
+
 
             if (registrationDTO is RegistrationRequest emailRequest)
             {
@@ -150,7 +224,7 @@ namespace RzumeAPI.Services
 
 
 
-        private async Task<RegisterUserResponse> HandleEmailSignup(RegistrationRequest emailRequest, string clientBaseUrl)
+        private async Task<ProcessUserResponse> HandleEmailSignup(RegistrationRequest emailRequest, string clientBaseUrl)
         {
             _logger.LogInformation("Starting HandleEmailSignup for {Email}", emailRequest.Email);
 
@@ -179,7 +253,7 @@ namespace RzumeAPI.Services
                         string token = await _tokenService.GenerateToken(user, DateTime.UtcNow.AddHours(5), TokenTypes.SignUp);
                         await _emailService.GenerateMail(userToReturn, TokenTypes.SignUp, true, clientBaseUrl, token);
 
-                        return new RegisterUserResponse
+                        return new ProcessUserResponse
                         {
                             User = userToReturn,
                         };
@@ -200,14 +274,14 @@ namespace RzumeAPI.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error occurred during HandleEmailSignup for {Email}", user.Email);
-                return new RegisterUserResponse
+                return new ProcessUserResponse
                 {
                     User = null,
                     Message = ex.Message
                 };
             }
         }
-        private async Task<RegisterUserResponse> HandleGoogleSignup(GoogleSigninRequest googleRequest)
+        private async Task<ProcessUserResponse> HandleGoogleSignup(GoogleSigninRequest googleRequest)
         {
             _logger.LogInformation("Starting HandleGoogleSignup for {Email}", googleRequest.Email);
 
@@ -235,7 +309,7 @@ namespace RzumeAPI.Services
                     var userToReturn = await _userRepo.GetUserByEmailAsync(user.Email);
                     if (userToReturn != null)
                     {
-                        return new RegisterUserResponse
+                        return new ProcessUserResponse
                         {
                             User = userToReturn,
                         };
@@ -256,7 +330,7 @@ namespace RzumeAPI.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error occurred during HandleGoogleSignup for {Email}", user.Email);
-                return new RegisterUserResponse
+                return new ProcessUserResponse
                 {
                     User = null,
                     Message = ex.Message

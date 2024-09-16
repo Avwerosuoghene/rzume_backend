@@ -1,10 +1,19 @@
 
-using RzumeAPI.Models.DTO;
+
+
+using System.Net;
 
 namespace RzumeAPI.Models.Responses;
 
-public class RegisterUserResponse
+
+
+public class RegisterUserResponse<T>
 {
-    public User? User { get; set; }
-    public string? Message { get; set; } = string.Empty;
+    public HttpStatusCode StatusCode { get; set; }
+    public bool IsSuccess { get; set; }
+    public List<string> ErrorMessages { get; set; } = [];
+
+    public T? Result { get; set; }
+
+
 }

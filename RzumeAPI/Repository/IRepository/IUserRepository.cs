@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using RzumeAPI.Models;
-using RzumeAPI.Models.DTO;
-using RzumeAPI.Models.Requests;
-using RzumeAPI.Models.Responses;
-
+﻿using RzumeAPI.Models;
 
 namespace RzumeAPI.Repository.IRepository
 {

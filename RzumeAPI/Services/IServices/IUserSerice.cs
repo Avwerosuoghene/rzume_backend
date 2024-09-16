@@ -10,7 +10,9 @@ namespace RzumeAPI.Services.IServices
     public interface IUserService
     {
 
-        Task<RegisterUserResponse> Register(object registrationRequestDTO, string? clientSideBaseUrl);
+        Task<ProcessUserResponse> ProcessUserRegistration(object registrationRequestDTO, string? clientSideBaseUrl);
+
+        Task<RegisterUserResponse<ResultObject>> RegisterUser(RegistrationRequest model, string clientSideBaseUrl);
 
         Task<LoginResponse> Login(object loginRequestDTO);
         Task<bool> Logout(LogoutRequest logoutRequestDTO);

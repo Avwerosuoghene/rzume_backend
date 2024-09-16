@@ -30,9 +30,6 @@ namespace RzumeAPI.Repository
 
 
 
-
-
-
         public async Task<bool> UpdateAsync(Education education)
         {
 

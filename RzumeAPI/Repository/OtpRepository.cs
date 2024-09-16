@@ -10,8 +10,6 @@ namespace RzumeAPI.Repository
     {
 
         private readonly ApplicationDbContext _db;
-        private readonly IMapper _mapper;
-
 
 
 
@@ -19,17 +17,9 @@ namespace RzumeAPI.Repository
         public OtpRepository(ApplicationDbContext db, IMapper mapper) : base(db)
         {
             _db = db;
-            _mapper = mapper;
-
-
-
         }
 
         
-
-
-
-
 
         public async Task<Otp> UpdateAsync(Otp otp)
         {
