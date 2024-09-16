@@ -16,6 +16,9 @@ namespace RzumeAPI.RegistoryConfig
             services.AddScoped<IUserService, UserService>();
 
             services.AddScoped<IProfileService, ProfileService>();
+
+            services.AddScoped<IEmailService, EmailService>();
+
         }
     }
 

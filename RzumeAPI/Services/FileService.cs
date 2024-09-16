@@ -1,6 +1,8 @@
+using RzumeAPI.Services.IServices;
+
 namespace RzumeAPI.Services 
 {
-public class FileService
+public class FileService: IFileService
 {
     
 

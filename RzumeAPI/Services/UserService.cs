@@ -12,14 +12,14 @@ using RzumeAPI.Services.IServices;
 namespace RzumeAPI.Services
 {
     public class UserService(
-        TokenService tokenService,
+        ITokenService tokenService,
         IUserRepository userRepo,
         SignInManager<User> signInManager,
         ILogger<UserRepository> logger,
         UserManager<User> userManager,
-        IEmailRepository emailService,
+        IEmailService emailService,
         IMapper mapper,
-        OtpService otpService,
+        IOtpService otpService,
         IOtpRepository otpRepository,
         IUtilityService utilityService
         ): IUserService
@@ -28,17 +28,17 @@ namespace RzumeAPI.Services
 
         private readonly IUserRepository _userRepo = userRepo;
 
-        private readonly TokenService _tokenService = tokenService;
+        private readonly ITokenService _tokenService = tokenService;
 
         private readonly ILogger<UserRepository> _logger = logger;
 
-        private readonly OtpService _otpService = otpService;
+        private readonly IOtpService _otpService = otpService;
         private readonly IUtilityService _utilityService = utilityService;
 
 
         private readonly UserManager<User> _userManager = userManager;
 
-        private readonly IEmailRepository _emailService = emailService;
+        private readonly IEmailService _emailService = emailService;
 
         private readonly IMapper _mapper = mapper;
 
@@ -70,58 +70,9 @@ namespace RzumeAPI.Services
 
 
 
-        public async Task<string> SendTokenEmailValidation(User user, string clientSideBaseUrl)
-        {
-            _logger.LogInformation("Starting SendTokenEmailValidation for user {Email}", user.Email);
-
-            var activeToken = await _userManager.GetAuthenticationTokenAsync(user, TokenTypes.SignUp, $"{TokenTypes.SignUp}");
-            if (activeToken != null)
-            {
-                _logger.LogInformation("Existing token found for user {Email}", user.Email);
-
-                TokenServiceResponse tokenServiceResponse = _tokenService.ValidateToken(activeToken);
-                if (tokenServiceResponse.Message != TokenStatMsg.TokenExpired)
-                {
-                    _logger.LogInformation("Token is still active for user {Email}", user.Email);
-                    return TokenStatMsg.ActivationTokenActive;
-                }
-            }
-
-            _logger.LogInformation("Generating new token for user {Email}", user.Email);
-            string token = await _tokenService.GenerateToken(user, DateTime.UtcNow.AddHours(5), TokenTypes.SignUp);
-
-            await GenerateMail(user, TokenTypes.SignUp, true, clientSideBaseUrl, token);
-
-            _logger.LogInformation("Token sent via email for user {Email}", user.Email);
-            return TokenStatMsg.ActivationTokenSent;
-        }
-
-
-        private async Task GenerateMail(User user, string mailPurpose, bool isSigin, string clientBaseUrl, string token)
-        {
-
-
-            string linkPath = $"{clientBaseUrl}auth/email-confirmation?token={token}";
-            string templatePath = @"EmailTemplate/{0}.html";
-            string mailSubject = "Kindly click the link to validate your email.";
-            string templateName = "EmailConfirm";
-            SendConfirmEmailProps confirmMailProps = new()
-            {
-                User = user,
-                Token = token,
-                MailPurpose = mailPurpose,
-                IsSigin = isSigin,
-                LinkPath = linkPath,
-                TemplatePath = templatePath,
-                TemplateName = templateName,
-                Subject = mailSubject,
-            };
-
-
-            await _emailService.SendConfrirmationMail(confirmMailProps);
-        }
-
-
+     
+  
+    
         public async Task<ActivateUserAccountResponse> ActivateUserAccount(string token)
         {
             _logger.LogInformation("Starting ActivateUserAccount with token: {Token}", token);
@@ -226,7 +177,7 @@ namespace RzumeAPI.Services
                         _logger.LogInformation("User {Email} retrieved from database", user.Email);
 
                         string token = await _tokenService.GenerateToken(user, DateTime.UtcNow.AddHours(5), TokenTypes.SignUp);
-                        await GenerateMail(userToReturn, TokenTypes.SignUp, true, clientBaseUrl, token);
+                        await _emailService.GenerateMail(userToReturn, TokenTypes.SignUp, true, clientBaseUrl, token);
 
                         return new RegisterUserResponse
                         {

@@ -19,8 +19,8 @@ namespace RzumeAPI.Repository
         IMapper mapper, 
         IUserFileRepository dbUserFile, 
         IExperienceRepository dbExperience, 
-        TokenService tokenService, 
-        IEmailRepository emailService, 
+        ITokenService tokenService, 
+        IEmailService emailService, 
         IUserRepository userRepo, 
         UserManager<User> userManager, 
         IEducationRepository educationRepo
@@ -28,9 +28,9 @@ namespace RzumeAPI.Repository
     {
         private readonly IExperienceRepository _dbExperience = dbExperience;
 
-        private readonly TokenService _tokenService = tokenService;
+        private readonly ITokenService _tokenService = tokenService;
 
-        private readonly IEmailRepository _emailService = emailService;
+        private readonly IEmailService _emailService = emailService;
 
         private readonly IUserRepository _userRepo = userRepo;
         private readonly IEducationRepository _educationRepo = educationRepo;

@@ -12,6 +12,7 @@ using RzumeAPI.Models.Utilities;
 using RzumeAPI.Models.Requests;
 using AutoMapper;
 using Google.Apis.Auth;
+using RzumeAPI.Services.IServices;
 
 
 namespace RzumeAPI.Controllers
@@ -20,19 +21,21 @@ namespace RzumeAPI.Controllers
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [ApiVersionNeutral]
-    public class UserController(IUserRepository userRepo, IEmailRepository emailRepository, OtpService otpService, IOtpRepository otpRepo, UserService userService, ILogger<UserController> logger, TokenService tokenService, IMapper mapper, IConfiguration configuration) : Controller
+    public class UserController(
+        IUserRepository userRepo, 
+        IEmailService emailService, 
+        IOtpRepository otpRepo, 
+        IUserService userService, 
+        ILogger<UserController> logger, 
+        ITokenService tokenService, 
+        IMapper mapper, 
+        IConfiguration configuration
+        ) : Controller
     {
 
         private readonly IUserRepository _userRepo = userRepo;
 
-        private readonly OtpService _otpService = otpService;
-
-        private readonly IEmailRepository _emailRepo = emailRepository;
-
-        
-
-        private readonly IOtpRepository _otpRepo = otpRepo;
-        private readonly UserService _userService = userService;
+        private readonly IUserService _userService = userService;
 
         private readonly string _clientId = configuration["Authentication:Google:ClientId"];
 
@@ -40,7 +43,7 @@ namespace RzumeAPI.Controllers
 
         private readonly ILogger<UserController> _logger = logger;
 
-        private readonly TokenService _tokenService = tokenService;
+        private readonly ITokenService _tokenService = tokenService;
 
         private readonly IMapper _mapper = mapper;
 
@@ -288,7 +291,7 @@ namespace RzumeAPI.Controllers
                     return BadRequest(_response);
                 }
 
-                string validateMessage = await _userService.SendTokenEmailValidation(user, clientSideBaseUrl);
+                string validateMessage = await _tokenService.SendTokenEmailValidation(user, clientSideBaseUrl);
                 if (validateMessage == TokenStatMsg.NotFound)
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;

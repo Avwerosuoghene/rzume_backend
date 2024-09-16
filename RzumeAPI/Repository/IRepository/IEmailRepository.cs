@@ -1,10 +1,10 @@
 
-using RzumeAPI.Models.Requests;
+// using RzumeAPI.Models.Requests;
 
-namespace RzumeAPI.Repository.IRepository
-{
-    public interface IEmailRepository
-    {
-        Task SendConfrirmationMail(SendConfirmEmailProps confirmationProps);
-    }
-}
+// namespace RzumeAPI.Repository.IRepository
+// {
+//     public interface IEmailRepository
+//     {
+//         Task SendConfrirmationMail(SendConfirmEmailProps confirmationProps);
+//     }
+// }

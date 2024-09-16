@@ -1,0 +1,24 @@
+2024-09-15 18:14:35.974 +01:00 [INF] User profile is available. Using '/Users/avwerosuoghenedarhare-igben/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2024-09-15 18:14:36.375 +01:00 [INF] Now listening on: https://localhost:7159
+2024-09-15 18:14:36.375 +01:00 [INF] Now listening on: http://localhost:5252
+2024-09-15 18:14:36.377 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-09-15 18:14:36.377 +01:00 [INF] Hosting environment: Development
+2024-09-15 18:14:36.377 +01:00 [INF] Content root path: /Users/avwerosuoghenedarhare-igben/Documents/DotNet/RzumeAPI/RzumeAPI
+2024-09-15 18:16:18.021 +01:00 [INF] User profile is available. Using '/Users/avwerosuoghenedarhare-igben/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2024-09-15 18:16:18.458 +01:00 [INF] Now listening on: https://localhost:7159
+2024-09-15 18:16:18.459 +01:00 [INF] Now listening on: http://localhost:5252
+2024-09-15 18:16:18.460 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-09-15 18:16:18.461 +01:00 [INF] Hosting environment: Development
+2024-09-15 18:16:18.461 +01:00 [INF] Content root path: /Users/avwerosuoghenedarhare-igben/Documents/DotNet/RzumeAPI/RzumeAPI
+2024-09-15 18:23:59.100 +01:00 [INF] User profile is available. Using '/Users/avwerosuoghenedarhare-igben/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2024-09-15 18:23:59.490 +01:00 [INF] Now listening on: https://localhost:7159
+2024-09-15 18:23:59.491 +01:00 [INF] Now listening on: http://localhost:5252
+2024-09-15 18:23:59.492 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-09-15 18:23:59.493 +01:00 [INF] Hosting environment: Development
+2024-09-15 18:23:59.493 +01:00 [INF] Content root path: /Users/avwerosuoghenedarhare-igben/Documents/DotNet/RzumeAPI/RzumeAPI
+2024-09-15 18:37:27.363 +01:00 [INF] User profile is available. Using '/Users/avwerosuoghenedarhare-igben/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2024-09-15 18:37:27.713 +01:00 [INF] Now listening on: https://localhost:7159
+2024-09-15 18:37:27.714 +01:00 [INF] Now listening on: http://localhost:5252
+2024-09-15 18:37:27.715 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-09-15 18:37:27.741 +01:00 [INF] Hosting environment: Development
+2024-09-15 18:37:27.741 +01:00 [INF] Content root path: /Users/avwerosuoghenedarhare-igben/Documents/DotNet/RzumeAPI/RzumeAPI

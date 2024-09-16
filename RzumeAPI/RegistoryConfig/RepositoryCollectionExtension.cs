@@ -10,7 +10,6 @@ namespace RzumeAPI.RegistoryConfig {
 
         services.AddScoped<IUserFileRepository, UserFileRepository>();
 
-        services.AddScoped<IEmailRepository, EmailRepository>();
 
         services.AddScoped<IOtpRepository, OtpRepository>();
 

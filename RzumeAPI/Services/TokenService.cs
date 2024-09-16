@@ -6,14 +6,25 @@ using Microsoft.IdentityModel.Tokens;
 using RzumeAPI.Models;
 using RzumeAPI.Models.Responses;
 using RzumeAPI.Models.Utilities;
+using RzumeAPI.Repository;
 using RzumeAPI.Repository.IRepository;
 using RzumeAPI.Services.IServices;
 
 namespace RzumeAPI.Services
 {
-    public class TokenService(IConfiguration configuration, UserManager<User> userManager,         IUserRepository userRepo
-): ITokenService
+    public class TokenService(
+        IConfiguration configuration,
+        UserManager<User> userManager,
+        IUserRepository userRepo,
+        ILogger<UserRepository> logger,
+        IEmailService emailService
+
+
+) : ITokenService
     {
+        private readonly ILogger<UserRepository> _logger = logger;
+
+        private readonly IEmailService _emailService = emailService;
 
         private readonly IUserRepository _userRepo = userRepo;
 
@@ -67,7 +78,7 @@ namespace RzumeAPI.Services
             }
         }
 
-           public async Task<GetUserFromTokenResponse> GetUserFromToken(string token)
+        public async Task<GetUserFromTokenResponse> GetUserFromToken(string token)
         {
             TokenServiceResponse tokenServiceResponse = ValidateToken(token);
             string? userMail = tokenServiceResponse.UserMail;
@@ -139,6 +150,32 @@ namespace RzumeAPI.Services
             return uniqueGenerateToken;
         }
 
+
+        public async Task<string> SendTokenEmailValidation(User user, string clientSideBaseUrl)
+        {
+            _logger.LogInformation("Starting SendTokenEmailValidation for user {Email}", user.Email);
+
+            var activeToken = await _userManager.GetAuthenticationTokenAsync(user, TokenTypes.SignUp, $"{TokenTypes.SignUp}");
+            if (activeToken != null)
+            {
+                _logger.LogInformation("Existing token found for user {Email}", user.Email);
+
+                TokenServiceResponse tokenServiceResponse = ValidateToken(activeToken);
+                if (tokenServiceResponse.Message != TokenStatMsg.TokenExpired)
+                {
+                    _logger.LogInformation("Token is still active for user {Email}", user.Email);
+                    return TokenStatMsg.ActivationTokenActive;
+                }
+            }
+
+            _logger.LogInformation("Generating new token for user {Email}", user.Email);
+            string token = await GenerateToken(user, DateTime.UtcNow.AddHours(5), TokenTypes.SignUp);
+
+            await _emailService.GenerateMail(user, TokenTypes.SignUp, true, clientSideBaseUrl, token);
+
+            _logger.LogInformation("Token sent via email for user {Email}", user.Email);
+            return TokenStatMsg.ActivationTokenSent;
+        }
 
     }
 }

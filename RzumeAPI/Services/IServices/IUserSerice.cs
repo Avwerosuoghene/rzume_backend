@@ -17,15 +17,14 @@ namespace RzumeAPI.Services.IServices
 
         Task<OtpPasswordResetRequestResponseDTO> InitiateOtpResetPassword(OtpPasswordResetRequestDTO passwordResetRequestModel);
 
-         Task<GetActiveUserResponse> GetActiveUser(string token);
+        Task<GetActiveUserResponse> GetActiveUser(string token);
+
+        Task<ActivateUserAccountResponse> ActivateUserAccount(string token);
+
+        Task<User?> UserExists(string email);
 
 
-         Task<string> SendTokenEmailValidation(User user, string clientSideBaseUrl);
 
-        Task<ActivateUserAccountResponse> ActivateUserAccount( string token);
-
-
-        
     };
 }
 
