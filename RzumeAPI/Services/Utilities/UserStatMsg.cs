@@ -1,4 +1,4 @@
-namespace RzumeAPI.Models.Utilities;
+namespace RzumeAPI.Services.Utilities;
 
 public static class UserStatMsg
 {

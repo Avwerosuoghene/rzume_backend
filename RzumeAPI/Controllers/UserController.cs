@@ -13,6 +13,7 @@ using RzumeAPI.Models.Requests;
 using AutoMapper;
 using Google.Apis.Auth;
 using RzumeAPI.Services.IServices;
+using RzumeAPI.Services.Utilities;
 
 
 namespace RzumeAPI.Controllers
@@ -53,63 +54,7 @@ namespace RzumeAPI.Controllers
 
 
 
-        // [HttpPost("register")]
-
-        // public async Task<IActionResult> Register([FromBody] RegistrationRequest model, [FromServices] IOptionsSnapshot<BaseUrlOptions> baseUrls)
-        // {
-
-        //     _logger.LogInformation("Register method called with model: {@Request}", model);
-
-        //     User? user = await  _userService.UserExists(model.Email);
-        //     var _baseUrls = baseUrls.Value;
-        //     string clientSideBaseUrl = _baseUrls.ClientBaseUrl;
-
-        //     if (user != null && user.EmailConfirmed)
-        //     {
-        //         _response.StatusCode = HttpStatusCode.Conflict;
-        //         _response.IsSuccess = false;
-        //         _response.ErrorMessages.Add(UserStatMsg.UserExistsMsg);
-        //         _logger.LogWarning("User already exists and email is confirmed. Response: {@Response}", _response);
-
-        //         return BadRequest(_response);
-        //     }
-
-        //     if (user != null && !user.EmailConfirmed)
-        //     {
-        //         _response.StatusCode = HttpStatusCode.Conflict;
-        //         _response.IsSuccess = false;
-        //         _response.ErrorMessages.Add(UserStatMsg.EmailNotConfirmedMsg);
-        //         _logger.LogWarning("User exists but email is not confirmed. Response: {@Response}", _response);
-        //         return BadRequest(_response);
-        //     }
-
-        //     RegisterUserResponse response = await _userService.RegisterUser(model, clientSideBaseUrl)!;
-        //     if (response.User == null)
-        //     {
-        //         string responseMsg = response.Message ?? "Error while registering";
-        //         _response.StatusCode = HttpStatusCode.BadRequest;
-        //         _response.IsSuccess = false;
-        //         _response.ErrorMessages.Add(responseMsg);
-        //         _logger.LogError("Error while registering user. Response: {@Response}", _response);
-        //         return BadRequest(_response);
-        //     }
-
-        //     RegistrationResponse signupResponse = new RegistrationResponse
-        //     {
-        //         IsCreated = true
-        //     };
-        //     _response.StatusCode = HttpStatusCode.OK;
-        //     _response.IsSuccess = true;
-        //     _response.Result = new ResultObject
-        //     {
-        //         Message = "Kindly check your mail for the confirmation token",
-        //         Content = signupResponse
-        //     };
-        //     _logger.LogInformation("User registered successfully. Response: {@Response}", _response);
-
-        //     return Ok(_response);
-        // }
-
+  
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegistrationRequest model, [FromServices] IOptionsSnapshot<BaseUrlOptions> baseUrls)
         {
