@@ -307,9 +307,59 @@ namespace RzumeAPI.Services
 
 
 
-        public async Task<RegisterUserResponse<ResultObject>> RegisterUserWithGoogle(GoogleSigninRequest googleRequest, string clientSideBaseUrl)
+        public async Task<GoogleSignupResponse> RegisterUserWithGoogle(GoogleSigninRequest googleRequest)
         {
-                        _logger.LogInformation("RegisterUser method called with model: {@Request}", model);
+            _logger.LogInformation("RegisterUser method called with model: {@Request}", googleRequest);
+            User user = new()
+            {
+                Email = googleRequest.Email,
+                Name = googleRequest.Name,
+                FirstName = googleRequest.GivenName,
+                LastName = googleRequest.FamilyName,
+                NormalizedEmail = googleRequest.Email.ToUpper(),
+                UserName = googleRequest.GivenName,
+                TwoFactorEnabled = true,
+                EmailConfirmed = true
+            };
+            string defaultPassword = _utilityService.GenerateDefaultPassword();
+            IdentityResult result = await _userManager.CreateAsync(user, defaultPassword);
+
+            try
+            {
+                if (result.Succeeded)
+                {
+                    _logger.LogInformation("Google user {Email} created successfully", user.Email);
+
+                    var userToReturn = await _userRepo.GetUserByEmailAsync(user.Email);
+                    if (userToReturn != null)
+                    {
+                        return new GoogleSignupResponse
+                        {
+                            User = userToReturn,
+                        };
+                    }
+                    else
+                    {
+                        _logger.LogError("User retrieval failed for {Email}", user.Email);
+                        throw new Exception(ErrorMsgs.UserRetrievalError);
+                    }
+                }
+                else
+                {
+                    var errorMessages = string.Join("; ", result.Errors.Select(e => e.Description));
+                    _logger.LogError("Google registration failed for {Email}: {Errors}", user.Email, errorMessages);
+                    throw new Exception($"{ErrorMsgs.RegistrationFailed}: {errorMessages}");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred during HandleGoogleSignup for {Email}", user.Email);
+                return new GoogleSignupResponse
+                {
+                    User = null,
+                    Message = ex.Message
+                };
+            }
 
 
         }
@@ -451,6 +501,8 @@ namespace RzumeAPI.Services
                     Message = ex.Message
                 };
             }
+
+
         }
         public async Task<GetActiveUserResponse> GetActiveUser(string token)
         {

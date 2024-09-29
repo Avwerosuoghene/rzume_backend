@@ -118,7 +118,7 @@ namespace RzumeAPI.Controllers
             var _baseUrls = baseUrls.Value;
             string clientSideBaseUrl = _baseUrls.ClientBaseUrl;
 
-            var response = await _userService.RegisterUser(model, clientSideBaseUrl);
+            var response = await _userService.RegisterUserWithEmail(model, clientSideBaseUrl);
 
             if (!response.IsSuccess)
             {
@@ -445,7 +445,7 @@ namespace RzumeAPI.Controllers
 
             if (loginResponse.User == null)
             {
-                ProcessUserResponse response = await _userService.ProcessUserRegistration(requestModel, string.Empty);
+                GoogleSignupResponse response = await _userService.RegisterUserWithGoogle(requestModel);
             
                 if (response.User == null)
                 {
