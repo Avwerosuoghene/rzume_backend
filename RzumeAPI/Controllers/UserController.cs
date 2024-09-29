@@ -445,7 +445,8 @@ namespace RzumeAPI.Controllers
 
             if (loginResponse.User == null)
             {
-                RegisterUserResponse<ResultObject> response = await _userService.RegisterUser(requestModel, string.Empty);
+                ProcessUserResponse response = await _userService.ProcessUserRegistration(requestModel, string.Empty);
+            
                 if (response.User == null)
                 {
                     string responseMsg = response.Message ?? "Error while registering";

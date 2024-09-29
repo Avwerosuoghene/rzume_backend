@@ -19,6 +19,8 @@ namespace RzumeAPI.Services.IServices
 
         Task<OtpPasswordResetRequestResponseDTO> InitiateOtpResetPassword(OtpPasswordResetRequestDTO passwordResetRequestModel);
 
+        Task<RegisterUserResponse<ResultObject>> RegisterUserWithEmail(RegistrationRequest model,string clientSideBaseUrl);
+
         Task<GetActiveUserResponse> GetActiveUser(string token);
 
         Task<ActivateUserAccountResponse> ActivateUserAccount(string token);

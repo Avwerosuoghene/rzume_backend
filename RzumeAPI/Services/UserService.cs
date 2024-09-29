@@ -197,9 +197,122 @@ namespace RzumeAPI.Services
             };
         }
 
+        public async Task<RegisterUserResponse<ResultObject>> RegisterUserWithEmail(RegistrationRequest model, string clientSideBaseUrl)
+        {
+            _logger.LogInformation("RegisterUser method called with model: {@Request}", model);
+            User? userExits = await UserExists(model.Email);
+
+            if (userExits != null)
+            {
+                if (userExits.EmailConfirmed)
+                {
+                    _logger.LogWarning("User already exists and email is confirmed.");
+
+
+                    return new RegisterUserResponse<ResultObject>
+                    {
+                        StatusCode = HttpStatusCode.Conflict,
+                        IsSuccess = false,
+                        ErrorMessages =
+                        [
+                            "User already exists and email is confirmed."
+                        ]
+                    };
+                }
+
+                _logger.LogWarning("User exists but email is not confirmed.");
+                return new RegisterUserResponse<ResultObject>
+                {
+                    StatusCode = HttpStatusCode.Conflict,
+                    IsSuccess = false,
+                    ErrorMessages =
+                    [
+                        "User exists but email is not confirmed."
+                    ]
+                };
+            }
+            User user = new()
+            {
+                Email = model.Email,
+                Name = string.Empty,
+                NormalizedEmail = model.Email.ToUpper(),
+                UserName = model.Email,
+                TwoFactorEnabled = true,
+            };
+            IdentityResult result = await _userManager.CreateAsync(user, model.Password);
+
+            try
+            {
+                if (result.Succeeded)
+                {
+                    _logger.LogInformation("User {Email} created successfully", user.Email);
+
+                    var userToReturn = await _userRepo.GetUserByEmailAsync(user.Email);
+                    if (userToReturn != null)
+                    {
+                        _logger.LogInformation("User {Email} retrieved from database", user.Email);
+
+                        string token = await _tokenService.GenerateToken(user, DateTime.UtcNow.AddHours(5), TokenTypes.SignUp);
+                        await _emailService.GenerateMail(userToReturn, TokenTypes.SignUp, true, clientSideBaseUrl, token);
+
+                        // return new ProcessUserResponse
+                        // {
+                        //     User = userToReturn,
+                        // };
+                        _logger.LogInformation("User registered successfully.");
+                        return new RegisterUserResponse<ResultObject>
+                        {
+                            StatusCode = HttpStatusCode.OK,
+                            IsSuccess = true,
+                            Result = new ResultObject
+                            {
+                                Message = "Kindly check your mail for the confirmation token",
+                                Content = userToReturn
+                            }
+                        };
+                    }
+                    else
+                    {
+                        _logger.LogError("User retrieval failed for {Email}", user.Email);
+                        throw new Exception(ErrorMsgs.UserRetrievalError);
+                    }
+                }
+                else
+                {
+                    var errorMessages = string.Join("; ", result.Errors.Select(e => e.Description));
+                    _logger.LogError("Registration failed for {Email}: {Errors}", user.Email, errorMessages);
+                    throw new Exception($"{ErrorMsgs.RegistrationFailed}: {errorMessages}");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred during HandleEmailSignup for {Email}", user.Email);
+
+                string responseMsg = ex.Message ?? "Error while registering";
+                _logger.LogError("Error while registering user.");
+                return new RegisterUserResponse<ResultObject>
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    IsSuccess = false,
+                    ErrorMessages =
+    [
+       responseMsg
+    ]
+
+                };
+            }
+
+
+        }
 
 
 
+        public async Task<RegisterUserResponse<ResultObject>> RegisterUserWithGoogle(GoogleSigninRequest googleRequest, string clientSideBaseUrl)
+        {
+                        _logger.LogInformation("RegisterUser method called with model: {@Request}", model);
+
+
+        }
         public async Task<ProcessUserResponse> ProcessUserRegistration(object registrationDTO, string? clientSideBaseUrl)
         {
             _logger.LogInformation("Starting user registration process");
@@ -280,6 +393,8 @@ namespace RzumeAPI.Services
                     Message = ex.Message
                 };
             }
+
+
         }
         private async Task<ProcessUserResponse> HandleGoogleSignup(GoogleSigninRequest googleRequest)
         {
