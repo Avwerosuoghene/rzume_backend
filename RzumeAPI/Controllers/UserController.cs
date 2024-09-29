@@ -122,7 +122,7 @@ namespace RzumeAPI.Controllers
 
             if (!response.IsSuccess)
             {
-                _logger.LogWarning("Registration failed. Response: {@Response}", response);
+                _logger.LogWarning("Registration failed. Response: {@Response}", response.ErrorMessages[0]);
                 return StatusCode((int)response.StatusCode, response);
             }
 
@@ -445,7 +445,7 @@ namespace RzumeAPI.Controllers
 
             if (loginResponse.User == null)
             {
-                RegisterUserResponse response = await _userService.Register(requestModel, string.Empty);
+                RegisterUserResponse<ResultObject> response = await _userService.RegisterUser(requestModel, string.Empty);
                 if (response.User == null)
                 {
                     string responseMsg = response.Message ?? "Error while registering";
