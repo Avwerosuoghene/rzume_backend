@@ -11,3 +11,9 @@ public class LoginResponse
 
     public bool EmailConfirmed { get; set; }
 }
+
+public class LoginResponseContent {
+    public string Token { get; set; } = string.Empty;
+
+   public required UserDTO User { get; set; }
+}

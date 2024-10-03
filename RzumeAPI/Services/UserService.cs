@@ -9,7 +9,6 @@ using RzumeAPI.Models.Utilities;
 using RzumeAPI.Repository;
 using RzumeAPI.Repository.IRepository;
 using RzumeAPI.Services.IServices;
-using RzumeAPI.Services.Utilities;
 
 namespace RzumeAPI.Services
 {
@@ -320,7 +319,7 @@ namespace RzumeAPI.Services
         }
 
 
-        public async Task<LoginResponse> Login(object loginRequest)
+        public async Task<APIServiceResponse<ResultObject>> Login(object loginRequest)
         {
 
 
@@ -345,7 +344,7 @@ namespace RzumeAPI.Services
 
         }
 
-        private async Task<LoginResponse> HandleEmailLogin(LoginRequest emailRequest)
+        private async Task<APIServiceResponse<ResultObject>> HandleEmailLogin(LoginRequest emailRequest)
         {
             _logger.LogInformation("Handling email login for {Email}", emailRequest.Email);
 
@@ -354,11 +353,13 @@ namespace RzumeAPI.Services
             if (user == null)
             {
                 _logger.LogWarning("User not found for email {Email}", emailRequest.Email);
-                return new LoginResponse
+
+
+                return new APIServiceResponse<ResultObject>
                 {
-                    Token = "",
-                    User = null,
-                    Message = UserStatMsg.InvalidDetails
+                    StatusCode = HttpStatusCode.BadRequest,
+                    IsSuccess = false,
+                    ErrorMessages = [UserStatMsg.InvalidDetails]
                 };
             }
 
@@ -372,19 +373,22 @@ namespace RzumeAPI.Services
                 if (signInResult.IsLockedOut)
                 {
                     _logger.LogWarning("User with email {Email} is locked out", emailRequest.Email);
-                    return new LoginResponse
+
+                    return new APIServiceResponse<ResultObject>
                     {
-                        Token = "",
-                        User = null,
-                        Message = UserStatMsg.LockedOut
+                        StatusCode = HttpStatusCode.BadRequest,
+                        IsSuccess = false,
+                        ErrorMessages = [UserStatMsg.LockedOut]
                     };
                 };
                 _logger.LogWarning("Sign-in failed for email {Email}", emailRequest.Email);
-                return new LoginResponse
+
+
+                return new APIServiceResponse<ResultObject>
                 {
-                    Token = "",
-                    User = null,
-                    Message = UserStatMsg.InvalidDetails
+                    StatusCode = HttpStatusCode.BadRequest,
+                    IsSuccess = false,
+                    ErrorMessages = [UserStatMsg.InvalidDetails]
                 };
 
 
@@ -393,12 +397,17 @@ namespace RzumeAPI.Services
             if (!user.EmailConfirmed)
             {
                 _logger.LogWarning("Email not confirmed for user {Email}", emailRequest.Email);
-                return new LoginResponse
+
+
+
+                return new APIServiceResponse<ResultObject>
                 {
-                    Token = "",
-                    User = _mapper.Map<UserDTO>(user),
-                    EmailConfirmed = false,
-                    Message = UserStatMsg.EmailNotConfirmedMsg
+                    StatusCode = HttpStatusCode.OK,
+                    IsSuccess = true,
+                    Result = new ResultObject
+                    {
+                        Message = UserStatMsg.EmailNotConfirmedMsg
+                    }
                 };
             }
 
@@ -406,11 +415,22 @@ namespace RzumeAPI.Services
             string token = await _tokenService.GenerateToken(user, DateTime.UtcNow.AddHours(5), TokenTypes.Login);
 
             _logger.LogInformation("Login successful for email {Email}", emailRequest.Email);
-            return new LoginResponse
+
+
+
+            return new APIServiceResponse<ResultObject>
             {
-                Token = token,
-                User = _mapper.Map<UserDTO>(user),
-                EmailConfirmed = true
+                StatusCode = HttpStatusCode.OK,
+                IsSuccess = true,
+                Result = new ResultObject
+                {
+                    Message = "Login Successful",
+                    Content = new LoginResponseContent
+                    {
+                        Token = token,
+                        User = _mapper.Map<UserDTO>(user)
+                    }
+                }
             };
         }
 

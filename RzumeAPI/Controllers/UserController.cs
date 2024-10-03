@@ -4,7 +4,6 @@ using RzumeAPI.Models;
 using RzumeAPI.Models.DTO;
 using RzumeAPI.Repository.IRepository;
 using System.Net;
-using RzumeAPI.Services;
 using Microsoft.Extensions.Options;
 using RzumeAPI.Options;
 using RzumeAPI.Models.Responses;
@@ -13,7 +12,6 @@ using RzumeAPI.Models.Requests;
 using AutoMapper;
 using Google.Apis.Auth;
 using RzumeAPI.Services.IServices;
-using RzumeAPI.Services.Utilities;
 
 
 namespace RzumeAPI.Controllers

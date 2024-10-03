@@ -8,7 +8,6 @@ using RzumeAPI.Models.Utilities;
 using RzumeAPI.Models.DO;
 using RzumeAPI.Models.Requests;
 using RzumeAPI.Models.Responses;
-using RzumeAPI.Services;
 using Microsoft.AspNetCore.Identity;
 using System.Net;
 using RzumeAPI.Services.IServices;
