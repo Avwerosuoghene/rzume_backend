@@ -52,7 +52,7 @@ namespace RzumeAPI.Controllers
 
 
 
-  
+
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegistrationRequest model, [FromServices] IOptionsSnapshot<BaseUrlOptions> baseUrls)
         {
@@ -79,56 +79,13 @@ namespace RzumeAPI.Controllers
 
             _logger.LogInformation("Login method called with model: {@Request}", model);
 
-            try
+            APIServiceResponse<ResultObject> loginResponse = await _userService.Login(model);
+
+            if (!loginResponse.IsSuccess)
             {
-                LoginResponse loginResponse = await _userService.Login(model);
-
-                if (loginResponse.User == null)
-                {
-                    _response.StatusCode = HttpStatusCode.BadRequest;
-                    _response.IsSuccess = false;
-                    _response.ErrorMessages.Add(loginResponse.Message);
-                    _logger.LogWarning("Login failed due to {response}", loginResponse.Message);
-                    return BadRequest(_response);
-                }
-
-                if (!loginResponse.EmailConfirmed)
-                {
-                    loginResponse.User = null;
-                    _response.StatusCode = HttpStatusCode.OK;
-                    _response.IsSuccess = true;
-                    _response.Result = new ResultObject
-                    {
-                        Message = "Kindly Validate your Account",
-                        Content = loginResponse
-                    };
-                    _logger.LogInformation("User email not confirmed. Response: {@Response}", _response);
-
-                    return Ok(_response);
-                }
-
-                _response.StatusCode = HttpStatusCode.OK;
-                _response.IsSuccess = true;
-
-                _response.Result = new ResultObject
-                {
-                    Message = "Login Successful",
-                    Content = loginResponse
-                };
-
-                _logger.LogInformation("User logged in successfully. Response: {@Response}", _response);
-
-                return Ok(_response);
+                return StatusCode((int)loginResponse.StatusCode, loginResponse);
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Exception occurred during login");
-            }
-
-            _response.StatusCode = HttpStatusCode.InternalServerError;
-            _response.IsSuccess = false;
-            return BadRequest(_response);
-
+            return Ok(loginResponse);
 
         }
 
@@ -345,87 +302,15 @@ namespace RzumeAPI.Controllers
 
 
         [HttpPost("google-signin")]
-        public async Task<IActionResult> GoogleResponse([FromServices] IOptionsSnapshot<BaseUrlOptions> baseUrls, [FromBody] GoogleLoginRequest model)
+        public async Task<IActionResult> GoogleResponse([FromBody] GoogleLoginRequest model)
         {
-            var clientId = _clientId;
             _logger.LogInformation("Google Signin method called with token: {@Request}", model);
-            var payload = await GoogleJsonWebSignature.ValidateAsync(model.UserToken, new GoogleJsonWebSignature.ValidationSettings
+            APIServiceResponse<ResultObject> loginResponse = await _userService.Login(model);
+            if (!loginResponse.IsSuccess)
             {
-                Audience = [_clientId]
-            });
-
-            var userInfo = new UserInfo
-            {
-                Email = payload.Email,
-                Name = payload.Name,
-                GivenName = payload.GivenName,
-                FamilyName = payload.FamilyName,
-                PictureUrl = payload.Picture,
-                Locale = payload.Locale
-            };
-
-
-
-
-            if (userInfo.Email == null || userInfo.Name == null)
-            {
-                _logger.LogWarning("Failed to retrieve user infomation from userToken");
-
-                return BadRequest("Failed to retrieve user information.");
+                return StatusCode((int)loginResponse.StatusCode, loginResponse);
             }
-
-            _logger.LogInformation("User mail obtained from claim with value: {@Request}", userInfo.Email);
-
-            GoogleSigninRequest requestModel = new()
-            {
-                Email = userInfo.Email,
-                Name = userInfo.Name,
-                GivenName = userInfo.GivenName,
-                FamilyName = userInfo.FamilyName
-            };
-
-            var loginResponse = await _userService.Login(requestModel);
-
-            if (loginResponse.User == null)
-            {
-                GoogleSignupResponse response = await _userService.RegisterUserWithGoogle(requestModel);
-            
-                if (response.User == null)
-                {
-                    string responseMsg = response.Message ?? "Error while registering";
-                    _response.StatusCode = HttpStatusCode.BadRequest;
-                    _response.IsSuccess = false;
-                    _response.ErrorMessages.Add(responseMsg);
-                    _logger.LogError("Error while registering user. Response: {@Response}", _response);
-                    return BadRequest(_response);
-                }
-                string token = await _tokenService.GenerateToken(response.User, DateTime.UtcNow.AddHours(5), TokenTypes.Login);
-                loginResponse = new()
-                {
-                    Token = token,
-                    User = _mapper.Map<UserDTO>(response.User),
-                    EmailConfirmed = true,
-                };
-                _logger.LogInformation("User registered successfully. Response: {@Response}", _response);
-
-
-            }
-
-
-            _response.StatusCode = HttpStatusCode.OK;
-            _response.IsSuccess = true;
-
-            _response.Result = new ResultObject
-            {
-                Message = "Login Successful",
-                Content = loginResponse
-            };
-
-            _logger.LogInformation("User logged in successfully. Response: {@Response}", _response);
-
-            return Ok(_response);
-
-
+            return Ok(loginResponse);
 
         }
 

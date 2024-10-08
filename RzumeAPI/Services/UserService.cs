@@ -1,5 +1,6 @@
 using System.Net;
 using AutoMapper;
+using Google.Apis.Auth;
 using Microsoft.AspNetCore.Identity;
 using RzumeAPI.Models;
 using RzumeAPI.Models.DTO;
@@ -22,7 +23,8 @@ namespace RzumeAPI.Services
         IMapper mapper,
         IOtpService otpService,
         IOtpRepository otpRepository,
-        IUtilityService utilityService
+        IUtilityService utilityService,
+          IConfiguration configuration
         ) : IUserService
     {
 
@@ -47,6 +49,9 @@ namespace RzumeAPI.Services
 
 
         private readonly SignInManager<User> _signInManager = signInManager;
+
+        private readonly string _clientId = configuration["Authentication:Google:ClientId"];
+
 
 
 
@@ -332,7 +337,7 @@ namespace RzumeAPI.Services
 
 
             }
-            else if (loginRequest is GoogleSigninRequest googleRequest)
+            else if (loginRequest is GoogleLoginRequest googleRequest)
             {
                 return await HandleGoogleLogin(googleRequest);
             }
@@ -435,20 +440,69 @@ namespace RzumeAPI.Services
         }
 
 
-        private async Task<LoginResponse> HandleGoogleLogin(GoogleSigninRequest googleRequest)
+        private async Task<APIServiceResponse<ResultObject>> HandleGoogleLogin(GoogleLoginRequest googleRequest)
         {
-            var user = await _userRepo.GetUserByEmailAsync(googleRequest.Email);
+            var payload = await GoogleJsonWebSignature.ValidateAsync(googleRequest.UserToken, new GoogleJsonWebSignature.ValidationSettings
+            {
+                Audience = [_clientId]
+            });
+
+            var userInfo = new UserInfo
+            {
+                Email = payload.Email,
+                Name = payload.Name,
+                GivenName = payload.GivenName,
+                FamilyName = payload.FamilyName,
+                PictureUrl = payload.Picture,
+                Locale = payload.Locale
+            };
+
+            if (userInfo.Email == null || userInfo.Name == null)
+            {
+                _logger.LogWarning("Failed to retrieve user infomation from userToken");
+
+
+                return new APIServiceResponse<ResultObject>
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    IsSuccess = false,
+                    ErrorMessages = ["Failed to retrieve user information."]
+                };
+            }
+
+            _logger.LogInformation("User mail obtained from claim with value: {@Request}", userInfo.Email);
+
+            GoogleSigninRequest requestModel = new()
+            {
+                Email = userInfo.Email,
+                Name = userInfo.Name,
+                GivenName = userInfo.GivenName,
+                FamilyName = userInfo.FamilyName
+            };
+
+
+
+            var user = await _userRepo.GetUserByEmailAsync(requestModel.Email);
 
 
 
             if (user == null)
             {
-                return new LoginResponse()
+                GoogleSignupResponse googleSignupResponse = await RegisterUserWithGoogle(requestModel);
+                if (googleSignupResponse.User == null)
                 {
-                    Token = "",
-                    User = null,
-                    Message = UserStatMsg.InvalidDetails
-                };
+                    _logger.LogError("Error while registering user");
+
+                    string responseMsg = googleSignupResponse.Message ?? "Error while registering";
+
+                    return new APIServiceResponse<ResultObject>
+                    {
+                        StatusCode = HttpStatusCode.BadRequest,
+                        IsSuccess = false,
+                        ErrorMessages = [responseMsg]
+                    };
+                }
+
             }
 
 
@@ -456,7 +510,7 @@ namespace RzumeAPI.Services
 
 
 
-            LoginResponse loginResponseDTO = new()
+            LoginResponse loginResponse = new()
             {
                 Token = token,
                 User = _mapper.Map<UserDTO>(user),
@@ -465,8 +519,18 @@ namespace RzumeAPI.Services
 
             };
 
+              return new APIServiceResponse<ResultObject>
+            {
+                StatusCode = HttpStatusCode.OK,
+                IsSuccess = true,
+                Result = new ResultObject
+                {
+                    Message = "Login Successful",
+                    Content = loginResponse
+                }
+            };
 
-            return loginResponseDTO;
+
         }
 
 
