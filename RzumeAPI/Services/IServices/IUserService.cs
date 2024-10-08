@@ -21,7 +21,7 @@ namespace RzumeAPI.Services.IServices
 
         Task<GoogleSignupResponse> RegisterUserWithGoogle(GoogleSigninRequest googleRequest);
 
-        Task<GetActiveUserResponse> GetActiveUser(string token);
+         Task<APIServiceResponse<ResultObject>> GetActiveUser(string token);
 
         Task<ActivateUserAccountResponse> ActivateUserAccount(string token);
 

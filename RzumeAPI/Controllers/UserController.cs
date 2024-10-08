@@ -94,52 +94,16 @@ namespace RzumeAPI.Controllers
         public async Task<IActionResult> GetActiveUser()
         {
             _logger.LogInformation("GetActiveUser method called");
+            var token = HttpContext.Request.Headers.Authorization.FirstOrDefault()?.Split(" ").Last();
 
-            try
+
+            APIServiceResponse<ResultObject> getActiveUserResponse = await _userService.GetActiveUser(token);
+              if (!getActiveUserResponse.IsSuccess)
             {
-                var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-                if (token == null)
-                {
-
-
-                    _response.StatusCode = HttpStatusCode.BadRequest;
-                    _response.IsSuccess = false;
-                    _response.ErrorMessages.Add("Invalid Request");
-                    _logger.LogWarning("Authorization token is missing");
-
-                    return BadRequest(_response);
-                }
-                GetActiveUserResponse response = await _userService.GetActiveUser(token);
-                if (response.User == null)
-                {
-                    _response.StatusCode = HttpStatusCode.BadRequest;
-                    _response.IsSuccess = false;
-                    _response.ErrorMessages.Add(response.Message);
-                    _logger.LogWarning("User not found. Response: {@Response}", _response);
-
-                    return BadRequest(_response);
-                }
-
-                _response.StatusCode = HttpStatusCode.OK;
-                _response.IsSuccess = true;
-                _response.Result = new ResultObject
-                {
-                    Message = "User Retrieved Succesfully",
-                    Content = response
-                };
-                _logger.LogInformation("Active user retrieved successfully. Response: {@Response}", _response);
-                return Ok(_response);
-
+                return StatusCode((int)getActiveUserResponse.StatusCode, getActiveUserResponse);
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Exception occurred while retrieving active user");
-
-            }
-
-            _response.StatusCode = HttpStatusCode.InternalServerError;
-            _response.IsSuccess = false;
-            return BadRequest(_response);
+            return Ok(getActiveUserResponse);
+            
         }
 
 

@@ -270,9 +270,20 @@ namespace RzumeAPI.Services
 
 
         }
-        public async Task<GetActiveUserResponse> GetActiveUser(string token)
+        public async Task<APIServiceResponse<ResultObject>> GetActiveUser(string token)
         {
             _logger.LogInformation("Starting GetActiveUser with token: {Token}", token);
+            if (token == null)
+            {
+                _logger.LogWarning("Authorization token is missing");
+
+                return new APIServiceResponse<ResultObject>
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    IsSuccess = false,
+                    ErrorMessages = ["Invalid Request"]
+                };
+            }
 
             try
             {
@@ -283,28 +294,31 @@ namespace RzumeAPI.Services
                 {
                     _logger.LogWarning("No active user found for token: {Token}", token);
 
-                    return new GetActiveUserResponse()
+                    return new APIServiceResponse<ResultObject>
                     {
-
-
-                        User = null,
-                        Message = response.Message
-
+                        StatusCode = HttpStatusCode.BadRequest,
+                        IsSuccess = false,
+                        ErrorMessages = [response.Message]
                     };
+
+
                 }
                 _logger.LogInformation("Active user retrieved: {Email}", response.User.Email);
-
-
-
-
-                return new GetActiveUserResponse()
+                return new APIServiceResponse<ResultObject>
                 {
+                    StatusCode = HttpStatusCode.OK,
+                    IsSuccess = true,
+                    Result = new ResultObject
+                    {
+                        Message = SuccessMsg.Default,
+                        Content = new GetActiveUserResponse
+                        {
 
-
-                    User = _mapper.Map<UserDTO>(response.User),
-                    Message = SuccessMsg.Default
-
+                            User = _mapper.Map<UserDTO>(response.User)
+                        }
+                    }
                 };
+
 
 
 
@@ -314,11 +328,19 @@ namespace RzumeAPI.Services
             {
                 _logger.LogError(ex, "Error occurred during GetActiveUser for token: {Token}", token);
 
-                return new GetActiveUserResponse()
+
+                string responseMsg = ex.Message ?? "Error while registering";
+                return new APIServiceResponse<ResultObject>
                 {
-                    User = null,
-                    Message = ErrorMsgs.Default
+                    StatusCode = HttpStatusCode.BadRequest,
+                    IsSuccess = false,
+                    ErrorMessages =
+                    [
+                    responseMsg
+                    ]
+
                 };
+
             }
 
         }
@@ -327,24 +349,45 @@ namespace RzumeAPI.Services
         public async Task<APIServiceResponse<ResultObject>> Login(object loginRequest)
         {
 
-
-
-            if (loginRequest is LoginRequest emailRequest)
+            try
             {
-                return await HandleEmailLogin(emailRequest);
+                if (loginRequest is LoginRequest emailRequest)
+                {
+                    return await HandleEmailLogin(emailRequest);
 
 
 
+
+                }
+                else if (loginRequest is GoogleLoginRequest googleRequest)
+                {
+                    return await HandleGoogleLogin(googleRequest);
+                }
+                else
+                {
+                    throw new Exception(ErrorMsgs.InvalidRegReq);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while Logging in" );
+
+
+                string responseMsg = ex.Message ?? "Error during login";
+                return new APIServiceResponse<ResultObject>
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    IsSuccess = false,
+                    ErrorMessages =
+                    [
+                    responseMsg
+                    ]
+
+                };
 
             }
-            else if (loginRequest is GoogleLoginRequest googleRequest)
-            {
-                return await HandleGoogleLogin(googleRequest);
-            }
-            else
-            {
-                throw new Exception(ErrorMsgs.InvalidRegReq);
-            }
+
+
 
 
         }
@@ -519,7 +562,7 @@ namespace RzumeAPI.Services
 
             };
 
-              return new APIServiceResponse<ResultObject>
+            return new APIServiceResponse<ResultObject>
             {
                 StatusCode = HttpStatusCode.OK,
                 IsSuccess = true,
