@@ -115,62 +115,17 @@ namespace RzumeAPI.Controllers
 
 
         [HttpGet("generate-email-token")]
-        public async Task<IActionResult> GenerateEmailToken([FromQuery] string Email, [FromServices] IOptionsSnapshot<BaseUrlOptions> baseUrls)
+        public async Task<IActionResult> GenerateUserEmailToken([FromQuery] string Email, [FromServices] IOptionsSnapshot<BaseUrlOptions> baseUrls)
         {
             var _baseUrls = baseUrls.Value;
             string clientSideBaseUrl = _baseUrls.ClientBaseUrl;
-            try
+
+              APIServiceResponse<ResultObject> sendEmailTokenResponse = await _userService.SendUserEmailToken(Email,clientSideBaseUrl); ;
+            if (!sendEmailTokenResponse.IsSuccess)
             {
-
-                var user = await _userRepo.GetUserByEmailAsync(Email);
-
-                if (user == null)
-                {
-                    _response.StatusCode = HttpStatusCode.BadRequest;
-                    _response.IsSuccess = false;
-                    _response.ErrorMessages.Add(UserStatMsg.NotFound);
-                    return BadRequest(_response);
-                }
-
-                if (user.EmailConfirmed)
-                {
-                    _response.StatusCode = HttpStatusCode.BadRequest;
-                    _response.IsSuccess = false;
-                    _response.ErrorMessages.Add(UserStatMsg.EmailValidated);
-                    return BadRequest(_response);
-                }
-
-                string validateMessage = await _tokenService.SendTokenEmailValidation(user, clientSideBaseUrl);
-                if (validateMessage == TokenStatMsg.NotFound)
-                {
-                    _response.StatusCode = HttpStatusCode.BadRequest;
-                    _response.IsSuccess = false;
-                    _response.ErrorMessages.Add(TokenStatMsg.NotFound);
-                    return BadRequest(_response);
-                }
-
-                _response.StatusCode = HttpStatusCode.OK;
-                _response.IsSuccess = true;
-                _response.Result = new ResultObject
-                {
-                    Message = validateMessage,
-                    Content = ""
-                };
-
-                return Ok(_response);
-
+                return StatusCode((int)sendEmailTokenResponse.StatusCode, sendEmailTokenResponse);
             }
-            catch (Exception ex)
-            {
-                {
-                    Console.WriteLine(ex);
-                }
-
-                _response.StatusCode = HttpStatusCode.InternalServerError;
-                _response.IsSuccess = false;
-                return BadRequest(_response);
-            }
-
+            return Ok(sendEmailTokenResponse);
 
         }
 

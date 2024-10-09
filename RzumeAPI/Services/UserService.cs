@@ -596,6 +596,70 @@ namespace RzumeAPI.Services
 
         }
 
+        public async Task<APIServiceResponse<ResultObject>> SendUserEmailToken(string Email, string clientSideBaseUrl)
+        {
+            try
+            {
+                var user = await _userRepo.GetUserByEmailAsync(Email);
+                if (user == null)
+                {
+                    return new APIServiceResponse<ResultObject>
+                    {
+                        StatusCode = HttpStatusCode.BadRequest,
+                        IsSuccess = false,
+                        ErrorMessages = [UserStatMsg.InvalidDetails]
+                    };
+                }
+
+
+                if (user.EmailConfirmed)
+                {
+                    return new APIServiceResponse<ResultObject>
+                    {
+                        StatusCode = HttpStatusCode.BadRequest,
+                        IsSuccess = false,
+                        ErrorMessages = [UserStatMsg.EmailValidated]
+                    };
+                }
+
+                string validateMessage = await _tokenService.SendTokenEmailValidation(user, clientSideBaseUrl);
+                if (validateMessage == TokenStatMsg.NotFound)
+                {
+                    return new APIServiceResponse<ResultObject>
+                    {
+                        StatusCode = HttpStatusCode.BadRequest,
+                        IsSuccess = false,
+                        ErrorMessages = [TokenStatMsg.NotFound]
+                    };
+
+                }
+
+                return new APIServiceResponse<ResultObject>
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    IsSuccess = true,
+                    Result = new ResultObject
+                    {
+                        Message = validateMessage,
+                        Content = null
+                    }
+                };
+
+            }
+            catch (Exception ex)
+            {
+                string responseMsg = ex.Message ?? "Error occured";
+
+                return new APIServiceResponse<ResultObject>
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    IsSuccess = false,
+                    ErrorMessages = [responseMsg]
+                };
+            }
+        }
+
+
 
 
 
