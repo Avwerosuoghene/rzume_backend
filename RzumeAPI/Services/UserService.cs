@@ -88,6 +88,18 @@ namespace RzumeAPI.Services
         {
             _logger.LogInformation("Starting ActivateUserAccount with token: {Token}", token);
 
+            if (string.IsNullOrEmpty(token))
+            {
+                _logger.LogWarning("Invalid token request");
+
+                return new APIServiceResponse<ResultObject>
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    IsSuccess = false,
+                    ErrorMessages = ["Invalid Request"]
+                };
+            }
+
             try
             {
                 GetUserFromTokenResponse response = await _tokenService.GetUserFromToken(token);
@@ -159,7 +171,7 @@ namespace RzumeAPI.Services
         }
 
 
-        public async Task<RegisterUserResponse<ResultObject>> RegisterUserWithEmail(RegistrationRequest model, string clientSideBaseUrl)
+        public async Task<APIServiceResponse<ResultObject>> RegisterUserWithEmail(RegistrationRequest model, string clientSideBaseUrl)
         {
             _logger.LogInformation("RegisterUser method called with model: {@Request}", model);
             string userEmailStat = await CheckUserMailStatus(model.Email);
@@ -168,7 +180,7 @@ namespace RzumeAPI.Services
             {
                 _logger.LogWarning("User signup failed with error: {userEmailStat}", userEmailStat);
 
-                return new RegisterUserResponse<ResultObject>
+                return new APIServiceResponse<ResultObject>
                 {
                     StatusCode = HttpStatusCode.Conflict,
                     IsSuccess = false,
@@ -195,7 +207,7 @@ namespace RzumeAPI.Services
                     string token = await _tokenService.GenerateToken(user, DateTime.UtcNow.AddHours(5), TokenTypes.SignUp);
 
                     _logger.LogInformation("User registered successfully.");
-                    return new RegisterUserResponse<ResultObject>
+                    return new APIServiceResponse<ResultObject>
                     {
                         StatusCode = HttpStatusCode.OK,
                         IsSuccess = true,
@@ -217,7 +229,7 @@ namespace RzumeAPI.Services
                 _logger.LogError(ex, "Error occurred during user registration for {Email}", user.Email);
 
                 string responseMsg = ex.Message ?? "Error while registering";
-                return new RegisterUserResponse<ResultObject>
+                return new APIServiceResponse<ResultObject>
                 {
                     StatusCode = HttpStatusCode.BadRequest,
                     IsSuccess = false,

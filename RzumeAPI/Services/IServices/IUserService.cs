@@ -17,7 +17,7 @@ namespace RzumeAPI.Services.IServices
 
         Task<OtpPasswordResetRequestResponseDTO> InitiateOtpResetPassword(OtpPasswordResetRequestDTO passwordResetRequestModel);
 
-        Task<RegisterUserResponse<ResultObject>> RegisterUserWithEmail(RegistrationRequest model,string clientSideBaseUrl);
+        Task<APIServiceResponse<ResultObject>> RegisterUserWithEmail(RegistrationRequest model,string clientSideBaseUrl);
         Task<APIServiceResponse<ResultObject>> SendUserEmailToken(string Email,string clientSideBaseUrl);
 
         Task<GoogleSignupResponse> RegisterUserWithGoogle(GoogleSigninRequest googleRequest);

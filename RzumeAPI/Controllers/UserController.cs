@@ -1,16 +1,11 @@
 ﻿
 using Microsoft.AspNetCore.Mvc;
-using RzumeAPI.Models;
-using RzumeAPI.Models.DTO;
-using RzumeAPI.Repository.IRepository;
 using System.Net;
+using RzumeAPI.Models;
 using Microsoft.Extensions.Options;
 using RzumeAPI.Options;
 using RzumeAPI.Models.Responses;
-using RzumeAPI.Models.Utilities;
 using RzumeAPI.Models.Requests;
-using AutoMapper;
-using Google.Apis.Auth;
 using RzumeAPI.Services.IServices;
 
 
@@ -21,65 +16,48 @@ namespace RzumeAPI.Controllers
     [ApiController]
     [ApiVersionNeutral]
     public class UserController(
-        IUserRepository userRepo,
         IUserService userService,
-        ILogger<UserController> logger,
-        ITokenService tokenService
+        ILogger<UserController> logger
         ) : Controller
     {
-
-        private readonly IUserRepository _userRepo = userRepo;
-
         private readonly IUserService _userService = userService;
 
-
-
-
         private readonly ILogger<UserController> _logger = logger;
-
-        private readonly ITokenService _tokenService = tokenService;
-
 
 
         protected APIResponse _response = new();
 
+        private IActionResult HandleResponse(APIServiceResponse<ResultObject> response)
+        {
+            if (!response.IsSuccess)
+            {
+                _logger.LogWarning("Operation failed: {@Response}", response.ErrorMessages);
+                return StatusCode((int)response.StatusCode, response);
+            }
+            _logger.LogInformation("Operation successful: {@Response}", response);
+            return Ok(response);
+        }
 
+        private string GetClientSideBaseUrl(IOptionsSnapshot<BaseUrlOptions> baseUrls)
+        {
+            return baseUrls.Value.ClientBaseUrl;
+        }
 
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegistrationRequest model, [FromServices] IOptionsSnapshot<BaseUrlOptions> baseUrls)
         {
             _logger.LogInformation("Register method called with model: {@Request}", model);
-
-            var _baseUrls = baseUrls.Value;
-            string clientSideBaseUrl = _baseUrls.ClientBaseUrl;
-
-            var response = await _userService.RegisterUserWithEmail(model, clientSideBaseUrl);
-
-            if (!response.IsSuccess)
-            {
-                _logger.LogWarning("Registration failed. Response: {@Response}", response.ErrorMessages[0]);
-                return StatusCode((int)response.StatusCode, response);
-            }
-
-            _logger.LogInformation("User registered successfully. Response: {@Response}", response);
-            return Ok(response);
+            var response = await _userService.RegisterUserWithEmail(model, GetClientSideBaseUrl(baseUrls));
+            return HandleResponse(response);
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest model, [FromServices] IOptionsSnapshot<BaseUrlOptions> baseUrls)
+        public async Task<IActionResult> Login([FromBody] LoginRequest model)
         {
-
             _logger.LogInformation("Login method called with model: {@Request}", model);
-
-            APIServiceResponse<ResultObject> loginResponse = await _userService.Login(model);
-
-            if (!loginResponse.IsSuccess)
-            {
-                return StatusCode((int)loginResponse.StatusCode, loginResponse);
-            }
-            return Ok(loginResponse);
-
+            var response = await _userService.Login(model);
+            return HandleResponse(response);
         }
 
 
@@ -88,68 +66,37 @@ namespace RzumeAPI.Controllers
         {
             _logger.LogInformation("GetActiveUser method called");
             var token = HttpContext.Request.Headers.Authorization.FirstOrDefault()?.Split(" ").Last();
-
-
-            APIServiceResponse<ResultObject> getActiveUserResponse = await _userService.GetActiveUser(token);
-            if (!getActiveUserResponse.IsSuccess)
-            {
-                return StatusCode((int)getActiveUserResponse.StatusCode, getActiveUserResponse);
-            }
-            return Ok(getActiveUserResponse);
-
+            var response = await _userService.GetActiveUser(token);
+            return HandleResponse(response);
         }
 
 
         [HttpPost("logout")]
         public async Task<IActionResult> Logout([FromBody] LogoutRequest model)
         {
-
-            APIServiceResponse<ResultObject> logoutResponse = await _userService.Logout(model); ;
-            if (!logoutResponse.IsSuccess)
-            {
-                return StatusCode((int)logoutResponse.StatusCode, logoutResponse);
-            }
-            return Ok(logoutResponse);
+            _logger.LogInformation("Logout method called with model: {@Request}", model);
+            var response = await _userService.Logout(model);
+            return HandleResponse(response);
         }
 
 
-
         [HttpGet("generate-email-token")]
-        public async Task<IActionResult> GenerateUserEmailToken([FromQuery] string Email, [FromServices] IOptionsSnapshot<BaseUrlOptions> baseUrls)
+        public async Task<IActionResult> GenerateUserEmailToken([FromQuery] string email, [FromServices] IOptionsSnapshot<BaseUrlOptions> baseUrls)
         {
-            var _baseUrls = baseUrls.Value;
-            string clientSideBaseUrl = _baseUrls.ClientBaseUrl;
-
-              APIServiceResponse<ResultObject> sendEmailTokenResponse = await _userService.SendUserEmailToken(Email,clientSideBaseUrl); ;
-            if (!sendEmailTokenResponse.IsSuccess)
-            {
-                return StatusCode((int)sendEmailTokenResponse.StatusCode, sendEmailTokenResponse);
-            }
-            return Ok(sendEmailTokenResponse);
-
+            _logger.LogInformation("GenerateEmailToken method called for email: {Email}", email);
+            var response = await _userService.SendUserEmailToken(email, GetClientSideBaseUrl(baseUrls));
+            return HandleResponse(response);
         }
 
 
         [HttpGet("validate-user-account")]
         public async Task<IActionResult> ConfirmEmail([FromQuery] string token)
         {
-
-            if (token == null)
-            {
-                _response.StatusCode = HttpStatusCode.BadRequest;
-                _response.IsSuccess = false;
-                _response.ErrorMessages.Add("Invalid Request");
-                return BadRequest(_response);
-            }
-
-            APIServiceResponse<ResultObject> activateAccountReponse = await _userService.ActivateUserAccount(token);
-            if (!activateAccountReponse.IsSuccess)
-            {
-                return StatusCode((int)activateAccountReponse.StatusCode, activateAccountReponse);
-            }
-            return Ok(activateAccountReponse);
-
+            _logger.LogInformation("ConfirmEmail method called with token: {Token}", token);
+            var response = await _userService.ActivateUserAccount(token);
+            return HandleResponse(response);
         }
+
 
 
 
@@ -157,13 +104,8 @@ namespace RzumeAPI.Controllers
         public async Task<IActionResult> GoogleResponse([FromBody] GoogleLoginRequest model)
         {
             _logger.LogInformation("Google Signin method called with token: {@Request}", model);
-            APIServiceResponse<ResultObject> loginResponse = await _userService.Login(model);
-            if (!loginResponse.IsSuccess)
-            {
-                return StatusCode((int)loginResponse.StatusCode, loginResponse);
-            }
-            return Ok(loginResponse);
-
+            var response = await _userService.Login(model);
+            return HandleResponse(response);
         }
 
 
@@ -172,16 +114,18 @@ namespace RzumeAPI.Controllers
 
         public IActionResult HealthCheck()
         {
-            _response.StatusCode = HttpStatusCode.OK;
-            _response.IsSuccess = true;
-            _response.Result = new ResultObject
+            _logger.LogInformation("HealthCheck method called");
+            var response = new APIResponse
             {
-                Message = "Server running!",
-                Content = null
+                StatusCode = HttpStatusCode.OK,
+                IsSuccess = true,
+                Result = new ResultObject
+                {
+                    Message = "Server running!",
+                    Content = null
+                }
             };
-
-
-            return Ok(_response);
+            return Ok(response);
         }
 
 
