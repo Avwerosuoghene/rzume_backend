@@ -98,12 +98,12 @@ namespace RzumeAPI.Controllers
 
 
             APIServiceResponse<ResultObject> getActiveUserResponse = await _userService.GetActiveUser(token);
-              if (!getActiveUserResponse.IsSuccess)
+            if (!getActiveUserResponse.IsSuccess)
             {
                 return StatusCode((int)getActiveUserResponse.StatusCode, getActiveUserResponse);
             }
             return Ok(getActiveUserResponse);
-            
+
         }
 
 
@@ -215,51 +215,21 @@ namespace RzumeAPI.Controllers
         [HttpGet("validate-user-account")]
         public async Task<IActionResult> ConfirmEmail([FromQuery] string token)
         {
-            try
+
+            if (token == null)
             {
-                if (token == null)
-                {
-
-
-                    _response.StatusCode = HttpStatusCode.BadRequest;
-                    _response.IsSuccess = false;
-                    _response.ErrorMessages.Add("Invalid Request");
-                    return BadRequest(_response);
-                }
-
-
-                ActivateUserAccountResponse activateAccountReponse = await _userService.ActivateUserAccount(token);
-
-                if (activateAccountReponse.User == null)
-                {
-                    _response.StatusCode = HttpStatusCode.BadRequest;
-                    _response.IsSuccess = false;
-                    _response.ErrorMessages.Add(activateAccountReponse.Message);
-                    return BadRequest(_response);
-                }
-
-
-
-
-                _response.StatusCode = HttpStatusCode.OK;
-                _response.IsSuccess = true;
-                _response.Result = new ResultObject
-                {
-                    Message = UserStatMsg.AccountActivated,
-                    Content = activateAccountReponse
-                };
-                return Ok(_response);
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-                _response.StatusCode = HttpStatusCode.InternalServerError;
+                _response.StatusCode = HttpStatusCode.BadRequest;
                 _response.IsSuccess = false;
+                _response.ErrorMessages.Add("Invalid Request");
                 return BadRequest(_response);
             }
 
-
+            APIServiceResponse<ResultObject> activateAccountReponse =  await _userService.ActivateUserAccount(token);
+            if (!activateAccountReponse.IsSuccess)
+            {
+                return StatusCode((int)activateAccountReponse.StatusCode, activateAccountReponse);
+            }
+            return Ok(activateAccountReponse);
 
         }
 

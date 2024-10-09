@@ -23,7 +23,7 @@ namespace RzumeAPI.Services.IServices
 
          Task<APIServiceResponse<ResultObject>> GetActiveUser(string token);
 
-        Task<ActivateUserAccountResponse> ActivateUserAccount(string token);
+        Task<APIServiceResponse<ResultObject>> ActivateUserAccount(string token);
 
 
 

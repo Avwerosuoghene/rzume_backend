@@ -84,7 +84,7 @@ namespace RzumeAPI.Services
 
 
 
-        public async Task<ActivateUserAccountResponse> ActivateUserAccount(string token)
+        public async Task<APIServiceResponse<ResultObject>> ActivateUserAccount(string token)
         {
             _logger.LogInformation("Starting ActivateUserAccount with token: {Token}", token);
 
@@ -96,20 +96,26 @@ namespace RzumeAPI.Services
                 if (user == null)
                 {
                     _logger.LogWarning("User not found for token: {Token}", token);
-                    return new ActivateUserAccountResponse
+
+
+                    return new APIServiceResponse<ResultObject>
                     {
-                        User = null,
-                        Message = response.Message
+                        StatusCode = HttpStatusCode.BadRequest,
+                        IsSuccess = false,
+                        ErrorMessages = [response.Message]
                     };
                 }
 
                 if (user.EmailConfirmed)
                 {
                     _logger.LogInformation("User {Email} already confirmed", user.Email);
-                    return new ActivateUserAccountResponse
+
+
+                    return new APIServiceResponse<ResultObject>
                     {
-                        User = null,
-                        Message = UserStatMsg.EmailValidated
+                        StatusCode = HttpStatusCode.BadRequest,
+                        IsSuccess = false,
+                        ErrorMessages = [UserStatMsg.EmailValidated]
                     };
                 }
 
@@ -121,19 +127,33 @@ namespace RzumeAPI.Services
                 await _userRepo.UpdateAsync(user);
 
                 _logger.LogInformation("User {Email} account activated successfully", user.Email);
-                return new ActivateUserAccountResponse
+
+
+                return new APIServiceResponse<ResultObject>
                 {
-                    User = _mapper.Map<UserDTO>(user),
-                    Token = loginToken
+                    StatusCode = HttpStatusCode.OK,
+                    IsSuccess = true,
+                    Result = new ResultObject
+                    {
+                        Message = UserStatMsg.AccountActivated,
+                        Content = new ActivateUserAccountResponse
+                        {
+                            User = _mapper.Map<UserDTO>(user),
+                            Token = loginToken
+                        }
+                    }
                 };
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error occurred during ActivateUserAccount for token: {Token}", token);
-                return new ActivateUserAccountResponse
+
+
+                return new APIServiceResponse<ResultObject>
                 {
-                    User = null,
-                    Message = "An error occurred"
+                    StatusCode = HttpStatusCode.BadRequest,
+                    IsSuccess = false,
+                    ErrorMessages = ["An error occurred"]
                 };
             }
         }
@@ -370,7 +390,7 @@ namespace RzumeAPI.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred while Logging in" );
+                _logger.LogError(ex, "Error occurred while Logging in");
 
 
                 string responseMsg = ex.Message ?? "Error during login";
