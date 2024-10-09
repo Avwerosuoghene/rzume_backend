@@ -600,18 +600,58 @@ namespace RzumeAPI.Services
 
 
 
-        public async Task<bool> Logout(LogoutRequest logoutRequestDTO)
+        public async Task<APIServiceResponse<ResultObject>> Logout(LogoutRequest logoutRequestDTO)
         {
+            _logger.LogInformation("Logout method called with model: {@Request}", logoutRequestDTO);
 
-            var user = await _userRepo.GetUserByEmailAsync(logoutRequestDTO.Email);
-
-            if (user == null)
+            try
             {
-                return false;
-            }
-            await _userManager.RemoveAuthenticationTokenAsync(user, TokenTypes.Login, $"{TokenTypes.Login}");
-            return true;
+                var user = await _userRepo.GetUserByEmailAsync(logoutRequestDTO.Email);
 
+                if (user == null)
+                {
+                    _logger.LogWarning("Logout failed");
+
+
+                    return new APIServiceResponse<ResultObject>
+                    {
+                        StatusCode = HttpStatusCode.BadRequest,
+                        IsSuccess = false,
+                        ErrorMessages = ["Something went wrong"]
+                    };
+                }
+                await _userManager.RemoveAuthenticationTokenAsync(user, TokenTypes.Login, $"{TokenTypes.Login}");
+
+                return new APIServiceResponse<ResultObject>
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    IsSuccess = true,
+                    Result = new ResultObject
+                    {
+                        Message = "Logout Successful",
+                        Content = null
+                    }
+                };
+            }
+
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while Logging in");
+
+
+                string responseMsg = ex.Message ?? "Error during logout";
+                return new APIServiceResponse<ResultObject>
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    IsSuccess = false,
+                    ErrorMessages =
+                    [
+                    responseMsg
+                    ]
+
+                };
+
+            }
         }
 
         public async Task<OtpPasswordResetRequestResponseDTO> InitiateOtpResetPassword(OtpPasswordResetRequestDTO passwordResetRequestModel)

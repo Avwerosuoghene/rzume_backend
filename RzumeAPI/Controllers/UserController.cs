@@ -22,13 +22,9 @@ namespace RzumeAPI.Controllers
     [ApiVersionNeutral]
     public class UserController(
         IUserRepository userRepo,
-        IEmailService emailService,
-        IOtpRepository otpRepo,
         IUserService userService,
         ILogger<UserController> logger,
-        ITokenService tokenService,
-        IMapper mapper,
-        IConfiguration configuration
+        ITokenService tokenService
         ) : Controller
     {
 
@@ -36,15 +32,12 @@ namespace RzumeAPI.Controllers
 
         private readonly IUserService _userService = userService;
 
-        private readonly string _clientId = configuration["Authentication:Google:ClientId"];
 
 
 
         private readonly ILogger<UserController> _logger = logger;
 
         private readonly ITokenService _tokenService = tokenService;
-
-        private readonly IMapper _mapper = mapper;
 
 
 
@@ -110,43 +103,13 @@ namespace RzumeAPI.Controllers
         [HttpPost("logout")]
         public async Task<IActionResult> Logout([FromBody] LogoutRequest model)
         {
-            _logger.LogInformation("Logout method called with model: {@Request}", model);
 
-            try
+            APIServiceResponse<ResultObject> logoutResponse = await _userService.Logout(model); ;
+            if (!logoutResponse.IsSuccess)
             {
-                var logoutSuccess = await _userService.Logout(model);
-
-                if (logoutSuccess != true)
-                {
-                    _response.StatusCode = HttpStatusCode.BadRequest;
-                    _response.IsSuccess = false;
-                    _response.ErrorMessages.Add("Something went wrong");
-                    _logger.LogWarning("Logout failed. Response: {@Response}", _response);
-
-                    return BadRequest(_response);
-
-                }
-
-                _response.StatusCode = HttpStatusCode.OK;
-                _response.IsSuccess = true;
-                _response.Result = new ResultObject
-                {
-                    Message = "Logout Successful",
-                    Content = null
-                };
-                _logger.LogInformation("User logged out successfully. Response: {@Response}", _response);
-
-                return Ok(_response);
+                return StatusCode((int)logoutResponse.StatusCode, logoutResponse);
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Exception occurred while logging user out");
-
-            }
-
-            _response.StatusCode = HttpStatusCode.InternalServerError;
-            _response.IsSuccess = false;
-            return BadRequest(_response);
+            return Ok(logoutResponse);
         }
 
 
@@ -224,7 +187,7 @@ namespace RzumeAPI.Controllers
                 return BadRequest(_response);
             }
 
-            APIServiceResponse<ResultObject> activateAccountReponse =  await _userService.ActivateUserAccount(token);
+            APIServiceResponse<ResultObject> activateAccountReponse = await _userService.ActivateUserAccount(token);
             if (!activateAccountReponse.IsSuccess)
             {
                 return StatusCode((int)activateAccountReponse.StatusCode, activateAccountReponse);

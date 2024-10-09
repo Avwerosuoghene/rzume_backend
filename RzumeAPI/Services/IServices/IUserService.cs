@@ -13,7 +13,7 @@ namespace RzumeAPI.Services.IServices
 
 
         Task<APIServiceResponse<ResultObject>> Login(object loginRequestDTO);
-        Task<bool> Logout(LogoutRequest logoutRequestDTO);
+        Task<APIServiceResponse<ResultObject>> Logout(LogoutRequest logoutRequestDTO);
 
         Task<OtpPasswordResetRequestResponseDTO> InitiateOtpResetPassword(OtpPasswordResetRequestDTO passwordResetRequestModel);
 
